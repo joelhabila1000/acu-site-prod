@@ -1,13 +1,15 @@
 // Central place for editable site content.
 // Update text, links, and image URLs here, components read from this file.
 
+import logoImg from "../assets/acu-logo-new-1.png";
+
 export const SITE = {
   name: "Ajayi Crowther University",
   shortName: "ACU, Oyo",
   motto: "Scientia Probitas",
   mottoMeaning: "Knowledge with Probity",
   tagline: "Raising Godly Intellectuals",
-  logo: "/src/assets/acu-logo-new-1.png",
+  logo: logoImg,
   phone: "+234 814 592 0637",
   email: "info@acu.edu.ng",
   address: "Ajayi Crowther University, PMB 1066, Oyo Town, Oyo State, Nigeria",
