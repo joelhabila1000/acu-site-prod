@@ -1,14 +1,22 @@
 import { useMemo } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useParams } from "react-router-dom";
 
 function useQuery() {
   const { search } = useLocation();
   return useMemo(() => new URLSearchParams(search), [search]);
 }
 
+function titleCaseSlug(slug) {
+  return slug
+    .split(/[-_ ]+/)
+    .map((w) => (w ? w[0].toUpperCase() + w.slice(1) : ""))
+    .join(" ");
+}
+
 export default function Maintenance() {
+  const { portal: portalParam } = useParams();
   const query = useQuery();
-  const portal = query.get("portal") || "Portal";
+  const portal = portalParam ? titleCaseSlug(portalParam) : query.get("portal") || "Portal";
 
   return (
     <section className="section section-cream">

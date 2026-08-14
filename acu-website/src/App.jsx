@@ -26,7 +26,8 @@ export default function App() {
           <Route path="/academics" element={<Academics />} />
           <Route path="/admissions" element={<Admissions />} />
           <Route path="/contact" element={<Contact />} />
-            <Route path="/maintenance" element={<Maintenance />} />
+          <Route path="/maintenance" element={<Maintenance />} />
+          <Route path="/portal/:portal" element={<Maintenance />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
