@@ -1,0 +1,240 @@
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--white);
+  box-shadow: 0 1px 0 var(--line);
+}
+
+.topbar {
+  background: var(--navy-950);
+  color: var(--gold-100);
+  font-size: 0.8rem;
+}
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 24px;
+  flex-wrap: wrap;
+}
+.topbar-contact a {
+  color: var(--gold-100);
+  opacity: 0.9;
+}
+.topbar-contact a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+.topbar-contact .dot {
+  margin: 0 10px;
+  opacity: 0.5;
+}
+.topbar-portals {
+  display: flex;
+  gap: 18px;
+}
+.topbar-portals a {
+  color: var(--gold-400);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+.topbar-portals a:hover {
+  color: var(--white);
+}
+
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 12px 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  transition: transform 180ms ease;
+}
+.brand:hover {
+  transform: translateY(-1px);
+}
+.brand img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: block;
+  background: transparent;
+  border-radius: 0;
+  animation: gentleFloat 4s ease-in-out infinite;
+}
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  min-width: 0;
+}
+.brand-text strong {
+  font-family: var(--font-display);
+  font-size: 1.08rem;
+  color: var(--navy-900);
+  white-space: nowrap;
+}
+.brand-text em {
+  font-style: normal;
+  font-size: 0.72rem;
+  color: var(--oxblood-600);
+  letter-spacing: 0.03em;
+}
+
+.primary-nav ul {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+.primary-nav a {
+  position: relative;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink-700);
+  padding: 8px 2px;
+}
+.primary-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--gold-500);
+  transform: scaleX(0);
+  transition: transform 180ms ease;
+  transform-origin: left;
+}
+.primary-nav a:hover {
+  color: var(--navy-900);
+}
+.primary-nav a:hover::after {
+  transform: scaleX(1);
+}
+.primary-nav a.active {
+  color: var(--navy-900);
+}
+.primary-nav a.active::after {
+  transform: scaleX(1);
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.menu-toggle span {
+  display: block;
+  height: 2px;
+  margin: 0 8px;
+  background: var(--navy-900);
+  transition:
+    transform 200ms ease,
+    opacity 200ms ease;
+}
+.menu-toggle.is-open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.menu-toggle.is-open span:nth-child(2) {
+  opacity: 0;
+}
+.menu-toggle.is-open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.mobile-menu {
+  display: none;
+}
+
+@media (max-width: 960px) {
+  .topbar-portals {
+    display: none;
+  }
+  .primary-nav {
+    display: none;
+  }
+  .navbar-actions .btn {
+    display: none;
+  }
+  .menu-toggle {
+    display: flex;
+  }
+  .brand-text em {
+    display: none;
+  }
+
+  .mobile-menu {
+    display: block;
+    max-height: 0;
+    overflow: hidden;
+    background: var(--navy-900);
+    transition: max-height 260ms ease;
+  }
+  .mobile-menu.is-open {
+    max-height: 640px;
+  }
+  .mobile-menu ul {
+    padding: 10px 24px 0;
+  }
+  .mobile-menu li {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .mobile-menu a {
+    display: block;
+    padding: 14px 4px;
+    color: var(--cream-100);
+    font-weight: 600;
+  }
+  .mobile-menu a.active {
+    color: var(--gold-400);
+  }
+  .mobile-portals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 16px 24px;
+  }
+  .mobile-portals a {
+    font-size: 0.78rem;
+    color: var(--gold-400);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-weight: 700;
+  }
+  .mobile-menu .btn {
+    margin: 4px 24px 22px;
+    width: calc(100% - 48px);
+  }
+}
+
+@media (max-width: 520px) {
+  .topbar-contact .dot,
+  .topbar-contact a:last-child {
+    display: none;
+  }
+}
