@@ -8,6 +8,7 @@ import Academics from "./pages/Academics.jsx";
 import Admissions from "./pages/Admissions.jsx";
 import Contact from "./pages/Contact.jsx";
 import Admin from "./pages/Admin.jsx";
+import Maintenance from "./pages/Maintenance.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 export default function App() {
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/academics" element={<Academics />} />
           <Route path="/admissions" element={<Admissions />} />
           <Route path="/contact" element={<Contact />} />
+            <Route path="/maintenance" element={<Maintenance />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

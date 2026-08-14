@@ -34,10 +34,10 @@ export const NAV_LINKS = [
 ];
 
 export const PORTALS = [
-  { label: "Postgraduate", url: "https://pgs.acu.edu.ng" },
-  { label: "Undergraduate", url: "https://portal.acu.edu.ng" },
-  { label: "Part-Time", url: "https://cpts.acu.edu.ng" },
-  { label: "Foundation", url: "https://cpfp.acu.edu.ng" },
+  { label: "Postgraduate", url: "/maintenance?portal=Postgraduate" },
+  { label: "Undergraduate", url: "/maintenance?portal=Undergraduate" },
+  { label: "Part-Time", url: "/maintenance?portal=Part-Time" },
+  { label: "Foundation", url: "/maintenance?portal=Foundation" },
 ];
 
 export const STATS = [
