@@ -34,10 +34,10 @@ export const NAV_LINKS = [
 ];
 
 export const PORTALS = [
-  { label: "Postgraduate", url: "/maintenance?portal=Postgraduate" },
-  { label: "Undergraduate", url: "/maintenance?portal=Undergraduate" },
-  { label: "Part-Time", url: "/maintenance?portal=Part-Time" },
-  { label: "Foundation", url: "/maintenance?portal=Foundation" },
+  { label: "Postgraduate", url: "/portal/postgraduate" },
+  { label: "Undergraduate", url: "/portal/undergraduate" },
+  { label: "Part-Time", url: "/portal/part-time" },
+  { label: "Foundation", url: "/portal/foundation" },
 ];
 
 export const STATS = [
