@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   DEFAULT_SITE_SETTINGS,
@@ -15,6 +15,8 @@ const emptyItem = {
   title: "",
   date: new Date().toISOString().slice(0, 10),
   image: "",
+  coverImage: "",
+  content: "",
   url: "",
 };
 
@@ -32,7 +34,7 @@ export default function Admin() {
   }, []);
 
   const canSubmit = useMemo(
-    () => draft.title.trim() && draft.image.trim() && draft.url.trim(),
+    () => draft.title.trim() && draft.coverImage.trim() && draft.content.trim(),
     [draft],
   );
 
@@ -51,8 +53,10 @@ export default function Admin() {
     const cleanDraft = {
       ...draft,
       title: draft.title.trim(),
-      image: draft.image.trim(),
-      url: draft.url.trim(),
+      image: (draft.image || "").trim(),
+      coverImage: (draft.coverImage || "").trim(),
+      content: draft.content || "",
+      url: (draft.url || "").trim(),
     };
 
     let nextItems;
@@ -76,6 +80,44 @@ export default function Admin() {
 
     const result = await readFileAsDataUrl(file);
     setDraft((current) => ({ ...current, image: result }));
+  }
+
+  async function handleCoverUpload(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+
+    const result = await readFileAsDataUrl(file);
+    setDraft((current) => ({ ...current, coverImage: result }));
+  }
+
+  async function handleInlineImageUpload(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    const result = await readFileAsDataUrl(file);
+    insertImageIntoContent(result);
+  }
+
+  function insertImageIntoContent(src) {
+    const imgHtml = `<p><img src="${src}" style="max-width:100%;height:auto;border-radius:6px;"/></p>`;
+    setDraft((current) => ({ ...current, content: (current.content || "") + imgHtml }));
+  }
+
+  const editorRef = useRef(null);
+
+  function handleContentInput(e) {
+    setDraft((current) => ({ ...current, content: e.currentTarget.innerHTML }));
+  }
+
+  async function handlePaste(e) {
+    const items = Array.from(e.clipboardData?.items || []);
+    const imageItem = items.find((it) => it.type && it.type.startsWith("image/"));
+    if (imageItem) {
+      e.preventDefault();
+      const file = imageItem.getAsFile();
+      if (!file) return;
+      const dataUrl = await readFileAsDataUrl(file);
+      insertImageIntoContent(dataUrl);
+    }
   }
 
   function handleDeleteNews(id) {
@@ -210,6 +252,50 @@ export default function Admin() {
                   placeholder="Or paste image URL"
                   onChange={(e) => handleInputChange("image", e.target.value)}
                 />
+              </div>
+
+              <div className="form-row">
+                <label htmlFor="news-cover">Cover image</label>
+                <input id="news-cover" type="file" accept="image/*" onChange={handleCoverUpload} />
+                {draft.coverImage && (
+                  <img
+                    src={draft.coverImage}
+                    alt="Cover preview"
+                    style={{ width: "100%", maxHeight: 160, objectFit: "cover", borderRadius: 8 }}
+                  />
+                )}
+                <input
+                  type="url"
+                  value={draft.coverImage}
+                  placeholder="Or paste cover image URL"
+                  onChange={(e) => handleInputChange("coverImage", e.target.value)}
+                />
+              </div>
+
+              <div className="form-row">
+                <label htmlFor="news-content">Story content (paste images or use upload)</label>
+                <div
+                  id="news-content-editor"
+                  ref={editorRef}
+                  contentEditable
+                  onInput={handleContentInput}
+                  onPaste={handlePaste}
+                  style={{
+                    minHeight: 160,
+                    border: "1px solid #e6eef6",
+                    padding: 12,
+                    borderRadius: 8,
+                    background: "#fff",
+                    overflow: "auto",
+                  }}
+                  dangerouslySetInnerHTML={{ __html: draft.content }}
+                />
+                <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                  <label className="btn btn-outline btn-sm" style={{ cursor: "pointer" }}>
+                    Insert image
+                    <input type="file" accept="image/*" onChange={handleInlineImageUpload} style={{ display: "none" }} />
+                  </label>
+                </div>
               </div>
 
               <div className="form-row">
