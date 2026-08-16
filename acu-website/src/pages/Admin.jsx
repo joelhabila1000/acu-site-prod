@@ -99,10 +99,24 @@ export default function Admin() {
 
   function insertImageIntoContent(src) {
     const imgHtml = `<p><img src="${src}" style="max-width:100%;height:auto;border-radius:6px;"/></p>`;
-    setDraft((current) => ({ ...current, content: (current.content || "") + imgHtml }));
+    if (editorRef.current) {
+      editorRef.current.innerHTML = (editorRef.current.innerHTML || "") + imgHtml;
+      setDraft((current) => ({ ...current, content: editorRef.current.innerHTML }));
+    } else {
+      setDraft((current) => ({
+        ...current,
+        content: (current.content || "") + imgHtml,
+      }));
+    }
   }
 
   const editorRef = useRef(null);
+
+  useEffect(() => {
+    // initialize editor content when starting to edit or when draft changes programmatically
+    if (!editorRef.current) return;
+    editorRef.current.innerHTML = draft.content || "";
+  }, [editingIndex]);
 
   function handleContentInput(e) {
     setDraft((current) => ({ ...current, content: e.currentTarget.innerHTML }));
@@ -110,7 +124,9 @@ export default function Admin() {
 
   async function handlePaste(e) {
     const items = Array.from(e.clipboardData?.items || []);
-    const imageItem = items.find((it) => it.type && it.type.startsWith("image/"));
+    const imageItem = items.find(
+      (it) => it.type && it.type.startsWith("image/"),
+    );
     if (imageItem) {
       e.preventDefault();
       const file = imageItem.getAsFile();
@@ -256,24 +272,38 @@ export default function Admin() {
 
               <div className="form-row">
                 <label htmlFor="news-cover">Cover image</label>
-                <input id="news-cover" type="file" accept="image/*" onChange={handleCoverUpload} />
+                <input
+                  id="news-cover"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleCoverUpload}
+                />
                 {draft.coverImage && (
                   <img
                     src={draft.coverImage}
                     alt="Cover preview"
-                    style={{ width: "100%", maxHeight: 160, objectFit: "cover", borderRadius: 8 }}
+                    style={{
+                      width: "100%",
+                      maxHeight: 160,
+                      objectFit: "cover",
+                      borderRadius: 8,
+                    }}
                   />
                 )}
                 <input
                   type="url"
                   value={draft.coverImage}
                   placeholder="Or paste cover image URL"
-                  onChange={(e) => handleInputChange("coverImage", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("coverImage", e.target.value)
+                  }
                 />
               </div>
 
               <div className="form-row">
-                <label htmlFor="news-content">Story content (paste images or use upload)</label>
+                <label htmlFor="news-content">
+                  Story content (paste images or use upload)
+                </label>
                 <div
                   id="news-content-editor"
                   ref={editorRef}
@@ -288,12 +318,19 @@ export default function Admin() {
                     background: "#fff",
                     overflow: "auto",
                   }}
-                  dangerouslySetInnerHTML={{ __html: draft.content }}
                 />
                 <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
-                  <label className="btn btn-outline btn-sm" style={{ cursor: "pointer" }}>
+                  <label
+                    className="btn btn-outline btn-sm"
+                    style={{ cursor: "pointer" }}
+                  >
                     Insert image
-                    <input type="file" accept="image/*" onChange={handleInlineImageUpload} style={{ display: "none" }} />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleInlineImageUpload}
+                      style={{ display: "none" }}
+                    />
                   </label>
                 </div>
               </div>

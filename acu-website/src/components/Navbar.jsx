@@ -33,14 +33,22 @@ export default function Navbar() {
             </span>
             <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
           </div>
-          <nav className="topbar-portals" aria-label="Student and staff portals">
+          <nav
+            className="topbar-portals"
+            aria-label="Student and staff portals"
+          >
             {PORTALS.map((p) =>
               p.url && p.url.startsWith("/") ? (
                 <NavLink key={p.label} to={p.url}>
                   {p.label}
                 </NavLink>
               ) : (
-                <a key={p.label} href={p.url} target="_blank" rel="noopener noreferrer">
+                <a
+                  key={p.label}
+                  href={p.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {p.label}
                 </a>
               ),
@@ -124,7 +132,12 @@ export default function Navbar() {
                 {p.label} Portal
               </NavLink>
             ) : (
-              <a key={p.label} href={p.url} target="_blank" rel="noopener noreferrer">
+              <a
+                key={p.label}
+                href={p.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {p.label} Portal
               </a>
             ),

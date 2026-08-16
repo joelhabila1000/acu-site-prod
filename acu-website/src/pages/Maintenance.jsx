@@ -16,7 +16,9 @@ function titleCaseSlug(slug) {
 export default function Maintenance() {
   const { portal: portalParam } = useParams();
   const query = useQuery();
-  const portal = portalParam ? titleCaseSlug(portalParam) : query.get("portal") || "Portal";
+  const portal = portalParam
+    ? titleCaseSlug(portalParam)
+    : query.get("portal") || "Portal";
 
   return (
     <section className="section section-cream">
@@ -28,7 +30,14 @@ export default function Maintenance() {
             check back shortly or use the links below to reach other parts of
             the site.
           </p>
-          <div style={{ display: "flex", gap: 12, marginTop: 18, flexWrap: "wrap" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: 12,
+              marginTop: 18,
+              flexWrap: "wrap",
+            }}
+          >
             <Link to="/" className="btn btn-navy">
               Back to Home
             </Link>

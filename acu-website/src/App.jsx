@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
@@ -12,6 +13,51 @@ import Maintenance from "./pages/Maintenance.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 export default function App() {
+  useEffect(() => {
+    function handleLinkClick(event) {
+      const anchor = event.target.closest("a[href]");
+      if (!anchor) return;
+
+      const href = anchor.getAttribute("href") || "";
+      if (!href) return;
+
+      const isInternalFragment = href.startsWith("#");
+      const isRelativeOrAppPath =
+        href.startsWith("/") ||
+        href.startsWith("./") ||
+        href.startsWith("../") ||
+        href.startsWith("?");
+      const isNonBrowserProtocol =
+        href.startsWith("mailto:") ||
+        href.startsWith("tel:") ||
+        href.startsWith("javascript:");
+
+      if (isInternalFragment || isRelativeOrAppPath || isNonBrowserProtocol) {
+        return;
+      }
+
+      try {
+        const targetUrl = new URL(href, window.location.href);
+        const isExternalHttpLink =
+          (targetUrl.protocol === "http:" || targetUrl.protocol === "https:") &&
+          targetUrl.origin !== window.location.origin;
+
+        if (isExternalHttpLink) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      } catch {
+        // Ignore malformed URLs and keep default browser behavior.
+      }
+    }
+
+    document.addEventListener("click", handleLinkClick, true);
+
+    return () => {
+      document.removeEventListener("click", handleLinkClick, true);
+    };
+  }, []);
+
   return (
     <>
       <a href="#main-content" className="skip-link">

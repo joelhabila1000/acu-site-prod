@@ -1,4 +1,4 @@
-// Central place for editable site content.
+// Central space for editable site content.
 // Update text, links, and image URLs here, components read from this file.
 
 import logoImg from "../assets/acu-logo-new-1.png";
@@ -13,7 +13,7 @@ export const SITE = {
   phone: "+234 814 592 0637",
   email: "info@acu.edu.ng",
   address: "Ajayi Crowther University, PMB 1066, Oyo Town, Oyo State, Nigeria",
-  applyUrl: "https://apply.acu.edu.ng/register",
+  applyUrl: "",
   mapEmbed:
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.4335198877734!2d3.9479533!3d7.849614000000009!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103759796a2d6965%3A0x661ff241b20e8152!2sAjayi%20Crowther%20University!5e0!3m2!1sen!2sng!4v1707814559781!5m2!1sen!2sng",
   social: {
@@ -51,60 +51,60 @@ export const PROGRAMMES = [
   {
     title: "Pre-Degree / Foundation",
     desc: "A one-year bridging programme for candidates preparing for direct entry into 100-level.",
-    url: "https://cpfp.acu.edu.ng",
+    url: "",
     tag: "JUPEB",
   },
   {
     title: "Undergraduate",
     desc: "Full-time bachelor's degree programmes across 13 faculties, taught by seasoned scholars.",
-    url: "https://acu.edu.ng/courses",
+    url: "",
     tag: "B.Sc / B.A / LL.B",
   },
   {
     title: "Part-Time",
     desc: "Flexible weekend and evening study for working professionals across our study centres.",
-    url: "https://cpts.acu.edu.ng",
+    url: "",
     tag: "Weekend & Evening",
   },
   {
     title: "Postgraduate",
     desc: "PGD, Master's and Doctoral research programmes supervised by distinguished faculty.",
-    url: "https://pgs.acu.edu.ng",
+    url: "",
     tag: "PGD / M.Sc / Ph.D",
   },
 ];
 
 export const FACULTIES = [
-  { name: "Agriculture", url: "https://acu.edu.ng/faculty-of-agric/" },
+  { name: "Agriculture", url: "" },
   {
     name: "Basic Medical Sciences",
-    url: "https://acu.edu.ng/faculty-of-basic-medical-sciences/",
+    url: "",
   },
   {
     name: "Communication & Media Studies",
-    url: "https://acu.edu.ng/faculty-of-communication-and-media-studies/",
+    url: "",
   },
-  { name: "Computing", url: "https://acu.edu.ng/faculty-of-computing/" },
-  { name: "Education", url: "https://acu.edu.ng/faculty-of-education/" },
-  { name: "Engineering", url: "https://acu.edu.ng/faculty-of-engineering/" },
+  { name: "Computing", url: "" },
+  { name: "Education", url: "" },
+  { name: "Engineering", url: "" },
   {
     name: "Environmental Studies",
-    url: "https://acu.edu.ng/faculty-of-environmental-studies/",
+    url: "",
   },
-  { name: "Humanities", url: "https://acu.edu.ng/faculty-of-humanities" },
-  { name: "Law", url: "https://acu.edu.ng/faculty-of-law" },
+  { name: "Humanities", url: "" },
+  { name: "Law", url: "" },
   {
     name: "Management Sciences",
-    url: "https://acu.edu.ng/faculty-of-management-sciences",
+    url: "",
   },
   {
     name: "Natural Sciences",
-    url: "https://acu.edu.ng/faculty-of-natural-sciences",
+    url: "",
   },
-  { name: "Nursing", url: "https://acu.edu.ng/faculty-of-nursing/" },
+  { name: "Nursing", url: "" },
   {
     name: "Social Sciences",
-    url: "https://acu.edu.ng/faculty-of-social-sciences",
+    url: "",
   },
 ];
 

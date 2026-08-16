@@ -8,7 +8,7 @@ export default function NotFound() {
       </p>
       <h1>This Page Could Not Be Found</h1>
       <p style={{ color: "var(--ink-500)", maxWidth: 420, margin: "0 auto 28px" }}>
-        The page you're looking for may have been moved or no longer exists.
+        The page you're looking for is currently under maintainance.
       </p>
       <Link to="/" className="btn btn-navy">
         Back to Homepage

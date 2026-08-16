@@ -1,111 +1,85 @@
-# Ajayi Crowther University — Website Redesign
+# Ajayi Crowther University — ACU Website (Vite + React)
 
-A fully responsive React + Vite redesign concept for the Ajayi Crowther University
-(ACU), Oyo website, inspired by ACU's own site and the American University of
-Nigeria's layout patterns.
+This repository contains a responsive React + Vite redesign of the Ajayi
+Crowther University (ACU) site. It is a static site built for ease of
+editing and deployment, with centralized content and simple design tokens for
+branding.
 
-## Tech stack
+**Live repository:** https://github.com/joelhabila1000/acu-site-prod
 
-- **React 19** + **Vite** — fast dev server, optimized production build
-- **React Router v7** — client-side routing (Home / About / Academics / Admissions / Contact)
-- Plain CSS with design tokens (no framework lock-in) — easy to restyle
-- Fonts: **Times New Roman** for headings, **Constantia** for body text, with
-  serif fallbacks (Georgia/Cambria) for systems that lack them
+## Quick start
 
-## Getting started
+Install dependencies and run the dev server:
 
 ```bash
 npm install
-npm run dev        # local dev server, usually http://localhost:5173
-npm run build       # production build → outputs to /dist
-npm run preview     # preview the production build locally
+npm run dev
 ```
 
-## Project structure
+Build for production and preview the build:
 
-```
-src/
-  data/content.js       ← ALL editable text, links, images live here
-  components/            Navbar, Footer, Hero, StatsBar, FacultiesGrid, etc.
-  pages/                 Home, About, Academics, Admissions, Contact, NotFound
-  index.css               design tokens (colors, fonts, spacing) + shared classes
+```bash
+npm run build
+npm run preview
 ```
 
-### To edit content (text, phone numbers, links, images)
+## Tech stack
 
-Open `src/data/content.js`. Everything the site displays — the motto, contact
-info, faculties list, news items, programme cards, image URLs, social links —
-is centralized there. You generally never need to touch component files just
-to change wording.
+- React + Vite
+- React Router for client-side navigation
+- Plain CSS with design tokens in [src/index.css](src/index.css)
+- Centralized site content in [src/data/content.js](src/data/content.js)
 
-### To change colors or fonts
+## Key project files
 
-Edit the `:root` variables at the top of `src/index.css`:
+- [src/index.css](src/index.css) — global design tokens (colors, spacing, fonts).
+  The project already imports the Poppins font here.
+- [src/data/content.js](src/data/content.js) — all editable site content
+  (headings, copies, links, image URLs).
+- [src/pages](src/pages) — route pages (Home, About, Admissions, Contact, etc.)
+- [src/components](src/components) — reusable components (Navbar, Footer,
+  Hero, Programme cards, etc.).
 
-```css
---navy-900: #0c2340;
---gold-500: #c9a227;
---oxblood-600: #7a2331;
---font-display: "Times New Roman", "Georgia", "Cambria", serif;
---font-body: "Constantia", "Cambria", "Georgia", serif;
-```
+## Editing content
 
-## Images
+Most text, images and links are managed from [src/data/content.js](src/data/content.js).
+Edit that file to update copy, programme lists, news items and image URLs —
+no need to change component code for basic content updates.
 
-The current build hot-links real photography directly from `acu.edu.ng`
-(campus buildings, VC portrait, news photos) so nothing here is a stock photo
-or placeholder. For a production launch, it's worth **downloading those
-images and serving them from your own domain** (e.g. a `public/images`
-folder) instead of hot-linking someone else's server — that protects you if
-the source URLs ever change or the source site rate-limits/blocks hot-linked
-traffic. Swap the URLs in `src/data/content.js` once you've done that.
+## Fonts & design tokens
+
+`[src/index.css](src/index.css)` defines `--font-display` and `--font-body`.
+Poppins is imported via Google Fonts at the top of that file; change weights
+or switch to self-hosting by updating the import and variables.
+
+## Deployment
+
+The production output is the static `dist` folder produced by `npm run build`.
+You can deploy it to any static host (Vercel, Netlify, Cloudflare Pages, or
+GitHub Pages). For GitHub Pages, build locally and push `dist` to a
+`gh-pages` branch or configure a workflow to publish on push to `main`.
 
 ## Forms
 
-The Admissions and Contact pages include inquiry forms with client-side
-validation, but **no backend is wired up** — submissions currently only show
-a success message in the browser. Before going live, connect the `handleSubmit`
-function in `src/pages/Admissions.jsx` and `src/pages/Contact.jsx` to a real
-HTTPS endpoint (your own API, a form service like Formspree, or an email
-provider). Never wire a form directly to expose credentials in client code.
+Contact and Admissions forms perform client-side validation only. Connect the
+form handlers in [src/pages/Admissions.jsx](src/pages/Admissions.jsx) and
+[src/pages/Contact.jsx](src/pages/Contact.jsx) to a secure backend or form
+service before accepting production submissions.
 
-## Security notes for hosting
+## Contributing
 
-- `index.html` ships a Content-Security-Policy meta tag restricting scripts to
-  same-origin and images to HTTPS — review and tighten it for your final
-  domain/CDN setup.
-- All external links use `rel="noopener noreferrer"`.
-- No `dangerouslySetInnerHTML`, `eval`, or dynamic script injection anywhere
-  in the codebase.
-- Serve the production build (`/dist`) over HTTPS only. Most static hosts
-  (Netlify, Vercel, Cloudflare Pages, GitHub Pages) handle this automatically.
-- If you add a real form backend, validate and sanitize on the server too —
-  client-side validation here is a UX convenience, not a security boundary.
+1. Fork the repo and create a branch for your feature.
+2. Make changes, run `npm run dev` to test locally.
+3. Open a PR with a clear description of changes.
 
-## Deploying
+## License
 
-The `npm run build` command outputs a static `/dist` folder — deploy it to
-any static host:
+Include a license file if you plan to publish this publicly (e.g. MIT).
 
-- **Netlify / Vercel**: connect the repo, build command `npm run build`,
-  publish directory `dist`
-- **GitHub Pages**: build locally and push `/dist` to a `gh-pages` branch, or
-  use an action
-- **Any traditional web host**: upload the contents of `/dist` via
-  FTP/cPanel — this app uses client-side routing, so configure your host to
-  redirect all unmatched routes to `index.html` (a "SPA fallback" rule)
+---
 
-## What's included
+If you want, I can also:
 
-- Sticky, responsive navbar with utility bar, mobile hamburger menu, and
-  active-link highlighting
-- Hero section with a real campus photo, admissions ribbon
-- Animated stat counters (faculties, courses, libraries, campuses)
-- Programme cards (Pre-Degree, Undergraduate, Part-Time, Postgraduate)
-- Full faculties directory (13 faculties)
-- Latest news grid pulling real ACU headlines
-- Embedded Google Map of the Oyo campus
-- About page with history, vision, mission, and core values
-- Admissions page with a 4-step process and inquiry form
-- Contact page with a message form and map
-- 404 page
+- update the `README.md` in the repo with this content (done),
+- add a short `CONTRIBUTING.md`, or
+- create a GitHub Action to auto-deploy to GitHub Pages.
