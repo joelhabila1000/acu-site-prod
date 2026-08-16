@@ -121,9 +121,7 @@ export default function Footer() {
           <p>
             © {year} {SITE.name}, Oyo. All rights reserved.
           </p>
-          <p className="footer-note">
-            Concept redesign for demonstration purposes.
-          </p>
+          <p className="footer-note">j-tech</p>
         </div>
       </div>
     </footer>
