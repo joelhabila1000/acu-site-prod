@@ -4,7 +4,7 @@
 import logoImg from "../assets/acu-logo-new-1.png";
 import heroImage from "../assets/1784031378408.jpg";
 import campusWideImage from "../assets/1784816484060.jpg";
-import aboutSecondaryImage from "../assets/image.png";
+import crestImage from "../assets/acu-logo-cd.png";
 
 export const SITE = {
   name: "Ajayi Crowther University",
@@ -160,7 +160,7 @@ export const PILLARS = [
 
 export const IMAGES = {
   hero: heroImage,
-  vc: aboutSecondaryImage,
-  aboutSecondary: aboutSecondaryImage,
+  vc: crestImage,
+  aboutSecondary: campusWideImage,
   campusWide: campusWideImage,
 };
