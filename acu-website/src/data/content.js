@@ -2,6 +2,9 @@
 // Update text, links, and image URLs here, components read from this file.
 
 import logoImg from "../assets/acu-logo-new-1.png";
+import heroImage from "../assets/1784031378408.jpg";
+import campusWideImage from "../assets/1784816484060.jpg";
+import aboutSecondaryImage from "../assets/image.png";
 
 export const SITE = {
   name: "Ajayi Crowther University",
@@ -156,10 +159,8 @@ export const PILLARS = [
 ];
 
 export const IMAGES = {
-  hero: "https://acu.edu.ng/wp-content/uploads/2025/10/ACU-Oyo-4.png",
-  vc: "https://acu.edu.ng/wp-content/uploads/2025/10/acu_vc-1024x819.jpeg",
-  aboutSecondary:
-    "https://acu.edu.ng/mainacu/wp-content/uploads/2026/08/AJAYI-CROWTHER-2.jpeg",
-  campusWide:
-    "https://acu.edu.ng/mainacu/wp-content/uploads/2026/08/AJAYI-CROWTHER-4.jpeg",
+  hero: heroImage,
+  vc: aboutSecondaryImage,
+  aboutSecondary: aboutSecondaryImage,
+  campusWide: campusWideImage,
 };
