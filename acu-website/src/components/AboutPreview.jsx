@@ -9,7 +9,7 @@ export default function AboutPreview() {
         <div className="about-media">
           <img
             src={IMAGES.vc}
-            alt="Ajayi Crowther University Vice Chancellor"
+            alt="Vice Chancellor, Ajayi Crowther University"
             loading="lazy"
           />
           <div className="about-media-frame" aria-hidden="true" />

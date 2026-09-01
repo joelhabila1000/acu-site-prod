@@ -74,13 +74,6 @@ export default function Footer() {
           </div>
 
           <div className="footer-meta-row">
-            <p>
-              Ajayi Crowther University does not discriminate on the basis of
-              race, color, national and ethnic origin in its educational
-              policies, admissions policies, scholarships, loan programs,
-              athletic and other programs. Read Nondiscrimination Policy.
-            </p>
-
             <div className="footer-social-row" aria-label="Social media links">
               <a
                 href={SITE.social.facebook}
@@ -124,9 +117,9 @@ export default function Footer() {
           <div className="bottom-links">
             <a href="/privacy">Website Policies</a>
             <span>|</span>
-            <a href="/privacy">Privacy Statement</a>
+            <a href="/privacy"></a>
             <span>|</span>
-            <a href="/contact">Site by: ACU Standard</a>
+            <a href="/contact">Site by:J-Technologies</a>
           </div>
           <p>
             © {year} {SITE.name}

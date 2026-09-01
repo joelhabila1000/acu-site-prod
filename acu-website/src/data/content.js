@@ -5,12 +5,12 @@ import logoImg from "../assets/acu-logo-new-1.png";
 import heroImage from "../assets/1784031378408.jpg";
 import campusWideImage from "../assets/1784816484060.jpg";
 import crestImage from "../assets/acu-logo-cd.png";
+import vchanImage from "../assets/vchan.jpg";
 import heroCampusOne from "../assets/IMG_3272.JPG";
 import heroCampusTwo from "../assets/IMG_3282.JPG";
 import heroCampusThree from "../assets/IMG_3307.JPG";
 import heroCampusFour from "../assets/IMG_3318.JPG";
 import heroCampusFive from "../assets/IMG_3413.JPG";
-import vcImage from "../assets/vchan.jpg";
 
 export const SITE = {
   name: "Ajayi Crowther University",
@@ -22,7 +22,7 @@ export const SITE = {
   phone: "+234 814 592 0637",
   email: "info@acu.edu.ng",
   address: "Ajayi Crowther University, PMB 1066, Oyo Town, Oyo State, Nigeria",
-  applyUrl: "apply.acu.edu.ng",
+  applyUrl: "",
   mapEmbed:
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.4335198877734!2d3.9479533!3d7.849614000000009!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103759796a2d6965%3A0x661ff241b20e8152!2sAjayi%20Crowther%20University!5e0!3m2!1sen!2sng!4v1707814559781!5m2!1sen!2sng",
   social: {
@@ -611,7 +611,7 @@ export const IMAGES = {
   heroCampusThree: heroCampusThree,
   heroCampusFour: heroCampusFour,
   heroCampusFive: heroCampusFive,
-  vc: vcImage,
+  vc: vchanImage,
   aboutSecondary: campusWideImage,
   campusWide: campusWideImage,
 };

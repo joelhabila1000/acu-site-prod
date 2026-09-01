@@ -20,7 +20,9 @@
   border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--line);
-  transition: transform 200ms ease, box-shadow 200ms ease;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease;
   animation: fadeUp 700ms ease both;
 }
 .news-card:hover,
