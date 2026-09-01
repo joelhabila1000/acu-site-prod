@@ -6,11 +6,11 @@ import AdmissionCTA from "../components/AdmissionCTA.jsx";
 export default function Academics() {
   return (
     <>
-      <PageHeader
+      {/* <PageHeader
         crumb="Academics"
         title="Thirteen Faculties. Fifty-One Accredited Courses."
         lede="From Agriculture to Law, our faculties are staffed by distinguished scholars committed to rigorous, faith-grounded scholarship."
-      />
+      /> */}
 
       <section className="section">
         <div className="container">

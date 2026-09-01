@@ -7,7 +7,11 @@ export default function AboutPreview() {
     <section className="section section-cream" aria-labelledby="about-heading">
       <div className="container about-grid">
         <div className="about-media">
-          <img src={IMAGES.vc} alt="ACU leadership addressing the university community" loading="lazy" />
+          <img
+            src={IMAGES.vc}
+            alt="Ajayi Crowther University Vice Chancellor"
+            loading="lazy"
+          />
           <div className="about-media-frame" aria-hidden="true" />
         </div>
 
@@ -15,11 +19,12 @@ export default function AboutPreview() {
           <p className="eyebrow">Who We Are</p>
           <h2 id="about-heading">A Legacy Rooted in Faith and Scholarship</h2>
           <p className="drop-cap">
-            Ajayi Crowther University was established by the Supra Diocesan Board (West) of
-            the Church of Nigeria (Anglican Communion), tracing its origins to the defunct
-            CMS Training Institution, Abeokuta, and St. Andrew's College, Oyo. We emphasise
-            the fear of God, sound academic development, excellent character formation,
-            hard work, diligence and entrepreneurship.
+            Ajayi Crowther University was established by the Supra Diocesan
+            Board (West) of the Church of Nigeria (Anglican Communion), tracing
+            its origins to the defunct CMS Training Institution, Abeokuta, and
+            St. Andrew's College, Oyo. We emphasise the fear of God, sound
+            academic development, excellent character formation, hard work,
+            diligence and entrepreneurship.
           </p>
           <Link to="/about" className="btn btn-navy">
             Read Our Full Story

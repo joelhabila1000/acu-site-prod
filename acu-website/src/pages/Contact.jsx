@@ -5,7 +5,12 @@ import { SITE } from "../data/content.js";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
@@ -16,7 +21,8 @@ export default function Contact() {
   function validate() {
     const next = {};
     if (!form.name.trim()) next.name = "Please enter your name.";
-    if (!EMAIL_RE.test(form.email.trim())) next.email = "Please enter a valid email address.";
+    if (!EMAIL_RE.test(form.email.trim()))
+      next.email = "Please enter a valid email address.";
     if (!form.message.trim()) next.message = "Please enter a message.";
     return next;
   }
@@ -34,11 +40,11 @@ export default function Contact() {
 
   return (
     <>
-      <PageHeader
+      {/* <PageHeader
         crumb="Contact"
         title="Get in Touch"
         lede="Reach the university's central offices, or find the faculty and portal you're looking for."
-      />
+      /> */}
 
       <section className="section">
         <div className="container">
@@ -62,8 +68,9 @@ export default function Contact() {
               <p className="eyebrow">Send a Message</p>
               <h2>We'd Love to Hear From You</h2>
               <p style={{ color: "var(--ink-500)", maxWidth: 420 }}>
-                Whether you're a prospective student, parent, or partner institution, our
-                team typically responds within one business day.
+                Whether you're a prospective student, parent, or partner
+                institution, our team typically responds within one business
+                day.
               </p>
               <div className="map-frame" style={{ marginTop: 28 }}>
                 <iframe
@@ -79,7 +86,8 @@ export default function Contact() {
             <form className="inquiry-form" onSubmit={handleSubmit} noValidate>
               {submitted && (
                 <div className="form-success" role="status">
-                  Message sent — thank you for reaching out. We'll respond shortly.
+                  Message sent — thank you for reaching out. We'll respond
+                  shortly.
                 </div>
               )}
 
@@ -95,7 +103,11 @@ export default function Contact() {
                   aria-invalid={Boolean(errors.name)}
                   aria-describedby={errors.name ? "c-name-error" : undefined}
                 />
-                {errors.name && <span id="c-name-error" className="form-error">{errors.name}</span>}
+                {errors.name && (
+                  <span id="c-name-error" className="form-error">
+                    {errors.name}
+                  </span>
+                )}
               </div>
 
               <div className="form-row">
@@ -110,7 +122,11 @@ export default function Contact() {
                   aria-invalid={Boolean(errors.email)}
                   aria-describedby={errors.email ? "c-email-error" : undefined}
                 />
-                {errors.email && <span id="c-email-error" className="form-error">{errors.email}</span>}
+                {errors.email && (
+                  <span id="c-email-error" className="form-error">
+                    {errors.email}
+                  </span>
+                )}
               </div>
 
               <div className="form-row">
@@ -133,10 +149,14 @@ export default function Contact() {
                   value={form.message}
                   onChange={(e) => update("message", e.target.value)}
                   aria-invalid={Boolean(errors.message)}
-                  aria-describedby={errors.message ? "c-message-error" : undefined}
+                  aria-describedby={
+                    errors.message ? "c-message-error" : undefined
+                  }
                 />
                 {errors.message && (
-                  <span id="c-message-error" className="form-error">{errors.message}</span>
+                  <span id="c-message-error" className="form-error">
+                    {errors.message}
+                  </span>
                 )}
               </div>
 

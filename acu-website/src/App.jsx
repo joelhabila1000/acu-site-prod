@@ -6,6 +6,7 @@ import ScrollToTop from "./components/ScrollToTop.jsx";
 import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
 import Academics from "./pages/Academics.jsx";
+import FacultyPage from "./pages/FacultyPage.jsx";
 import Admissions from "./pages/Admissions.jsx";
 import Contact from "./pages/Contact.jsx";
 import Admin from "./pages/Admin.jsx";
@@ -70,6 +71,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/academics" element={<Academics />} />
+          <Route path="/faculties/:slug" element={<FacultyPage />} />
           <Route path="/admissions" element={<Admissions />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/maintenance" element={<Maintenance />} />

@@ -63,11 +63,11 @@ export default function Admissions() {
 
   return (
     <>
-      <PageHeader
+      {/* <PageHeader
         crumb="Admissions"
         title="Admission Is Currently Open for 2026/2027 Session"
         lede="Follow four simple steps to begin your journey as a Godly intellectual at ACU, Oyo."
-      />
+      /> */}
 
       <section className="section">
         <div className="container">
@@ -85,7 +85,7 @@ export default function Admissions() {
 
           <div className="admissions-actions">
             <a
-              href={SITE.applyUrl}
+              href="https://apply.acu.edu.ng"
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-oxblood"

@@ -5,11 +5,11 @@ import { IMAGES } from "../data/content.js";
 export default function About() {
   return (
     <>
-      <PageHeader
+      {/* <PageHeader
         crumb="About"
         title="A Legacy of Faith, Knowledge and Probity"
         lede="Established by the Church of Nigeria (Anglican Communion), Ajayi Crowther University carries forward a century-old tradition of mission education in Yorubaland."
-      />
+      /> */}
 
       <section className="section">
         <div className="container about-grid">

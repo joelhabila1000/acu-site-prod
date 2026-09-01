@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { SITE, FACULTIES } from "../data/content.js";
+import { SITE } from "../data/content.js";
 import "./Footer.css";
 
 export default function Footer() {
@@ -7,121 +7,130 @@ export default function Footer() {
 
   return (
     <footer className="site-footer">
-      <div className="container footer-grid">
-        <div className="footer-brand">
-          <div className="footer-brand-row">
+      <div className="container footer-shell">
+        <div className="footer-brand-panel">
+          <div className="footer-brand-lockup">
             <img
               src={SITE.logo}
               alt={`${SITE.name} crest`}
-              width="52"
-              height="52"
+              width="78"
+              height="78"
               loading="lazy"
             />
-            <div>
+            <div className="brand-text-stack">
               <strong>{SITE.name}</strong>
-              <span>
-                {SITE.motto} {SITE.mottoMeaning}
-              </span>
+              <span>{SITE.tagline}</span>
             </div>
           </div>
-          <p>
-            A faith-based Anglican university raising Godly intellectuals who
-            become agents of positive change in their environment, the nation,
-            and the world.
-          </p>
-          <div className="footer-social">
-            <a
-              href={SITE.social.facebook}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Facebook"
-            >
-              Facebook
-            </a>
-            <a
-              href={SITE.social.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-            >
-              Instagram
-            </a>
-            <a
-              href={SITE.social.x}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="X (Twitter)"
-            >
-              X
-            </a>
-            <a
-              href={SITE.social.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
-            >
-              LinkedIn
-            </a>
-            <a
-              href={SITE.social.youtube}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="YouTube"
-            >
-              YouTube
-            </a>
+
+          <div className="footer-address-block">
+            <p>Ajayi Crowther University</p>
+            <p>PMB 1066, Oyo Town</p>
+            <p>Oyo State, Nigeria</p>
+            <p>{SITE.phone}</p>
           </div>
         </div>
 
-        <div className="footer-col">
-          <h4>Explore</h4>
-          <ul>
-            <li>
-              <Link to="/about">About ACU</Link>
-            </li>
-            <li>
-              <Link to="/academics">Academics</Link>
-            </li>
-            <li>
-              <Link to="/admissions">Admissions</Link>
-            </li>
-            <li>
-              <Link to="/contact">Contact</Link>
-            </li>
-          </ul>
-        </div>
+        <div className="footer-main-panel">
+          <div className="footer-search">
+            <input
+              type="text"
+              placeholder="Search ACU"
+              aria-label="Search ACU"
+            />
+            <button type="button" aria-label="Search">
+              ⌕
+            </button>
+          </div>
 
-        <div className="footer-col">
-          <h4>Faculties</h4>
-          <ul>
-            {FACULTIES.slice(0, 6).map((f) => (
-              <li key={f.name}>
-                <a href={f.url} target="_blank" rel="noopener noreferrer">
-                  {f.name}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
+          <div className="footer-actions">
+            <Link to="/admissions" className="action-card">
+              Apply
+            </Link>
+            <a
+              href="https://maps.google.com/?q=Ajayi+Crowther+University+Oyo"
+              className="action-card"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Visit
+            </a>
+            <a href="mailto:info@acu.edu.ng" className="action-card">
+              Contact Admissions
+            </a>
+          </div>
 
-        <div className="footer-col">
-          <h4>Contact</h4>
-          <address>
-            {SITE.address}
-            <br />
-            <a href={`tel:${SITE.phone.replace(/\s/g, "")}`}>{SITE.phone}</a>
-            <br />
-            <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
-          </address>
+          <div className="footer-links-wrap">
+            <div className="footer-links-col">
+              <a href="/contact">Contact Us</a>
+              <a href="/admissions">Employment</a>
+              <a href="/about">Offices &amp; Centers</a>
+            </div>
+            <div className="footer-links-col">
+              <a href="/about">Emergency Information</a>
+              <a href="/news">News &amp; Events</a>
+              <a href="/contact">Website Feedback</a>
+            </div>
+          </div>
+
+          <div className="footer-meta-row">
+            <p>
+              Ajayi Crowther University does not discriminate on the basis of
+              race, color, national and ethnic origin in its educational
+              policies, admissions policies, scholarships, loan programs,
+              athletic and other programs. Read Nondiscrimination Policy.
+            </p>
+
+            <div className="footer-social-row" aria-label="Social media links">
+              <a
+                href={SITE.social.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+              >
+                f
+              </a>
+              <a
+                href={SITE.social.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+              >
+                ◎
+              </a>
+              <a
+                href={SITE.social.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+              >
+                in
+              </a>
+              <a
+                href={SITE.social.youtube}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="YouTube"
+              >
+                ▶
+              </a>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="footer-bottom">
+      <div className="footer-bottom-bar">
         <div className="container footer-bottom-inner">
+          <div className="bottom-links">
+            <a href="/privacy">Website Policies</a>
+            <span>|</span>
+            <a href="/privacy">Privacy Statement</a>
+            <span>|</span>
+            <a href="/contact">Site by: ACU Standard</a>
+          </div>
           <p>
-            © {year} {SITE.name}, Oyo. All rights reserved.
+            © {year} {SITE.name}
           </p>
-          <p className="footer-note">j-tech</p>
         </div>
       </div>
     </footer>

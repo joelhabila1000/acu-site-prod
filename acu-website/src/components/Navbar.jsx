@@ -68,6 +68,7 @@ export default function Navbar() {
           />
           <span className="brand-text">
             <strong>{SITE.name}</strong>
+            <em>{SITE.tagline}</em>
           </span>
         </NavLink>
 
