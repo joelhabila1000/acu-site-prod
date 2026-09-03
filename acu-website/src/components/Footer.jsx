@@ -115,11 +115,9 @@ export default function Footer() {
       <div className="footer-bottom-bar">
         <div className="container footer-bottom-inner">
           <div className="bottom-links">
-            <a href="/privacy">Website Policies</a>
-            <span>|</span>
-            <a href="/privacy"></a>
-            <span>|</span>
-            <a href="/contact">Site by:J-Technologies</a>
+            <a href="https://www.meetjoelhabila.vercel.app" target="_blank" rel="noopener noreferrer">
+              Site by:J-Technologies
+            </a>
           </div>
           <p>
             © {year} {SITE.name}

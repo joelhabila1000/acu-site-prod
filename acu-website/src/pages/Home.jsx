@@ -4,6 +4,7 @@ import StatsBar from "../components/StatsBar.jsx";
 import ProgrammesSection from "../components/ProgrammesSection.jsx";
 import AboutPreview from "../components/AboutPreview.jsx";
 import FacultiesGrid from "../components/FacultiesGrid.jsx";
+import GallerySection from "../components/GallerySection.jsx";
 import NewsSection from "../components/NewsSection.jsx";
 import AdmissionCTA from "../components/AdmissionCTA.jsx";
 import { SITE } from "../data/content.js";
@@ -33,6 +34,7 @@ export default function Home() {
         </div>
       </section>
 
+      <GallerySection />
       <NewsSection />
       <AdmissionCTA />
 

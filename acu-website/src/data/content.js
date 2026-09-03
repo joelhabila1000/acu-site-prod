@@ -11,6 +11,7 @@ import heroCampusTwo from "../assets/IMG_3282.JPG";
 import heroCampusThree from "../assets/IMG_3307.JPG";
 import heroCampusFour from "../assets/IMG_3318.JPG";
 import heroCampusFive from "../assets/IMG_3413.JPG";
+import studentsImage from "../assets/students.jpg";
 
 export const SITE = {
   name: "Ajayi Crowther University",
@@ -22,7 +23,7 @@ export const SITE = {
   phone: "+234 814 592 0637",
   email: "info@acu.edu.ng",
   address: "Ajayi Crowther University, PMB 1066, Oyo Town, Oyo State, Nigeria",
-  applyUrl: "",
+  applyUrl: "https://apply.acu.edu.ng/",
   mapEmbed:
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.4335198877734!2d3.9479533!3d7.849614000000009!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103759796a2d6965%3A0x661ff241b20e8152!2sAjayi%20Crowther%20University!5e0!3m2!1sen!2sng!4v1707814559781!5m2!1sen!2sng",
   social: {
@@ -44,7 +45,7 @@ export const NAV_LINKS = [
 
 export const PORTALS = [
   { label: "Postgraduate", url: "/portal/postgraduate" },
-  { label: "Undergraduate", url: "/portal/undergraduate" },
+  { label: "Undergraduate", url: "https://apply.acu.edu.ng/" },
   { label: "Part-Time", url: "/portal/part-time" },
   { label: "Foundation", url: "/portal/foundation" },
 ];
@@ -559,33 +560,41 @@ export const FACULTIES = [
 
 export const NEWS = [
   {
-    title: "SURCON Accreditation Team Visits ACU, Lauds Programme Quality",
-    date: "August 5, 2026",
-    image:
-      "https://acu.edu.ng/mainacu/wp-content/uploads/2026/08/SURCON-2.jpeg",
-    url: "https://acu.edu.ng/surcon-accreditation-team-visits-acu-lauds-programme-quality/",
+    title: "Freshers Orientation Brings the ACU Community Together",
+    date: "August 12, 2026",
+    image: studentsImage,
+    url: "/admissions",
   },
   {
-    title: "NUC Pre-Validation Team Visits ACU for ODeL Programme Assessment",
-    date: "August 5, 2026",
-    image:
-      "https://acu.edu.ng/mainacu/wp-content/uploads/2026/08/AJAYI-CROWTHER-4.jpeg",
-    url: "https://acu.edu.ng/nuc-pre-validation-team-visits-ajayi-crowther-university-for-odel-programme-assessment/",
+    title: "Academic Excellence in Motion: Students Thrive Across Campuses",
+    date: "August 9, 2026",
+    image: heroCampusOne,
+    url: "/academics",
+  },
+  {
+    title: "A New Chapter of Learning, Leadership, and Service at ACU",
+    date: "August 4, 2026",
+    image: heroCampusTwo,
+    url: "/about",
+  },
+  {
+    title: "Campus Life and Research Culture Continue to Grow",
+    date: "July 29, 2026",
+    image: heroCampusThree,
+    url: "/faculties/computing",
   },
   {
     title:
-      "ACU Celebrates BOT Chairman Chief Wole Olanipekun's 50 Years of Legal Excellence",
-    date: "August 5, 2026",
-    image:
-      "https://acu.edu.ng/mainacu/wp-content/uploads/2026/08/AJAYI-CROWTHER-2.jpeg",
-    url: "https://acu.edu.ng/acu-celebrates-bot-chairman-chief-wole-olanipekuns-50-years-of-legal-excellence-hails-his-transformative-philanthropy/",
+      "Faculty Collaboration and Innovation Strengthen the Student Experience",
+    date: "July 21, 2026",
+    image: heroCampusFour,
+    url: "/faculties",
   },
   {
-    title: "2026/2027 Admissions: Why Ajayi Crowther University, Oyo",
-    date: "July 29, 2026",
-    image:
-      "https://acu.edu.ng/mainacu/wp-content/uploads/2026/07/1785321244968.jpg",
-    url: "https://acu.edu.ng/2026-2027-admissions-why-ajayi-crowther-university-acu-oyo/",
+    title: "ACU Celebrates a Vibrant Student Community and Shared Purpose",
+    date: "July 15, 2026",
+    image: heroCampusFive,
+    url: "/contact",
   },
 ];
 
