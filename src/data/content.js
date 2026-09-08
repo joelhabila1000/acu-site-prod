@@ -25,7 +25,7 @@ export const SITE = {
   address: "Ajayi Crowther University, PMB 1066, Oyo Town, Oyo State, Nigeria",
   applyUrl: "https://apply.acu.edu.ng/",
   mapEmbed:
-    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.4335198877734!2d3.9479533!3d7.849614000000009!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103759796a2d6965%3A0x661ff241b20e8152!2sAjayi%20Crowther%20University!5e0!3m2!1sen!2sng!4v1707814559781!5m2!1sen!2sng&maptype=satellite",
+    "https://www.google.com/maps?q=Ajayi+Crowther+University,+Oyo&z=16&t=k&output=embed",
   social: {
     facebook: "https://www.facebook.com/ACU.Oyo/",
     instagram: "https://www.instagram.com/acuoyo/",
