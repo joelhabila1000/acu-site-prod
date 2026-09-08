@@ -10,6 +10,7 @@ import heroCampusOne from "../assets/IMG_3272.JPG";
 import heroCampusTwo from "../assets/IMG_3282.JPG";
 import heroCampusThree from "../assets/IMG_3307.JPG";
 import heroCampusFour from "../assets/IMG_3318.JPG";
+import heroCampusSix from "../assets/IMG_3405.JPG";
 import heroCampusFive from "../assets/IMG_3413.JPG";
 import studentsImage from "../assets/students.jpg";
 
@@ -656,6 +657,7 @@ export const IMAGES = {
   heroCampusTwo: heroCampusTwo,
   heroCampusThree: heroCampusThree,
   heroCampusFour: heroCampusFour,
+  heroCampusSix: heroCampusSix,
   heroCampusFive: heroCampusFive,
   vc: vchanImage,
   aboutSecondary: campusWideImage,
