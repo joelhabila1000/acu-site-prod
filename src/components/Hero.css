@@ -1,0 +1,128 @@
+.hero {
+  position: relative;
+  color: var(--white);
+  overflow: hidden;
+}
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.hero-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 700ms ease;
+  pointer-events: none;
+}
+.hero-media img.is-active {
+  opacity: 1;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    rgba(8, 19, 38, 0.94) 8%,
+    rgba(8, 19, 38, 0.78) 45%,
+    rgba(8, 19, 38, 0.55) 100%
+  );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  padding: 150px 24px 130px;
+  max-width: 780px;
+  animation: fadeUp 700ms ease both;
+}
+
+.hero h1 {
+  color: var(--white);
+  font-size: clamp(2.2rem, 4.6vw, 3.4rem);
+  margin-bottom: 20px;
+}
+.hero-sub {
+  display: block;
+  font-size: 0.42em;
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: var(--gold-100);
+  letter-spacing: 0.04em;
+  margin-top: 10px;
+}
+
+.hero-lede {
+  font-size: 1.08rem;
+  color: rgba(248, 244, 233, 0.88);
+  max-width: 560px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.hero-dots {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-dots button {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: 0;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    transform 180ms ease,
+    background 180ms ease;
+}
+.hero-dots button.is-active {
+  background: var(--gold-400);
+  transform: scale(1.2);
+}
+
+.hero-ribbon {
+  position: relative;
+  z-index: 1;
+  background: var(--oxblood-600);
+}
+.hero-ribbon-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 14px 24px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.hero-ribbon-inner span {
+  letter-spacing: 0.02em;
+}
+.hero-ribbon-inner a {
+  color: var(--gold-100);
+  font-weight: 700;
+}
+.hero-ribbon-inner a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .hero-content {
+    padding: 110px 20px 90px;
+  }
+}

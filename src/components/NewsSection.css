@@ -1,0 +1,118 @@
+.news-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.news-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.news-arrow {
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--white);
+  color: var(--navy-900);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+.news-arrow:hover,
+.news-arrow:focus-visible {
+  background: var(--navy-900);
+  color: var(--white);
+  border-color: var(--navy-900);
+}
+
+.news-carousel {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 72px) / 4);
+  gap: 24px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  padding-bottom: 8px;
+}
+.news-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.news-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  scroll-snap-align: start;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease;
+  animation: fadeUp 700ms ease both;
+}
+.news-card:hover,
+.news-card:focus-visible {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+}
+
+.news-image {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--cream-100);
+}
+.news-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 400ms ease;
+}
+.news-card:hover .news-image img {
+  transform: scale(1.06);
+}
+
+.news-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.news-body time {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--oxblood-600);
+  font-weight: 700;
+}
+.news-body h3 {
+  font-size: 1rem;
+  margin: 10px 0 14px;
+  line-height: 1.35;
+  flex: 1;
+}
+.news-link {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--navy-900);
+}
+
+@media (max-width: 960px) {
+  .news-carousel {
+    grid-auto-columns: calc((100% - 24px) / 2);
+  }
+}
+@media (max-width: 560px) {
+  .news-carousel {
+    grid-auto-columns: 100%;
+  }
+}

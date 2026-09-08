@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/src/assets/acu-logo-new-1.png" />
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="/src/assets/acu-logo-new-1.png"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Basic hardening: restrict what the page is allowed to load/execute -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self'; connect-src 'self' https:; frame-src https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+    />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <title>Ajayi Crowther University, Oyo | Raising Godly Intellectuals</title>
+    <meta
+      name="description"
+      content="Ajayi Crowther University (ACU), Oyo — a faith-based Anglican university in Oyo State, Nigeria. Explore admissions, faculties, and campus life."
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
