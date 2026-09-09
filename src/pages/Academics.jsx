@@ -1,24 +1,40 @@
-import PageHeader from "../components/PageHeader.jsx";
 import FacultiesGrid from "../components/FacultiesGrid.jsx";
 import ProgrammesSection from "../components/ProgrammesSection.jsx";
 import AdmissionCTA from "../components/AdmissionCTA.jsx";
+import { STATS } from "../data/content.js";
+import "./Academics.css";
 
 export default function Academics() {
   return (
     <>
-      {/* <PageHeader
-        crumb="Academics"
-        title="Thirteen Faculties. Fifty-One Accredited Courses."
-        lede="From Agriculture to Law, our faculties are staffed by distinguished scholars committed to rigorous, faith-grounded scholarship."
-      /> */}
+      <section className="academics-hero">
+        <div className="container academics-hero-content">
+          <p className="eyebrow">Academic distinction</p>
+          <h1>Explore Our Faculties</h1>
+          <p>
+            Discover the faculties, programmes and learning communities shaping
+            the next generation of leaders at Ajayi Crowther University.
+          </p>
+          <div className="academics-stat-strip">
+            {STATS.slice(0, 2).map((stat) => (
+              <div key={stat.label}>
+                <strong>{stat.value}+</strong>
+                <span>{stat.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="section">
         <div className="container">
           <div className="section-head center">
-            <p className="eyebrow" style={{ justifyContent: "center" }}>
-              Faculties
+            <p className="eyebrow" style={{ justifyContent: "center" }}>Faculties</p>
+            <h2>Find Your Academic Path</h2>
+            <p>
+              Search by faculty or programme, then select a faculty to explore
+              its academic offerings, facilities and career pathways.
             </p>
-            <h2>Explore Our Faculties</h2>
           </div>
           <FacultiesGrid />
         </div>

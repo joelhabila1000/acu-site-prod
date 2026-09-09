@@ -659,6 +659,7 @@ export const IMAGES = {
   heroCampusFour: heroCampusFour,
   heroCampusSix: heroCampusSix,
   heroCampusFive: heroCampusFive,
+  students: studentsImage,
   vc: vchanImage,
   aboutSecondary: campusWideImage,
   campusWide: campusWideImage,

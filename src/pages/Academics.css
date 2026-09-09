@@ -1,0 +1,29 @@
+.academics-hero {
+  position: relative;
+  min-height: 510px;
+  display: grid;
+  background: linear-gradient(135deg, var(--navy-950), var(--navy-800));
+  color: var(--white);
+}
+
+.academics-hero-content {
+  align-self: center;
+  max-width: 900px;
+  padding-top: 88px;
+  padding-bottom: 66px;
+}
+
+.academics-hero .eyebrow { color: var(--gold-400); }
+.academics-hero h1 { max-width: 700px; color: var(--white); font-size: clamp(2.8rem, 7vw, 5.1rem); margin: 0 0 20px; }
+.academics-hero-content > p:not(.academics-breadcrumb):not(.eyebrow) { max-width: 650px; color: rgba(255, 255, 255, 0.8); font-size: 1.1rem; }
+
+.academics-stat-strip { display: flex; flex-wrap: wrap; gap: 34px; margin-top: 36px; }
+.academics-stat-strip div { display: grid; gap: 2px; min-width: 112px; }
+.academics-stat-strip strong { color: var(--gold-400); font-size: 1.8rem; line-height: 1; }
+.academics-stat-strip span { color: rgba(255, 255, 255, 0.7); font-size: 0.76rem; }
+
+@media (max-width: 560px) {
+  .academics-hero { min-height: 480px; }
+  .academics-hero-content { padding-top: 72px; }
+  .academics-stat-strip { gap: 20px; }
+}
