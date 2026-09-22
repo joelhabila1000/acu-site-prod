@@ -1,7 +1,7 @@
 import viceChancellorImage from "../assets/PRINCIPAL OFFICERS/Vice chancellor.png";
 import dvcAcademicsImage from "../assets/PRINCIPAL OFFICERS/DVC-Acad.png";
 import dvcAdminImage from "../assets/PRINCIPAL OFFICERS/DVC-Admin.png";
-import registrarImage from "../assets/PRINCIPAL OFFICERs/Registrar.png";
+import registrarImage from "../assets/PRINCIPAL OFFICERS/Registrar.png";
 import bursarImage from "../assets/PRINCIPAL OFFICERS/Bursar.png";
 import librarianImage from "../assets/PRINCIPAL OFFICERS/Librarian.png";
 
