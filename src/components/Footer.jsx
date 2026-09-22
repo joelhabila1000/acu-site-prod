@@ -45,7 +45,7 @@ export default function Footer() {
             
           </div> */}
 
-          <div className="footer-actions">
+          {/* <div className="footer-actions">
             <Link to="/admissions" className="action-card">
               Apply
             </Link>
@@ -60,17 +60,25 @@ export default function Footer() {
             <a href="mailto:info@acu.edu.ng" className="action-card">
               Contact Admissions
             </a>
-          </div>
+          </div> */}
 
           <div className="footer-links-wrap">
             <div className="footer-links-col">
+              <h1><span style={{ color: "white" }}>Quick Links</span></h1>
               <a href="/contact">Contact Us</a>
               <a href="/admissions">Admissions</a>
               <a href="/academics">Academics </a>
+              <Link to="/news">News &amp; Events</Link>
+              <Link to="/">Staff Directory</Link>
+              <Link to="/">Library</Link>
+      
             </div>
             <div className="footer-links-col">
-              <Link to="/news">News &amp; Events</Link>
-              <a href="/Gallery">Gallery</a>
+              <h1><span style={{ color: "white" }}>Portals</span></h1>
+              <Link to="apply.acu.edu.ng">Apply</Link>
+              <Link to="portal.acu.edu.ng">Undergraduate</Link>
+              <Link to="pgs.acu.edu.ng">Postgraduate</Link>
+              <a href="cpfpapply.acu.edu.ng">Foundation</a>
 
             </div>
           </div>

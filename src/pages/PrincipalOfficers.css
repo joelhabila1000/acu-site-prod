@@ -25,14 +25,26 @@
   box-shadow: 0 16px 36px -28px rgba(8, 19, 38, .7);
 }
 
-.principal-officer-card > img {
+/* .principal-officer-card > img {
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
   object-position: center top;
   background: var(--cream-100);
+} */
+.principal-officer-card > img {
+    display: block;
+  width: calc(100% - 28px);        /* inset from card edges */
+  height: 320px;                    /* uniform image area */
+  margin: 14px auto 0;              /* center + top spacing */
+  object-fit: contain;              /* shows the ENTIRE image */
+  object-position: center;
+  background: var(--cream-100);     /* fill for letterbox space */
+  padding: 10px;                    /* mat between image and border */
+  border: 2px solid var(--navy-800);/* the frame border */
+  border-radius: var(--radius-sm);
+  box-sizing: border-box;
 }
-
 
 .principal-officer-card {
   display: block;

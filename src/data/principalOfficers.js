@@ -1,9 +1,9 @@
-import viceChancellorImage from "../assets/PRINCIPAL OFFICERS/Professor-Ebunoluwa-Oduwole.jpg";
-import dvcAcademicsImage from "../assets/PRINCIPAL OFFICERS/DVC-Academics.jpg";
+import viceChancellorImage from "../assets/PRINCIPAL OFFICERS/Vice chancellor.png";
+import dvcAcademicsImage from "../assets/PRINCIPAL OFFICERS/DVC-Acad.png";
 import dvcAdminImage from "../assets/PRINCIPAL OFFICERS/DVC-Admin.png";
-import registrarImage from "../assets/PRINCIPAL OFFICERS/Registrar.jpg";
-import bursarImage from "../assets/PRINCIPAL OFFICERS/Bursar.jpg";
-import librarianImage from "../assets/PRINCIPAL OFFICERS/Librarian-1.jpg";
+import registrarImage from "../assets/PRINCIPAL OFFICERs/Registrar.png";
+import bursarImage from "../assets/PRINCIPAL OFFICERS/Bursar.png";
+import librarianImage from "../assets/PRINCIPAL OFFICERS/Librarian.png";
 
 export const PRINCIPAL_OFFICERS = [
   {
@@ -130,7 +130,7 @@ export const PRINCIPAL_OFFICERS = [
   },
   {
     slug: "librarian",
-    name: "Dr. Bosede Adebimpe Ajiboye",
+    name: "Professor Bosede Adebimpe Ajiboye",
     role: "University Librarian",
     image: librarianImage,
     summary:

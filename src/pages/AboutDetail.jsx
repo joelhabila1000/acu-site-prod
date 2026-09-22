@@ -1,7 +1,7 @@
 import PageHeader from "../components/PageHeader.jsx";
 import { SITE } from "../data/content.js";
 import anthemAudio from "../assets/ACU-Anthem.mp3";
-import vcPhoto from "../assets/PRINCIPAL OFFICERS/Professor-Ebunoluwa-Oduwole.jpg";
+import vcPhoto from "../assets/PRINCIPAL OFFICERS/Vice chancellor.png";
 
 const ABOUT_PAGES = {
   "historical-background": {
