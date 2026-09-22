@@ -16,7 +16,7 @@ const STEPS = [
     desc: "Create an account on the admissions portal and complete your application form.",
   },
   {
-    title: "Submit &amp; Pay",
+    title: "Submit; Pay",
     desc: "Upload your documents, pay the application fee, and submit before the deadline.",
   },
 ];
@@ -101,7 +101,7 @@ export default function Admissions() {
               Postgraduate Applications
             </a>
             <a
-              href="https://acu.edu.ng/courses"
+              href="../listofcourses"
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-navy"

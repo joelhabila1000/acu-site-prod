@@ -1,0 +1,71 @@
+.back-to-top {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #0b1f4a;              /* navy */
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 900;
+  box-shadow: 0 8px 20px rgba(11, 31, 74, 0.35);
+
+  /* Hidden state */
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.back-to-top--visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.back-to-top:hover {
+  background: #c9a227;              /* gold */
+  color: #0b1f4a;
+  transform: translateY(-3px);
+}
+
+.back-to-top:focus-visible {
+  outline: 2px solid #c9a227;
+  outline-offset: 3px;
+}
+
+.back-to-top svg {
+  display: block;
+}
+
+/* On mobile, tuck it a little closer to the edge */
+@media (max-width: 640px) {
+  .back-to-top {
+    right: 16px;
+    bottom: 16px;
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top {
+    transition: opacity 0.2s ease;
+  }
+  .back-to-top--visible {
+    transform: none;
+  }
+  .back-to-top:hover {
+    transform: none;
+  }
+}

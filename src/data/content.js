@@ -84,8 +84,8 @@ export const NAV_LINKS = [
 export const PORTALS = [
   { label: "Postgraduate", url: "/portal/postgraduate" },
   { label: "Undergraduate", url: "https://apply.acu.edu.ng/" },
-  { label: "Part-Time", url: "/portal/part-time" },
-  { label: "Foundation", url: "/portal/foundation" },
+  { label: "Part-Time", url: "#" },
+  { label: "Foundation", url: "https://cpfpapply.acu.edu.ng" },
 ];
 
 export const STATS = [

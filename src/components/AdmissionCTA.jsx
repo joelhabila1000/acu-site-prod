@@ -13,7 +13,7 @@ export default function AdmissionCTA() {
           <p>Take the first step toward becoming a Godly intellectual at ACU, Oyo.</p>
         </div>
         <div className="cta-actions">
-          <a href="https://acu.edu.ng/courses" target="_blank" rel="noopener noreferrer" className="btn btn-outline">
+          <a href="../listofcourses.jsx" target="_blank" rel="noopener noreferrer" className="btn btn-outline">
             View Courses
           </a>
           <a href={SITE.applyUrl} target="_blank" rel="noopener noreferrer" className="btn btn-gold">

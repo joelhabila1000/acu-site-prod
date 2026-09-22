@@ -1,0 +1,70 @@
+.principal-officers-hero {
+  padding: 92px 0 72px;
+  background: linear-gradient(135deg, var(--navy-950), var(--navy-800));
+  color: var(--white);
+  text-align: center;
+}
+
+.principal-officers-hero .eyebrow,
+.principal-officers-message .eyebrow { color: var(--gold-400); }
+.principal-officers-hero .eyebrow { justify-content: center; }
+.principal-officers-hero h1 { color: var(--white); font-size: clamp(2.4rem, 5vw, 4rem); }
+.principal-officers-hero > .container > p:last-child { max-width: 700px; margin: 0 auto; color: rgba(255,255,255,.78); }
+
+.principal-officers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 26px;
+}
+
+.principal-officer-card {
+  overflow: hidden;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: 0 16px 36px -28px rgba(8, 19, 38, .7);
+}
+
+.principal-officer-card > img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: center top;
+  background: var(--cream-100);
+}
+
+
+.principal-officer-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.principal-officer-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 44px -28px rgba(8, 19, 38, 0.7);
+}
+
+.principal-officer-cta {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--navy-800);
+}
+.principal-officer-card-content { padding: 24px; }
+.principal-officer-card-content > p:first-child { margin-bottom: 10px; color: var(--oxblood-600); font-size: .73rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.principal-officer-card h2 { font-size: 1.14rem; margin-bottom: 0; }
+.principal-officer-card-content > p:last-child { margin: 0; color: var(--ink-700); font-size: .9rem; }
+.principal-officer-divider { display: block; width: 36px; height: 2px; margin: 18px 0; background: var(--gold-500); }
+
+.principal-officers-message { max-width: 760px; text-align: center; }
+.principal-officers-message .eyebrow { justify-content: center; }
+.principal-officers-message h2 { color: var(--white); }
+.principal-officers-message > p { color: rgba(248, 244, 233, .82); }
+
+@media (max-width: 920px) { .principal-officers-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .principal-officers-hero { padding: 68px 0 56px; }.principal-officers-grid { grid-template-columns: 1fr; gap: 20px; } }

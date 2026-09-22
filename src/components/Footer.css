@@ -95,6 +95,7 @@
   color: rgba(18, 25, 38, 0.7);
 }
 
+
 .footer-search button {
   width: 72px;
   height: 100%;
@@ -119,7 +120,7 @@
   min-height: 88px;
   padding: 12px 14px;
   border: 1px solid rgba(255, 255, 255, 0.7);
-  background: rgba(122, 35, 49, 0.42);
+  background: rgba(153, 126, 7, 0.42);
   color: var(--white);
   text-decoration: none;
   font-family: var(--font-display);
@@ -133,7 +134,7 @@
 }
 
 .action-card:hover {
-  background: rgba(122, 35, 49, 0.62);
+  background: rgba(161, 129, 11, 0.62);
   transform: translateY(-1px);
 }
 
@@ -278,4 +279,26 @@
     flex-direction: column;
     align-items: flex-start;
   }
+}
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: #0b1f4a;
+  background: transparent;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.social-icon:hover {
+  color: #ffffff;
+  background: #ff0000; /* YouTube red on hover */
+  transform: translateY(-2px);
+}
+
+.social-icon svg {
+  display: block;
 }

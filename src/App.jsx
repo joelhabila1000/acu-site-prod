@@ -15,6 +15,11 @@ import PostgraduatePortal from "./pages/PostgraduatePortal.jsx";
 import Admin from "./admin/AdminApp.jsx";
 import Maintenance from "./pages/Maintenance.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import Listofcourses from "./pages/ListOfCourses.jsx";
+import BackToTop from "./components/BackToTop.jsx";
+import News from "./admin/pages/News.jsx";
+import NewsEventsPage from "./pages/NewsEventsPage.jsx";
+import PrincipalOfficerDetail from "./pages/PrincipalOfficerDetail";
 
 export default function App() {
   const location = useLocation();
@@ -42,6 +47,7 @@ export default function App() {
           <Route path="/admissions" element={<Admissions />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/maintenance" element={<Maintenance />} />
+          <Route path="/listofcourses" element={<Listofcourses />} />
           <Route
             path="/portal/postgraduate/*"
             element={<PostgraduatePortal />}
@@ -49,8 +55,14 @@ export default function App() {
           <Route path="/portal/:portal" element={<Maintenance />} />
           <Route path="/admin/*" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/admin/news" element={<News />} />
+          <Route path="/news" element={<NewsEventsPage />} />
+         
+          <Route path="/principal-officers/:slug" element={<PrincipalOfficerDetail />} />
         </Routes>
       </main>
+      <BackToTop />
+
       <Footer />
     </>
   );

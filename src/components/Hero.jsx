@@ -113,7 +113,7 @@ export default function Hero() {
         <div className="container hero-ribbon-inner">
           <span>Admission is open for the 2026/2027 Session</span>
           <a
-            href="https://acu.edu.ng/courses"
+            href="../listofcourses.jsx"
             target="_blank"
             rel="noopener noreferrer"
           >

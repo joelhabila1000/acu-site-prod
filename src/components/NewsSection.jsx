@@ -80,7 +80,7 @@ export default function NewsSection() {
               →
             </button>
             <a
-              href="https://acu.edu.ng/news"
+              href="/news"
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-navy btn-sm"
