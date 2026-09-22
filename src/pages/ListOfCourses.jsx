@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import PageHeader from "../components/PageHeader.jsx";
-import "./listofcourses.css";
+import "../pages/ListOfCourses.css";
 // ===== COURSE DATA =====
 const ALL_COURSES = [
   {
