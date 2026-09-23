@@ -139,6 +139,7 @@ body .admin-shell {
   background: var(--bg);
   min-height: 100vh;
   width: calc(100% - 270px);
+  min-width: 0;
 }
 
 .dashboard-page {
@@ -296,11 +297,24 @@ body .admin-shell {
   border-collapse: collapse;
 }
 
+/* Keeps wide tables inside the card instead of stretching the page. */
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
 .table th,
 .table td {
   padding: 12px 10px;
   border-bottom: 1px solid #edf2f8;
   text-align: left;
+  white-space: nowrap;
+}
+
+.table td:first-child,
+.table th:first-child {
+  white-space: normal;
+  min-width: 180px;
 }
 
 .btn {
@@ -528,9 +542,21 @@ body .admin-shell {
   max-height: 90vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+
+/* The form must flex so .modal-scroll can actually scroll instead of the
+   whole modal growing past the viewport and hiding the action buttons. */
+.modal > form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 
 .modal-scroll {
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding-right: 4px;
 }

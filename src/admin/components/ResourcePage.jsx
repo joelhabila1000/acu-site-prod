@@ -141,35 +141,37 @@ export default function ResourcePage({ resource }) {
         ) : filtered.length === 0 ? (
           <div className="empty">No items found</div>
         ) : (
-          <table className="table">
-            <thead>
-              <tr>
-                {resource.columns.map((column) => (
-                  <th key={column.key}>{column.label}</th>
-                ))}
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((item) => (
-                <tr key={item.id}>
+          <div className="table-wrap">
+            <table className="table">
+              <thead>
+                <tr>
                   {resource.columns.map((column) => (
-                    <td key={column.key}>
-                      {formatCell(item[column.key], column.format)}
-                    </td>
+                    <th key={column.key}>{column.label}</th>
                   ))}
-                  <td className="actions">
-                    <button className="btn secondary" onClick={() => openEdit(item)}>
-                      Edit
-                    </button>
-                    <button className="btn" onClick={() => remove(item)}>
-                      Delete
-                    </button>
-                  </td>
+                  <th></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filtered.map((item) => (
+                  <tr key={item.id}>
+                    {resource.columns.map((column) => (
+                      <td key={column.key}>
+                        {formatCell(item[column.key], column.format)}
+                      </td>
+                    ))}
+                    <td className="actions">
+                      <button className="btn secondary" onClick={() => openEdit(item)}>
+                        Edit
+                      </button>
+                      <button className="btn" onClick={() => remove(item)}>
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </Card>
 
