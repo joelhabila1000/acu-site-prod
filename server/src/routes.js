@@ -53,7 +53,7 @@ router.get("/settings", settings.getAll);
 router.put("/settings/:key", auth.requireAuth, settings.put);
 
 // Uploads
-router.post("/uploads", auth.requireAuth, uploads.upload.single("file"), uploads.put);
+router.post("/uploads", auth.requireAuth, uploads.parseUpload, uploads.put);
 
 // Users
 router.get("/users", auth.requireAuth, users.list);

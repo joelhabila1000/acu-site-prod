@@ -2,15 +2,34 @@ const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
 
+const MAX_MB =
+  Number(process.env.UPLOAD_MAX_MB) > 0 ? Number(process.env.UPLOAD_MAX_MB) : 4;
+
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 8 * 1024 * 1024 },
+  limits: { fileSize: MAX_MB * 1024 * 1024 },
 });
 
-const LOCAL_DIR = path.join(__dirname, "..", "..", "..", "uploads");
+// Overridable so a host with a persistent disk (not a serverless bundle) can
+// point uploads somewhere that survives deployments.
+const LOCAL_DIR =
+  process.env.UPLOAD_DIR || path.join(__dirname, "..", "..", "..", "uploads");
 
 function safeName(original) {
   return `${Date.now()}-${String(original).replace(/[^\w.-]+/g, "_")}`;
+}
+
+// Wraps multer so size/field errors return JSON instead of a generic 500.
+function parseUpload(req, res, next) {
+  upload.single("file")(req, res, (err) => {
+    if (!err) return next();
+    if (err.code === "LIMIT_FILE_SIZE") {
+      return res
+        .status(413)
+        .json({ error: `File is too large. Maximum size is ${MAX_MB} MB.` });
+    }
+    return res.status(400).json({ error: err.message || "Upload failed" });
+  });
 }
 
 async function put(req, res) {
@@ -28,15 +47,24 @@ async function put(req, res) {
       return res.json({ url: blob.url });
     } catch (error) {
       return res
-        .status(500)
+        .status(502)
         .json({ error: `Upload failed: ${error.message}` });
     }
   }
 
-  fs.mkdirSync(LOCAL_DIR, { recursive: true });
-  const name = safeName(req.file.originalname);
-  fs.writeFileSync(path.join(LOCAL_DIR, name), req.file.buffer);
-  res.json({ url: `/uploads/${name}` });
+  try {
+    fs.mkdirSync(LOCAL_DIR, { recursive: true });
+    const name = safeName(req.file.originalname);
+    fs.writeFileSync(path.join(LOCAL_DIR, name), req.file.buffer);
+    res.json({ url: `/uploads/${name}` });
+  } catch (error) {
+    res.status(500).json({
+      error:
+        "Image storage is not configured on this host. Set BLOB_READ_WRITE_TOKEN or point UPLOAD_DIR at a persistent folder. (" +
+        (error.code || error.message) +
+        ")",
+    });
+  }
 }
 
-module.exports = { upload, put };
+module.exports = { parseUpload, put };
