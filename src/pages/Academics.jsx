@@ -1,10 +1,11 @@
 import FacultiesGrid from "../components/FacultiesGrid.jsx";
 import ProgrammesSection from "../components/ProgrammesSection.jsx";
 import AdmissionCTA from "../components/AdmissionCTA.jsx";
-import { STATS } from "../data/content.js";
+import { useSite } from "../data/cms.js";
 import "./Academics.css";
 
 export default function Academics() {
+  const { stats } = useSite();
   return (
     <>
       <section className="academics-hero">
@@ -16,7 +17,7 @@ export default function Academics() {
             the next generation of leaders at Ajayi Crowther University.
           </p>
           <div className="academics-stat-strip">
-            {STATS.slice(0, 2).map((stat) => (
+            {stats.slice(0, 2).map((stat) => (
               <div key={stat.label}>
                 <strong>{stat.value}+</strong>
                 <span>{stat.label}</span>

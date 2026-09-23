@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { SITE, NAV_LINKS, PORTALS } from "../data/content.js";
+import { useSite } from "../data/cms.js";
 import "./Navbar.css";
 
 function hasChildren(item) {
@@ -62,6 +62,7 @@ function DesktopMegaMenu({ columns }) {
 }
 
 export default function Navbar() {
+  const { site, nav, portals } = useSite();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -85,17 +86,17 @@ export default function Navbar() {
       <div className="topbar">
         <div className="container topbar-inner">
           <div className="topbar-contact">
-            <a href={`tel:${SITE.phone.replace(/\s/g, "")}`}>{SITE.phone}</a>
+            <a href={`tel:${site.phone.replace(/\s/g, "")}`}>{site.phone}</a>
             <span className="dot" aria-hidden="true">
               •
             </span>
-            <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+            <a href={`mailto:${site.email}`}>{site.email}</a>
           </div>
           <nav
             className="topbar-portals"
             aria-label="Student and staff portals"
           >
-            {PORTALS.map((p) =>
+            {portals.map((p) =>
               p.url && p.url.startsWith("/") ? (
                 <NavLink key={p.label} to={p.url}>
                   {p.label}
@@ -118,21 +119,21 @@ export default function Navbar() {
       <div className="container navbar-inner">
         <NavLink to="/" className="brand" onClick={() => setOpen(false)}>
           <img
-            src={SITE.logo}
-            alt={`${SITE.name} crest`}
+            src={site.logo}
+            alt={`${site.name} crest`}
             width="48"
             height="48"
             loading="lazy"
           />
           <span className="brand-text">
-            <strong>{SITE.name}</strong>
-            <em>{SITE.tagline}</em>
+            <strong>{site.name}</strong>
+            <em>{site.tagline}</em>
           </span>
         </NavLink>
 
         <nav className="primary-nav" aria-label="Primary">
           <ul>
-            {NAV_LINKS.map((link) => {
+            {nav.map((link) => {
               const hasChildren = Array.isArray(link.children) && link.children.length > 0;
 
               if (!hasChildren) {
@@ -177,7 +178,7 @@ export default function Navbar() {
 
         <div className="navbar-actions">
           <a
-            href={SITE.applyUrl}
+            href={site.applyUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-oxblood btn-sm"
@@ -200,7 +201,7 @@ export default function Navbar() {
 
       <div id="mobile-menu" className={`mobile-menu ${open ? "is-open" : ""}`}>
         <ul>
-          {NAV_LINKS.map((link) => {
+          {nav.map((link) => {
             if (hasChildren(link)) {
               return (
                 <li key={link.path}>
@@ -259,7 +260,7 @@ export default function Navbar() {
           })}
         </ul>
         <div className="mobile-portals">
-          {PORTALS.map((p) =>
+          {portals.map((p) =>
             p.url && p.url.startsWith("/") ? (
               <NavLink key={p.label} to={p.url} onClick={() => setOpen(false)}>
                 {p.label} Portal
@@ -277,7 +278,7 @@ export default function Navbar() {
           )}
         </div>
         <a
-          href={SITE.applyUrl}
+          href={site.applyUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="btn btn-oxblood btn-block"

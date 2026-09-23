@@ -1,10 +1,12 @@
 import { Link, useParams } from "react-router-dom";
-import { FACULTIES, SITE } from "../data/content.js";
+import { useFaculties, useSite } from "../data/cms.js";
 import "./FacultyPage.css";
 
 export default function FacultyPage() {
+  const faculties = useFaculties();
+  const { site } = useSite();
   const { slug } = useParams();
-  const faculty = FACULTIES.find((item) => item.slug === slug);
+  const faculty = faculties.find((item) => item.slug === slug);
 
   if (!faculty) {
     return <section className="section"><div className="container"><div className="not-found-panel"><p className="eyebrow">Faculty not found</p><h1>Faculty Page Unavailable</h1><p>The faculty you are looking for does not exist or has not been published.</p><Link to="/academics" className="btn btn-navy">Back to Faculties</Link></div></div></section>;
@@ -35,13 +37,13 @@ export default function FacultyPage() {
         </div>
 
         <aside className="faculty-detail-sidebar">
-          <div className="faculty-apply-card"><h2>Ready to Join Us?</h2><p>Take the first step toward an exceptional academic career.</p><a href={SITE.applyUrl} className="btn btn-gold" target="_blank" rel="noopener noreferrer">Apply Now</a><Link to="/academics" className="btn btn-outline">Explore Faculties</Link></div>
-          <div className="faculty-side-card"><h2>Contact Faculty</h2><dl><div><dt>Phone</dt><dd>{SITE.phone}</dd></div><div><dt>Email</dt><dd><a href={`mailto:${SITE.email}`}>{SITE.email}</a></dd></div><div><dt>Location</dt><dd>{SITE.address}</dd></div></dl></div>
+          <div className="faculty-apply-card"><h2>Ready to Join Us?</h2><p>Take the first step toward an exceptional academic career.</p><a href={site.applyUrl} className="btn btn-gold" target="_blank" rel="noopener noreferrer">Apply Now</a><Link to="/academics" className="btn btn-outline">Explore Faculties</Link></div>
+          <div className="faculty-side-card"><h2>Contact Faculty</h2><dl><div><dt>Phone</dt><dd>{site.phone}</dd></div><div><dt>Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div><div><dt>Location</dt><dd>{site.address}</dd></div></dl></div>
           <div className="faculty-side-card"><h2>Quick Facts</h2><dl><div><dt>Programmes</dt><dd>{programmeCount}</dd></div><div><dt>Research Areas</dt><dd>{faculty.researchAreas.length}</dd></div><div><dt>Facilities</dt><dd>{faculty.facilities.length}</dd></div></dl></div>
         </aside>
       </div>
 
-      <section className="faculty-bottom-cta"><div className="container"><h2>Begin Your Journey</h2><p>Join a faculty where excellence, discovery and purpose converge.</p><div><a href={SITE.applyUrl} className="btn btn-navy" target="_blank" rel="noopener noreferrer">Apply Now</a><Link to="/academics" className="btn btn-outline-navy">View All Faculties</Link></div></div></section>
+      <section className="faculty-bottom-cta"><div className="container"><h2>Begin Your Journey</h2><p>Join a faculty where excellence, discovery and purpose converge.</p><div><a href={site.applyUrl} className="btn btn-navy" target="_blank" rel="noopener noreferrer">Apply Now</a><Link to="/academics" className="btn btn-outline-navy">View All Faculties</Link></div></div></section>
     </div>
   );
 }

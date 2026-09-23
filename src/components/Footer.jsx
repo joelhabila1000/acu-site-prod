@@ -1,9 +1,10 @@
 
 import { Link } from "react-router-dom";
-import { SITE } from "../data/content.js";
+import { useSite } from "../data/cms.js";
 import "./Footer.css";
 
 export default function Footer() {
+  const { site } = useSite();
   const year = new Date().getFullYear();
 
   return (
@@ -12,15 +13,15 @@ export default function Footer() {
         <div className="footer-brand-panel">
           <div className="footer-brand-lockup">
             <img
-              src={SITE.logo}
-              alt={`${SITE.name} crest`}
+              src={site.logo}
+              alt={`${site.name} crest`}
               width="78"
               height="78"
               loading="lazy"
             />
             <div className="brand-text-stack">
-              <strong>{SITE.name}</strong>
-              <span>{SITE.tagline}</span>
+              <strong>{site.name}</strong>
+              <span>{site.tagline}</span>
             </div>
           </div>
 
@@ -28,7 +29,7 @@ export default function Footer() {
             <p>Ajayi Crowther University</p>
             <p>PMB 1066, Oyo Town</p>
             <p>Oyo State, Nigeria</p>
-            <p>{SITE.phone}</p>
+            <p>{site.phone}</p>
           </div>
         </div>
 
@@ -69,6 +70,7 @@ export default function Footer() {
               <a href="/admissions">Admissions</a>
               <a href="/academics">Academics </a>
               <Link to="/news">News &amp; Events</Link>
+              <Link to="/gallery">Gallery</Link>
               <Link to="/">Staff Directory</Link>
               <Link to="/">Library</Link>
       
@@ -86,7 +88,7 @@ export default function Footer() {
           <div className="footer-meta-row">
             <div className="footer-social-row" aria-label="Social media links">
               <a
-                href={SITE.social.facebook}
+                href={site.social.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
@@ -94,7 +96,7 @@ export default function Footer() {
                 f
               </a>
               <a
-                href={SITE.social.instagram}
+                href={site.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
@@ -111,7 +113,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href={SITE.social.linkedin}
+                href={site.social.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
@@ -119,7 +121,7 @@ export default function Footer() {
                 in
               </a>
               <a
-                href={SITE.social.youtube}
+                href={site.social.youtube}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="YouTube"
@@ -143,7 +145,7 @@ export default function Footer() {
             </a>
           </div>
           <p>
-            © {year} {SITE.name}
+            © {year} {site.name}
           </p>
         </div>
       </div>

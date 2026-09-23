@@ -1,46 +1,25 @@
-import { IMAGES } from "../data/content.js";
+import { Link } from "react-router-dom";
+import { useGallery } from "../data/cms.js";
 import "./GallerySection.css";
 
-const galleryItems = [
-  {
-    src: IMAGES.heroCampusOne,
-    alt: "Florence Ajimobi Information Technology Building at Ajayi Crowther University",
-    offset: "left",
-    angle: "-2deg",
-  },
-  {
-    src: IMAGES.heroCampusTwo,
-    alt: "Academic building at Ajayi Crowther University",
-    offset: "right",
-    angle: "2deg",
-  },
-  {
-    src: IMAGES.heroCampusThree,
-    alt: "Crowther Hall at Ajayi Crowther University",
-    offset: "left",
-    angle: "-3deg",
-  },
-  {
-    src: IMAGES.heroCampusFour,
-    alt: "University Lecture Rooms at Ajayi Crowther University",
-    offset: "right",
-    angle: "3deg",
-  },
-  {
-    src: IMAGES.heroCampusFive,
-    alt: "Senate Building at Ajayi Crowther University",
-    offset: "left",
-    angle: "-1deg",
-  },
-  {
-    src: IMAGES.heroCampusSix,
-    alt: "Postgraduate School building at Ajayi Crowther University",
-    offset: "right",
-    angle: "1deg",
-  },
-];
+const OFFSETS = ["left", "right", "left", "right", "left", "right"];
+const ANGLES = ["-2deg", "2deg", "-3deg", "3deg", "-1deg", "1deg"];
 
 export default function GallerySection() {
+  const albums = useGallery();
+
+  const photos = albums
+    .flatMap((album) => album.images)
+    .slice(0, 6)
+    .map((image, index) => ({
+      src: image.url,
+      alt: image.caption || `Ajayi Crowther University campus photo ${index + 1}`,
+      offset: OFFSETS[index % OFFSETS.length],
+      angle: ANGLES[index % ANGLES.length],
+    }));
+
+  if (!photos.length) return null;
+
   return (
     <section className="section" aria-labelledby="gallery-heading">
       <div className="container">
@@ -52,15 +31,21 @@ export default function GallerySection() {
         </div>
 
         <div className="gallery-collage" aria-label="University campus gallery">
-          {galleryItems.map((item, index) => (
+          {photos.map((item, index) => (
             <figure
-              key={`${item.alt}-${index}`}
+              key={`${item.src}-${index}`}
               className={`gallery-photo ${item.offset}`}
               style={{ "--tilt": item.angle }}
             >
               <img src={item.src} alt={item.alt} loading="lazy" />
             </figure>
           ))}
+        </div>
+
+        <div className="gallery-more">
+          <Link className="btn btn-navy btn-sm" to="/gallery">
+            View full gallery
+          </Link>
         </div>
       </div>
     </section>

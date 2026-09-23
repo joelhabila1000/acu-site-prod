@@ -78,6 +78,7 @@ export const NAV_LINKS = [
   },
   { label: "Academics", path: "/academics" },
   { label: "Admissions", path: "/admissions" },
+  { label: "Gallery", path: "/gallery" },
   { label: "Contact", path: "/contact" },
 ];
 

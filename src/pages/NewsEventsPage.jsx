@@ -1,61 +1,16 @@
 import { useState, useMemo, useEffect } from "react";
 import PageHeader from "../components/PageHeader.jsx";
-
-
-const API_BASE = "/api/acu/wp-json/wp/v2";
-
-
-function stripHtml(html) {
-  if (!html) return "";
-  const doc = new DOMParser().parseFromString(html, "text/html");
-  return (doc.body.textContent || "").trim();
-}
-
-function decodeEntities(str) {
-  if (!str) return "";
-  const el = document.createElement("textarea");
-  el.innerHTML = str;
-  return el.value;
-}
+import { useNewsEvents } from "../data/cms.js";
+import "./NewsEvensPage.css";
 
 function formatDate(iso) {
   if (!iso) return "";
-  return new Date(iso).toLocaleDateString("en-GB", {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return String(iso);
+  return date.toLocaleDateString("en-GB", {
     day: "numeric",
     month: "long",
     year: "numeric",
-  });
-}
-
-
-async function fetchPosts() {
-  const url = `${API_BASE}/posts?per_page=20&_embed`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`API responded with ${res.status}`);
-  const data = await res.json();
-
-  return data.map((post) => {
-    const featured =
-      post._embedded?.["wp:featuredmedia"]?.[0]?.source_url || null;
-    const categoryNames =
-      post._embedded?.["wp:term"]?.[0]?.map((t) => t.name) || [];
-    const isEvent = categoryNames.some((n) =>
-      n.toLowerCase().includes("event")
-    );
-
-    return {
-      id: post.id,
-      type: isEvent ? "event" : "news",
-      title: decodeEntities(post.title?.rendered || ""),
-      date: post.date,
-      link: post.link,
-      excerpt: stripHtml(post.excerpt?.rendered || "")
-        .replace(/\[…\]|\[\.\.\.\]/g, "")
-        .trim(),
-      body: stripHtml(post.content?.rendered || ""),
-      image: featured,
-      categories: categoryNames,
-    };
   });
 }
 
@@ -63,34 +18,10 @@ async function fetchPosts() {
    PAGE
 ---------------------------------------------------------------- */
 export default function NewsEventsPage() {
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const items = useNewsEvents();
   const [filter, setFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [activeItem, setActiveItem] = useState(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    async function load() {
-      try {
-        setLoading(true);
-        const posts = await fetchPosts();
-        if (!cancelled) {
-          setItems(posts);
-          setError(null);
-        }
-      } catch (err) {
-        if (!cancelled) setError(err.message);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   useEffect(() => {
     if (!activeItem) return;
@@ -109,7 +40,7 @@ export default function NewsEventsPage() {
       .filter(
         (item) =>
           item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.excerpt.toLowerCase().includes(searchTerm.toLowerCase())
+          (item.excerpt || "").toLowerCase().includes(searchTerm.toLowerCase()),
       )
       .sort((a, b) => new Date(b.date) - new Date(a.date));
   }, [items, filter, searchTerm]);
@@ -169,96 +100,67 @@ export default function NewsEventsPage() {
             </div>
           </div>
 
-          {loading && (
-            <div className="news-status">
-              <div className="news-spinner" aria-hidden="true" />
-              <p>Loading latest news from acu.edu.ng…</p>
-            </div>
-          )}
+          <p className="news-count">
+            Showing <strong>{filtered.length}</strong> of {items.length} items
+          </p>
 
-          {error && (
-            <div className="news-status news-status--error">
-              <p>Could not load news: {error}</p>
+          {filtered.length > 0 ? (
+            <div className="news-grid">
+              {filtered.map((item) => (
+                <article
+                  className="news-card"
+                  key={item.id}
+                  onClick={() => setActiveItem(item)}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`Read: ${item.title}`}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setActiveItem(item);
+                    }
+                  }}
+                >
+                  {item.image && (
+                    <div className="news-card-image">
+                      <img
+                        src={item.image}
+                        alt=""
+                        loading="lazy"
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+                        }}
+                      />
+                    </div>
+                  )}
+                  <div className="news-card-body">
+                    <div className="news-card-top">
+                      <span className={`news-badge news-badge--${item.type}`}>
+                        {item.type === "news" ? "News" : "Event"}
+                      </span>
+                      <span className="news-date">{formatDate(item.date)}</span>
+                    </div>
+                    <h3 className="news-title">{item.title}</h3>
+                    <p className="news-excerpt">{item.excerpt}</p>
+                    <span className="news-read-more">Read more →</span>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="news-empty">
+              <p>No items match your search.</p>
               <button
                 type="button"
                 className="news-cta"
-                onClick={() => window.location.reload()}
+                onClick={() => {
+                  setSearchTerm("");
+                  setFilter("all");
+                }}
               >
-                Try again
+                Clear filters
               </button>
             </div>
-          )}
-
-          {!loading && !error && (
-            <>
-              <p className="news-count">
-                Showing <strong>{filtered.length}</strong> of {items.length}{" "}
-                items
-              </p>
-
-              {filtered.length > 0 ? (
-                <div className="news-grid">
-                  {filtered.map((item) => (
-                    <article
-                      className="news-card"
-                      key={item.id}
-                      onClick={() => setActiveItem(item)}
-                      tabIndex={0}
-                      role="button"
-                      aria-label={`Read: ${item.title}`}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.preventDefault();
-                          setActiveItem(item);
-                        }
-                      }}
-                    >
-                      {item.image && (
-                        <div className="news-card-image">
-                          <img
-                            src={item.image}
-                            alt=""
-                            loading="lazy"
-                            onError={(e) => {
-                              e.currentTarget.style.display = "none";
-                            }}
-                          />
-                        </div>
-                      )}
-                      <div className="news-card-body">
-                        <div className="news-card-top">
-                          <span
-                            className={`news-badge news-badge--${item.type}`}
-                          >
-                            {item.type === "news" ? "News" : "Event"}
-                          </span>
-                          <span className="news-date">
-                            {formatDate(item.date)}
-                          </span>
-                        </div>
-                        <h3 className="news-title">{item.title}</h3>
-                        <p className="news-excerpt">{item.excerpt}</p>
-                        <span className="news-read-more">Read more →</span>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              ) : (
-                <div className="news-empty">
-                  <p>No items match your search.</p>
-                  <button
-                    type="button"
-                    className="news-cta"
-                    onClick={() => {
-                      setSearchTerm("");
-                      setFilter("all");
-                    }}
-                  >
-                    Clear filters
-                  </button>
-                </div>
-              )}
-            </>
           )}
         </div>
       </section>
@@ -291,13 +193,11 @@ export default function NewsEventsPage() {
                 {activeItem.type === "news" ? "News" : "Event"}
               </span>
               <h2 id="news-modal-title">{activeItem.title}</h2>
-              <p className="news-modal-date">
-                {formatDate(activeItem.date)}
-              </p>
+              <p className="news-modal-date">{formatDate(activeItem.date)}</p>
             </div>
 
             <div className="news-modal-body">
-              {activeItem.body
+              {String(activeItem.body || "")
                 .split(/\n\n+/)
                 .filter((p) => p.trim().length > 0)
                 .map((para, i) => (
@@ -313,14 +213,16 @@ export default function NewsEventsPage() {
               >
                 Close
               </button>
-              <a
-                className="news-cta"
-                href={activeItem.link}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Read on acu.edu.ng →
-              </a>
+              {activeItem.link && (
+                <a
+                  className="news-cta"
+                  href={activeItem.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Read on acu.edu.ng →
+                </a>
+              )}
             </div>
           </div>
         </div>

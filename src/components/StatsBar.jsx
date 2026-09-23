@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { STATS } from "../data/content.js";
+import { useSite } from "../data/cms.js";
 import "./StatsBar.css";
 
 function Counter({ value }) {
@@ -45,10 +45,11 @@ function Counter({ value }) {
 }
 
 export default function StatsBar() {
+  const { stats } = useSite();
   return (
     <section className="stats-bar" aria-label="Ajayi Crowther University at a glance">
       <div className="container stats-grid">
-        {STATS.map((s) => (
+        {stats.map((s) => (
           <div className="stat-item" key={s.label}>
             <Counter value={s.value} />
             <span className="stat-label">{s.label}</span>

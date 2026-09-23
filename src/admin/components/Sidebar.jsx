@@ -1,47 +1,29 @@
 import { Link, useLocation } from "react-router-dom";
+import { ADMIN_NAV } from "../schema/resources.js";
+import logo from "../../assets/acu-logo-new-1.png";
 import "../admin.css";
 
-const LINKS = [
-  ["/admin", "Dashboard"],
-  ["/admin/pages", "Website Pages"],
-  ["/admin/news", "News"],
-  ["/admin/events", "Events"],
-  ["/admin/faculties", "Faculties & Departments"],
-  ["/admin/programmes", "Programmes"],
-  ["/admin/admissions", "Admissions"],
-  ["/admin/staff", "Staff"],
-  ["/admin/gallery", "Gallery"],
-  ["/admin/documents", "Documents"],
-  ["/admin/announcements", "Announcements"],
-  ["/admin/homepage", "Homepage"],
-  ["/admin/contact", "Contact Information"],
-  ["/admin/users", "Users & Roles"],
-  ["/admin/settings", "Settings"],
-];
-
 export default function Sidebar() {
-  const loc = useLocation();
+  const location = useLocation();
+  const pathname = (location.pathname || "/admin").replace(/\/$/, "") || "/admin";
+
   return (
     <aside className="admin-sidebar">
       <div className="brand">
-        <img
-          src="/src/assets/acu-logo-new-1.png"
-          alt="ACU"
-          style={{ width: 40 }}
-        />
+        <img src={logo} alt="ACU" style={{ width: 40 }} />
         <div>
           <div style={{ fontWeight: 700 }}>Ajayi Crowther Univ.</div>
           <div className="small muted">Admin Dashboard</div>
         </div>
       </div>
       <nav>
-        {LINKS.map(([path, label]) => (
+        {ADMIN_NAV.map((item) => (
           <Link
-            key={path}
-            to={path}
-            className={loc.pathname === path ? "active" : ""}
+            key={item.path}
+            to={item.path}
+            className={pathname === item.path ? "active" : ""}
           >
-            {label}
+            {item.label}
           </Link>
         ))}
       </nav>

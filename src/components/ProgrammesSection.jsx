@@ -1,7 +1,8 @@
-import { PROGRAMMES } from "../data/content.js";
+import { useSite } from "../data/cms.js";
 import "./ProgrammesSection.css";
 
 export default function ProgrammesSection() {
+  const { programmes } = useSite();
   return (
     <section className="section" aria-labelledby="programmes-heading">
       <div className="container">
@@ -13,7 +14,7 @@ export default function ProgrammesSection() {
         </div>
 
         <div className="programme-grid">
-          {PROGRAMMES.map((p) => (
+          {programmes.map((p) => (
             <a
               key={p.title}
               href={p.url}

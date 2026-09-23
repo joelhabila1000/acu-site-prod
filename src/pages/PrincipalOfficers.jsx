@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { PRINCIPAL_OFFICERS } from "../data/principalOfficers";
+import { usePrincipalOfficers } from "../data/cms.js";
 import "./PrincipalOfficers.css";
 
 export default function PrincipalOfficers() {
+  const officers = usePrincipalOfficers();
   return (
     <>
       <section className="principal-officers-hero">
@@ -19,7 +20,7 @@ export default function PrincipalOfficers() {
 
       <section className="section">
         <div className="container principal-officers-grid">
-          {PRINCIPAL_OFFICERS.map((officer) => (
+          {officers.map((officer) => (
             <Link
               to={`/principal-officers/${officer.slug}`}
               className="principal-officer-card"

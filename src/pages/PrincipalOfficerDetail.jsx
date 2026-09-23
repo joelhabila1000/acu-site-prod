@@ -1,20 +1,20 @@
 import { Link, useParams, Navigate } from "react-router-dom";
-import { PRINCIPAL_OFFICERS } from "../data/principalOfficers";
+import { usePrincipalOfficers } from "../data/cms.js";
 import "./PrincipalOfficerDetail.css";
 
 export default function PrincipalOfficerDetail() {
+  const officers = usePrincipalOfficers();
   const { slug } = useParams();
-  const officer = PRINCIPAL_OFFICERS.find((o) => o.slug === slug);
+  const officer = officers.find((o) => o.slug === slug);
 
   if (!officer) {
     return <Navigate to="/principal-officers" replace />;
   }
 
-  const currentIndex = PRINCIPAL_OFFICERS.findIndex((o) => o.slug === slug);
+  const currentIndex = officers.findIndex((o) => o.slug === slug);
   const prevOfficer =
-    PRINCIPAL_OFFICERS[(currentIndex - 1 + PRINCIPAL_OFFICERS.length) % PRINCIPAL_OFFICERS.length];
-  const nextOfficer =
-    PRINCIPAL_OFFICERS[(currentIndex + 1) % PRINCIPAL_OFFICERS.length];
+    officers[(currentIndex - 1 + officers.length) % officers.length];
+  const nextOfficer = officers[(currentIndex + 1) % officers.length];
 
   return (
     <>

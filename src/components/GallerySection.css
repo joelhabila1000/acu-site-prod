@@ -93,6 +93,12 @@
   }
 }
 
+.gallery-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 34px;
+}
+
 @media (max-width: 960px) {
   .gallery-collage {
     display: flex;

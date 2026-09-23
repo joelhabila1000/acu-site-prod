@@ -1,10 +1,11 @@
 import { useState } from "react";
 import PageHeader from "../components/PageHeader.jsx";
-import { SITE } from "../data/content.js";
+import { useSite } from "../data/cms.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function Contact() {
+  const { site } = useSite();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -51,15 +52,15 @@ export default function Contact() {
           <div className="contact-info-grid">
             <div className="contact-info-card">
               <h3>Call Us</h3>
-              <a href={`tel:${SITE.phone.replace(/\s/g, "")}`}>{SITE.phone}</a>
+              <a href={`tel:${site.phone.replace(/\s/g, "")}`}>{site.phone}</a>
             </div>
             <div className="contact-info-card">
               <h3>Email Us</h3>
-              <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+              <a href={`mailto:${site.email}`}>{site.email}</a>
             </div>
             <div className="contact-info-card">
               <h3>Visit Us</h3>
-              <p>{SITE.address}</p>
+              <p>{site.address}</p>
             </div>
           </div>
 
@@ -74,8 +75,8 @@ export default function Contact() {
               </p>
               <div className="map-frame" style={{ marginTop: 28 }}>
                 <iframe
-                  title={`${SITE.name} location map`}
-                  src={SITE.mapEmbed}
+                  title={`${site.name} location map`}
+                  src={site.mapEmbed}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   allowFullScreen

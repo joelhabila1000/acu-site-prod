@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 const slugify = require("slugify");
 
 async function list(req, res) {
-  const { q, status, page = 1, per = 20 } = req.query;
+  const { q, status, limit, page = 1, per = 20 } = req.query;
   const where = {};
   if (status) where.status = status;
   if (q)
@@ -12,8 +12,8 @@ async function list(req, res) {
       { excerpt: { contains: q, mode: "insensitive" } },
       { content: { contains: q, mode: "insensitive" } },
     ];
-  const take = Number(per);
-  const skip = (Number(page) - 1) * take;
+  const take = limit ? Number(limit) : Number(per);
+  const skip = limit ? 0 : (Number(page) - 1) * take;
   const [items, total] = await Promise.all([
     prisma.news.findMany({
       where,
@@ -56,12 +56,33 @@ async function create(req, res) {
   res.json(created);
 }
 
+const WRITABLE = [
+  "title",
+  "slug",
+  "excerpt",
+  "content",
+  "featuredImage",
+  "category",
+  "featured",
+  "status",
+  "publishedAt",
+];
+
+function pick(body) {
+  const data = {};
+  for (const key of WRITABLE) {
+    if (body[key] !== undefined) data[key] = body[key];
+  }
+  return data;
+}
+
 async function update(req, res) {
   const id = Number(req.params.id);
-  const body = req.body;
-  if (body.title) {
+  const body = pick(req.body);
+  if (!body.slug && body.title) {
     body.slug = slugify(body.title, { lower: true, strict: true });
   }
+  if (body.publishedAt) body.publishedAt = new Date(body.publishedAt);
   if (body.status === "published" && !body.publishedAt)
     body.publishedAt = new Date();
   const updated = await prisma.news.update({ where: { id }, data: body });

@@ -17,8 +17,8 @@ import Maintenance from "./pages/Maintenance.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import Listofcourses from "./pages/ListOfCourses.jsx";
 import BackToTop from "./components/BackToTop.jsx";
-import News from "./admin/pages/News.jsx";
 import NewsEventsPage from "./pages/NewsEventsPage.jsx";
+import Gallery from "./pages/Gallery.jsx";
 import PrincipalOfficerDetail from "./pages/PrincipalOfficerDetail";
 
 export default function App() {
@@ -53,12 +53,13 @@ export default function App() {
             element={<PostgraduatePortal />}
           />
           <Route path="/portal/:portal" element={<Maintenance />} />
-          <Route path="/admin/*" element={<Admin />} />
-          <Route path="*" element={<NotFound />} />
-          <Route path="/admin/news" element={<News />} />
           <Route path="/news" element={<NewsEventsPage />} />
-         
-          <Route path="/principal-officers/:slug" element={<PrincipalOfficerDetail />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route
+            path="/principal-officers/:slug"
+            element={<PrincipalOfficerDetail />}
+          />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <BackToTop />

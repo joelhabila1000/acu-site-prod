@@ -1,17 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { getStoredNews } from "../data/admin.js";
+import { useEffect, useRef } from "react";
+import { useNews } from "../data/cms.js";
 import "./NewsSection.css";
 
 export default function NewsSection() {
-  const [news, setNews] = useState([]);
+  const news = useNews();
   const carouselRef = useRef(null);
-
-  useEffect(() => {
-    setNews(getStoredNews());
-    const onStorage = () => setNews(getStoredNews());
-    window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
-  }, []);
 
   const scrollCarousel = (direction) => {
     if (!carouselRef.current) return;
@@ -27,14 +20,19 @@ export default function NewsSection() {
   };
 
   useEffect(() => {
-    if (!news.length || !carouselRef.current) return;
-
     const container = carouselRef.current;
-    const content = [...container.children];
-    if (content.length === 0) return;
+    if (!container || !news.length) return;
 
-    const cloneItems = content.map((item) => item.cloneNode(true));
-    cloneItems.forEach((item) => container.appendChild(item));
+    container
+      .querySelectorAll('[data-clone="true"]')
+      .forEach((node) => node.remove());
+
+    const originals = [...container.querySelectorAll(".news-card")];
+    originals.forEach((item) => {
+      const clone = item.cloneNode(true);
+      clone.setAttribute("data-clone", "true");
+      container.appendChild(clone);
+    });
 
     const timer = window.setInterval(() => {
       const firstCard = container.querySelector(".news-card");

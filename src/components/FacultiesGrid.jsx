@@ -1,12 +1,14 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { FACULTIES, IMAGES } from "../data/content.js";
+import { useFaculties } from "../data/cms.js";
+import { IMAGES } from "../data/content.js";
 import "./FacultiesGrid.css";
 
 export default function FacultiesGrid({ limit }) {
+  const faculties = useFaculties();
   const [search, setSearch] = useState("");
   const [letter, setLetter] = useState("");
-  const source = limit ? FACULTIES.slice(0, limit) : FACULTIES;
+  const source = limit ? faculties.slice(0, limit) : faculties;
   const letters = [...new Set(source.map((faculty) => faculty.name[0]))].sort();
   const cardImages = [
     IMAGES.heroCampusOne,
