@@ -4,6 +4,7 @@ const slugify = require("slugify");
 const prisma = new PrismaClient();
 const content = require("./seedContent");
 const { INAUGURAL_LECTURES } = require("./lectures");
+const { POSTGRADUATE_PROGRAMMES } = require("./programmes");
 
 function slug(value) {
   return slugify(value, { lower: true, strict: true });
@@ -216,6 +217,22 @@ async function seedAnnouncements() {
   });
 }
 
+async function seedPostgraduateProgrammes() {
+  const count = await prisma.postgraduateProgramme.count();
+  if (count > 0) return;
+  for (const [index, programme] of POSTGRADUATE_PROGRAMMES.entries()) {
+    await prisma.postgraduateProgramme.create({
+      data: {
+        name: programme.name,
+        award: programme.award,
+        faculty: programme.faculty,
+        status: "published",
+        sortOrder: index,
+      },
+    });
+  }
+}
+
 async function main() {
   console.log("Seeding database...");
   const admin = await seedRolesAndAdmin();
@@ -225,6 +242,7 @@ async function main() {
   await seedNewsAndEvents(admin.id);
   await seedLectures();
   await seedAnnouncements();
+  await seedPostgraduateProgrammes();
   console.log("Seeding completed");
 }
 

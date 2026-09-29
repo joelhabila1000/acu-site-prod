@@ -25,6 +25,7 @@ import {
   NEWS,
   IMAGES,
   SUSTAINABILITY,
+  PG_PROGRAMMES,
 } from "./content.js";
 import { NEWS_ITEMS } from "./News.js";
 import { PRINCIPAL_OFFICERS } from "./principalOfficers.js";
@@ -277,6 +278,7 @@ const DEFAULT_CONTENT = {
   staff: [],
   lectures: INAUGURAL_LECTURES.map((lecture) => ({ ...lecture })),
   announcements: [],
+  pgProgrammes: PG_PROGRAMMES.map((programme) => ({ ...programme })),
   ready: false,
 };
 
@@ -331,6 +333,7 @@ export function ContentProvider({ children }) {
         staffR,
         lecturesR,
         announcementsR,
+        programmesR,
       ] = await Promise.allSettled([
         apiGet("/api/settings"),
         apiGet("/api/faculties"),
@@ -342,6 +345,7 @@ export function ContentProvider({ children }) {
         apiGet("/api/staff?status=active"),
         apiGet("/api/lectures?status=published"),
         apiGet("/api/announcements?status=published"),
+        apiGet("/api/programmes?status=published"),
       ]);
 
       if (cancelled) return;
@@ -495,6 +499,20 @@ export function ContentProvider({ children }) {
           content: row.content,
           priority: row.priority || 1,
           date: formatDate(row.publishedAt),
+        }));
+      }
+
+      const programmeRows =
+        programmesR.status === "fulfilled"
+          ? asArray(programmesR.value && programmesR.value.data)
+          : [];
+
+      if (programmeRows.length) {
+        next.pgProgrammes = programmeRows.map((row) => ({
+          id: row.id,
+          name: row.name,
+          award: row.award,
+          faculty: row.faculty,
         }));
       }
 
@@ -656,4 +674,8 @@ export function useLectures() {
 
 export function useAnnouncements() {
   return useContent().announcements;
+}
+
+export function usePostgraduateProgrammes() {
+  return useContent().pgProgrammes;
 }

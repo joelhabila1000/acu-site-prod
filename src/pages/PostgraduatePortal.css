@@ -851,3 +851,39 @@
     order: 0;
   }
 }
+
+/* In-page navigation in the hero. These sections used to be a submenu in the
+   site header, which was redundant — the content lives on this page. */
+.pg-anchor-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.pg-anchor-nav button {
+  background: none;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  padding: 2px 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    color 160ms ease,
+    border-color 160ms ease;
+}
+
+.pg-anchor-nav button:hover {
+  color: var(--pg-white);
+  border-bottom-color: var(--pg-gold);
+}
+
+/* Stop the sticky site header covering the heading we jump to. */
+.pg-portal [id] {
+  scroll-margin-top: 120px;
+}

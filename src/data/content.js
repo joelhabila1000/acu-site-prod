@@ -84,16 +84,18 @@ export const NAV_LINKS = [
       { label: "Inaugural Lectures", path: "/academics/inaugural-lectures" },
     ],
   },
+  { label: "Admissions", path: "/admissions" },
   {
-    label: "Postgraduate",
-    path: "/portal/postgraduate",
+    // A grouping label rather than a destination — no `path`, so the navbar
+    // renders it as a non-clickable heading that reveals the menu on hover.
+    label: "Student Services",
     children: [
       { label: "Postgraduate School", path: "/portal/postgraduate" },
-      { label: "Programmes", path: "/portal/postgraduate/programmes" },
-      { label: "How to Apply", path: "/portal/postgraduate/apply" },
+      { label: "Undergraduate Study", path: "https://apply.acu.edu.ng/" },
+      { label: "Part-Time Study", path: "/admissions" },
+      { label: "Foundation Programme", path: "https://cpfpapply.acu.edu.ng" },
     ],
   },
-  { label: "Admissions", path: "/admissions" },
   { label: "Sustainability", path: "/sustainability" },
   {
     label: "Directory",
@@ -1009,6 +1011,181 @@ export const SUSTAINABILITY = {
   sourceNote:
     "Goal icons, titles and descriptions are published by the United Nations. The content of this publication has not been approved by the United Nations and does not reflect the views of the United Nations or its officials or Member States.",
 };
+
+// Postgraduate programme catalogue. This bundled copy is what the Postgraduate
+// page shows when the CMS has no programmes; the CMS copy (Admin → Postgraduate
+// Programmes) takes over once it has entries.
+export const PG_PROGRAMMES = [
+  { name: "M.A. History", award: "M.A.", faculty: "Faculty of Humanities" },
+  { name: "Ph.D. History", award: "Ph.D.", faculty: "Faculty of Humanities" },
+  {
+    name: "M.A. Christian Religious Studies",
+    award: "M.A.",
+    faculty: "Faculty of Humanities",
+  },
+  {
+    name: "PGD Christian Religious Studies",
+    award: "PGD",
+    faculty: "Faculty of Humanities",
+  },
+  {
+    name: "Ph.D. Christian Religious Studies",
+    award: "Ph.D.",
+    faculty: "Faculty of Humanities",
+  },
+  {
+    name: "PGD Religious Studies",
+    award: "PGD",
+    faculty: "Faculty of Humanities",
+  },
+  {
+    name: "Ph.D. Religious Studies",
+    award: "Ph.D.",
+    faculty: "Faculty of Humanities",
+  },
+  { name: "Ph.D. English", award: "Ph.D.", faculty: "Faculty of Humanities" },
+  {
+    name: "Master of Business Administration (MBA)",
+    award: "MBA",
+    faculty: "Faculty of Management Sciences",
+  },
+  {
+    name: "Master of Public Administration (MPA)",
+    award: "MPA",
+    faculty: "Faculty of Management Sciences",
+  },
+  {
+    name: "Doctor of Business Administration (DBA)",
+    award: "DBA",
+    faculty: "Faculty of Management Sciences",
+  },
+  {
+    name: "M.Sc. Accounting",
+    award: "M.Sc.",
+    faculty: "Faculty of Management Sciences",
+  },
+  {
+    name: "PGD Accounting",
+    award: "PGD",
+    faculty: "Faculty of Management Sciences",
+  },
+  {
+    name: "M.Sc. Business Administration",
+    award: "M.Sc.",
+    faculty: "Faculty of Management Sciences",
+  },
+  {
+    name: "PGD Business Administration",
+    award: "PGD",
+    faculty: "Faculty of Management Sciences",
+  },
+  {
+    name: "Ph.D. Business Administration",
+    award: "Ph.D.",
+    faculty: "Faculty of Management Sciences",
+  },
+  {
+    name: "M.Sc. Computer Science",
+    award: "M.Sc.",
+    faculty: "Faculty of Natural Sciences",
+  },
+  {
+    name: "PGD Computer Science",
+    award: "PGD",
+    faculty: "Faculty of Natural Sciences",
+  },
+  {
+    name: "Ph.D. Computer Science",
+    award: "Ph.D.",
+    faculty: "Faculty of Natural Sciences",
+  },
+  {
+    name: "Master of Information Technology (MIT)",
+    award: "MIT",
+    faculty: "Faculty of Natural Sciences",
+  },
+  {
+    name: "M.Sc. Microbiology",
+    award: "M.Sc.",
+    faculty: "Faculty of Natural Sciences",
+  },
+  {
+    name: "PGD Microbiology",
+    award: "PGD",
+    faculty: "Faculty of Natural Sciences",
+  },
+  {
+    name: "Ph.D. Microbiology",
+    award: "Ph.D.",
+    faculty: "Faculty of Natural Sciences",
+  },
+  {
+    name: "M.Sc. Biochemistry",
+    award: "M.Sc.",
+    faculty: "Faculty of Natural Sciences",
+  },
+  {
+    name: "PGD Biochemistry",
+    award: "PGD",
+    faculty: "Faculty of Natural Sciences",
+  },
+  {
+    name: "Ph.D. Biochemistry",
+    award: "Ph.D.",
+    faculty: "Faculty of Natural Sciences",
+  },
+  {
+    name: "M.Sc. Industrial Chemistry",
+    award: "M.Sc.",
+    faculty: "Faculty of Natural Sciences",
+  },
+  {
+    name: "PGD Industrial Chemistry",
+    award: "PGD",
+    faculty: "Faculty of Natural Sciences",
+  },
+  {
+    name: "M.Sc. Geology",
+    award: "M.Sc.",
+    faculty: "Faculty of Natural Sciences",
+  },
+  {
+    name: "PGD Geology",
+    award: "PGD",
+    faculty: "Faculty of Natural Sciences",
+  },
+  {
+    name: "Ph.D. Geology",
+    award: "Ph.D.",
+    faculty: "Faculty of Natural Sciences",
+  },
+  {
+    name: "PGD Physics",
+    award: "PGD",
+    faculty: "Faculty of Natural Sciences",
+  },
+  {
+    name: "M.Sc. Mass Communication",
+    award: "M.Sc.",
+    faculty: "Faculty of Social Sciences & Communication",
+  },
+  {
+    name: "PGD Mass Communication",
+    award: "PGD",
+    faculty: "Faculty of Social Sciences & Communication",
+  },
+  {
+    name: "Ph.D. Mass Communication",
+    award: "Ph.D.",
+    faculty: "Faculty of Social Sciences & Communication",
+  },
+  {
+    name: "M.Ed. Educational Management",
+    award: "M.Ed.",
+    faculty: "Faculty of Education",
+  },
+  { name: "PGD Education", award: "PGD", faculty: "Faculty of Education" },
+];
 
 export const IMAGES = {
   hero: heroImage,

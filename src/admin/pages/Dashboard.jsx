@@ -27,6 +27,7 @@ export default function Dashboard() {
     lectures: 0,
     announcements: 0,
     messages: 0,
+    pgProgrammes: 0,
   });
   const [recent, setRecent] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,16 +36,25 @@ export default function Dashboard() {
     let cancelled = false;
     async function load() {
       try {
-        const [news, events, faculties, officers, lectures, announcements, messages] =
-          await Promise.all([
-            authGet("/api/news"),
-            authGet("/api/events"),
-            authGet("/api/faculties"),
-            authGet("/api/principal-officers"),
-            authGet("/api/lectures"),
-            authGet("/api/announcements"),
-            authGet("/api/messages"),
-          ]);
+        const [
+          news,
+          events,
+          faculties,
+          officers,
+          lectures,
+          announcements,
+          messages,
+          programmes,
+        ] = await Promise.all([
+          authGet("/api/news"),
+          authGet("/api/events"),
+          authGet("/api/faculties"),
+          authGet("/api/principal-officers"),
+          authGet("/api/lectures"),
+          authGet("/api/announcements"),
+          authGet("/api/messages"),
+          authGet("/api/programmes"),
+        ]);
         if (cancelled) return;
         const newsItems = (news && news.data) || [];
         setStats({
@@ -55,6 +65,7 @@ export default function Dashboard() {
           lectures: ((lectures && lectures.data) || []).length,
           announcements: ((announcements && announcements.data) || []).length,
           messages: ((messages && messages.data) || []).length,
+          pgProgrammes: ((programmes && programmes.data) || []).length,
         });
         setRecent(newsItems.slice(0, 5));
       } catch {
@@ -114,6 +125,10 @@ export default function Dashboard() {
         <Card className="stat-card accent-purple" title="Enquiries">
           <div className="stat-value">{loading ? "—" : stats.messages}</div>
           <div className="muted small">Messages received</div>
+        </Card>
+        <Card className="stat-card accent-green" title="Postgraduate Programmes">
+          <div className="stat-value">{loading ? "—" : stats.pgProgrammes}</div>
+          <div className="muted small">In the catalogue</div>
         </Card>
       </div>
 

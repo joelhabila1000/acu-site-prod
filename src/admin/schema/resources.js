@@ -403,6 +403,59 @@ export const RESOURCES = {
     ],
   },
 
+  postgraduateProgrammes: {
+    title: "Postgraduate Programmes",
+    singular: "programme",
+    endpoint: "/api/programmes",
+    columns: [
+      { key: "name", label: "Programme" },
+      { key: "award", label: "Award" },
+      { key: "faculty", label: "Faculty" },
+      { key: "status", label: "Status" },
+    ],
+    defaults: { status: "published", sortOrder: 0 },
+    fields: [
+      {
+        name: "name",
+        label: "Programme name",
+        type: "text",
+        required: true,
+        help: "e.g. M.Sc. Computer Science",
+      },
+      {
+        name: "award",
+        label: "Award",
+        type: "select",
+        required: true,
+        options: [
+          "PGD",
+          "M.Sc.",
+          "M.A.",
+          "MBA",
+          "MPA",
+          "MIT",
+          "M.Ed.",
+          "DBA",
+          "Ph.D.",
+        ],
+      },
+      {
+        name: "faculty",
+        label: "Faculty",
+        type: "text",
+        required: true,
+        help: "Programmes are grouped by this value on the public page.",
+      },
+      { name: "sortOrder", label: "Display order", type: "number" },
+      {
+        name: "status",
+        label: "Status",
+        type: "select",
+        options: ["published", "hidden"],
+      },
+    ],
+  },
+
   messages: {
     title: "Enquiries",
     singular: "enquiry",
@@ -450,6 +503,11 @@ export const ADMIN_NAV = [
   { path: "/admin/principal-officers", page: "principal-officers", label: "Principal Officers" },
   { path: "/admin/faculties", page: "faculties", label: "Faculties & Programmes" },
   { path: "/admin/departments", page: "departments", label: "Departments" },
+  {
+    path: "/admin/postgraduate-programmes",
+    page: "postgraduate-programmes",
+    label: "Postgraduate Programmes",
+  },
   { path: "/admin/lectures", page: "lectures", label: "Inaugural Lectures" },
   { path: "/admin/gallery", page: "gallery", label: "Gallery" },
   { path: "/admin/staff", page: "staff", label: "Staff Directory" },

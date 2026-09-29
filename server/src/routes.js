@@ -16,6 +16,7 @@ const roles = require("./controllers/roles");
 const announcements = require("./controllers/announcements");
 const lectures = require("./controllers/lectures");
 const messages = require("./controllers/messages");
+const programmes = require("./controllers/programmes");
 
 // Auth
 router.post("/auth/login", auth.loginLimiter, auth.login);
@@ -104,6 +105,13 @@ router.get("/messages", auth.requireEditor, messages.list);
 router.get("/messages/:id", auth.requireEditor, messages.get);
 router.put("/messages/:id", auth.requireEditor, messages.update);
 router.delete("/messages/:id", auth.requireEditor, messages.remove);
+
+// Postgraduate programme catalogue (Public site → Postgraduate page).
+router.get("/programmes", programmes.list);
+router.get("/programmes/:id", programmes.get);
+router.post("/programmes", auth.requireEditor, programmes.create);
+router.put("/programmes/:id", auth.requireEditor, programmes.update);
+router.delete("/programmes/:id", auth.requireEditor, programmes.remove);
 
 // Uploads
 router.post("/uploads", auth.requireEditor, uploads.parseUpload, uploads.put);

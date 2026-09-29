@@ -44,9 +44,9 @@ const NAV_LINKS = [
         path: "/about",
         children: [
           { label: "Principal Officers", path: "/about/principal-officers" },
-          { label: "Vice-Chancellary", path: "/about" },
-          { label: "Registry", path: "/about" },
-          { label: "Bursary", path: "/about" },
+          { label: "Vice-Chancellary", path: "/about/vice-chancellary" },
+          { label: "Registry", path: "/about/registry" },
+          { label: "Bursary", path: "/about/bursary" },
         ],
       },
     ],
@@ -73,8 +73,27 @@ const NAV_LINKS = [
       },
     ],
   },
-  { label: "Academics", path: "/academics" },
+  {
+    label: "Academics",
+    path: "/academics",
+    children: [
+      { label: "Academics Overview", path: "/academics" },
+      { label: "List of Courses", path: "/listofcourses" },
+      { label: "Inaugural Lectures", path: "/academics/inaugural-lectures" },
+    ],
+  },
   { label: "Admissions", path: "/admissions" },
+  {
+    // A grouping label rather than a destination — no `path`, so the navbar
+    // renders it as a non-clickable heading that reveals the menu on hover.
+    label: "Student Services",
+    children: [
+      { label: "Postgraduate School", path: "/portal/postgraduate" },
+      { label: "Undergraduate Study", path: "https://apply.acu.edu.ng/" },
+      { label: "Part-Time Study", path: "/admissions" },
+      { label: "Foundation Programme", path: "https://cpfpapply.acu.edu.ng" },
+    ],
+  },
   { label: "Sustainability", path: "/sustainability" },
   {
     label: "Directory",
@@ -90,7 +109,7 @@ const NAV_LINKS = [
 const PORTALS = [
   { label: "Postgraduate", url: "/portal/postgraduate" },
   { label: "Undergraduate", url: "https://apply.acu.edu.ng/" },
-  { label: "Part-Time", url: "#" },
+  { label: "Part-Time", url: "/admissions" },
   { label: "Foundation", url: "https://cpfpapply.acu.edu.ng" },
 ];
 

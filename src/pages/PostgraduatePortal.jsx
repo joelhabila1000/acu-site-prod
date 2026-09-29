@@ -1,4 +1,6 @@
+import { useMemo } from "react";
 import { Link, Routes, Route, NavLink, useParams } from "react-router-dom";
+import { usePostgraduateProgrammes } from "../data/cms.js";
 import "./PostgraduatePortal.css";
 
 import pgHero from "../assets/Buildings/PG School.JPG";
@@ -88,67 +90,29 @@ const AWARDS = [
   },
 ];
 
-const FACULTY_PROGRAMMES = [
-  {
-    faculty: "Faculty of Humanities",
-    programmes: [
-      "M.A. History",
-      "Ph.D. History",
-      "M.A. Christian Religious Studies",
-      "PGD Christian Religious Studies",
-      "Ph.D. Christian Religious Studies",
-      "PGD Religious Studies",
-      "Ph.D. Religious Studies",
-      "Ph.D. English",
-    ],
-  },
-  {
-    faculty: "Faculty of Management Sciences",
-    programmes: [
-      "Master of Business Administration (MBA)",
-      "Master of Public Administration (MPA)",
-      "Doctor of Business Administration (DBA)",
-      "M.Sc. Accounting",
-      "PGD Accounting",
-      "M.Sc. Business Administration",
-      "PGD Business Administration",
-      "Ph.D. Business Administration",
-    ],
-  },
-  {
-    faculty: "Faculty of Natural Sciences",
-    programmes: [
-      "M.Sc. Computer Science",
-      "PGD Computer Science",
-      "Ph.D. Computer Science",
-      "Master of Information Technology (MIT)",
-      "M.Sc. Microbiology",
-      "PGD Microbiology",
-      "Ph.D. Microbiology",
-      "M.Sc. Biochemistry",
-      "PGD Biochemistry",
-      "Ph.D. Biochemistry",
-      "M.Sc. Industrial Chemistry",
-      "PGD Industrial Chemistry",
-      "M.Sc. Geology",
-      "PGD Geology",
-      "Ph.D. Geology",
-      "PGD Physics",
-    ],
-  },
-  {
-    faculty: "Faculty of Social Sciences & Communication",
-    programmes: [
-      "M.Sc. Mass Communication",
-      "PGD Mass Communication",
-      "Ph.D. Mass Communication",
-    ],
-  },
-  {
-    faculty: "Faculty of Education",
-    programmes: ["M.Ed. Educational Management", "PGD Education"],
-  },
-];
+// The catalogue is maintained in the CMS (Admin → Postgraduate Programmes) and
+// grouped by faculty for display. The bundled copy is the offline fallback.
+function useFacultyGroups() {
+  const programmes = usePostgraduateProgrammes();
+
+  return useMemo(() => {
+    const list = Array.isArray(programmes) ? programmes : [];
+    const groups = [];
+    const byFaculty = new Map();
+
+    for (const programme of list) {
+      const key = programme.faculty || "Other programmes";
+      if (!byFaculty.has(key)) {
+        const group = { faculty: key, programmes: [] };
+        byFaculty.set(key, group);
+        groups.push(group);
+      }
+      byFaculty.get(key).programmes.push(programme.name);
+    }
+
+    return groups;
+  }, [programmes]);
+}
 
 const STEPS = [
   "Visit the Postgraduate School admission portal and create an account.",
@@ -364,6 +328,8 @@ function ApplyButton({ className = "btn btn-gold", children = "Apply Now" }) {
 }
 
 function PostgraduateHome() {
+  const facultyGroups = useFacultyGroups();
+
   return (
     <div className="pg-portal">
       <section
@@ -387,6 +353,30 @@ function PostgraduateHome() {
                 Browse Programmes
               </Link>
             </div>
+
+            {/* The navigation used to be a submenu; the sections it pointed at
+                live on this page instead. */}
+            <nav className="pg-anchor-nav" aria-label="On this page">
+              {[
+                ["programmes", "Programmes"],
+                ["course-list", "Course list"],
+                ["requirements", "Entry requirements"],
+                ["how-to-apply", "How to apply"],
+                ["faqs", "FAQs"],
+              ].map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() =>
+                    document
+                      .getElementById(id)
+                      ?.scrollIntoView({ behavior: "smooth", block: "start" })
+                  }
+                >
+                  {label}
+                </button>
+              ))}
+            </nav>
           </div>
 
           <div className="pg-card pg-hero-panel">
@@ -434,7 +424,7 @@ function PostgraduateHome() {
         </div>
       </section>
 
-      <section className="pg-section pg-section-soft">
+      <section className="pg-section pg-section-soft" id="programmes">
         <div className="pg-shell">
           <div className="pg-intro">
             <div>
@@ -504,7 +494,7 @@ function PostgraduateHome() {
         </div>
       </section>
 
-      <section className="pg-section pg-section-soft">
+      <section className="pg-section pg-section-soft" id="course-list">
         <div className="pg-shell">
           <div className="pg-intro">
             <div>
@@ -514,7 +504,7 @@ function PostgraduateHome() {
           </div>
 
           <div className="pg-faculty-grid">
-            {FACULTY_PROGRAMMES.map((group) => (
+            {facultyGroups.map((group) => (
               <article key={group.faculty} className="pg-faculty-card">
                 <h3>{group.faculty}</h3>
                 <ul className="pg-chip-list">
@@ -528,7 +518,7 @@ function PostgraduateHome() {
         </div>
       </section>
 
-      <section className="pg-section">
+      <section className="pg-section" id="requirements">
         <div className="pg-shell pg-columns">
           <div className="pg-panel">
             <p className="eyebrow">Requirements</p>
@@ -540,7 +530,7 @@ function PostgraduateHome() {
             </ul>
           </div>
 
-          <div className="pg-panel">
+          <div className="pg-panel" id="how-to-apply">
             <p className="eyebrow">Application guide</p>
             <h2>How to apply</h2>
             <ol>
@@ -589,7 +579,7 @@ function PostgraduateHome() {
         </div>
       </section>
 
-      <section className="pg-section">
+      <section className="pg-section" id="faqs">
         <div className="pg-shell pg-faqs">
           <div>
             <p className="eyebrow">FAQs</p>
@@ -831,6 +821,8 @@ function ProgrammeDetailPage() {
 }
 
 function ProgrammesIndex() {
+  const facultyGroups = useFacultyGroups();
+
   return (
     <div className="pg-portal">
       <section className="pg-section pg-section-top">
@@ -867,7 +859,7 @@ function ProgrammesIndex() {
           </div>
 
           <div className="pg-faculty-grid">
-            {FACULTY_PROGRAMMES.map((group) => (
+            {facultyGroups.map((group) => (
               <article key={group.faculty} className="pg-faculty-card">
                 <h3>{group.faculty}</h3>
                 <ul className="pg-chip-list">

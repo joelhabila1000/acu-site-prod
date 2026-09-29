@@ -273,6 +273,18 @@ model Announcement {
   updatedAt DateTime @updatedAt
 }
 
+model PostgraduateProgramme {
+  id        Int      @id @default(autoincrement())
+  name      String
+  // Award route, e.g. "PGD", "M.Sc.", "MBA", "Ph.D." — used for grouping.
+  award     String
+  faculty   String
+  status    String   @default("published")
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model ContactMessage {
   id        Int      @id @default(autoincrement())
   name      String

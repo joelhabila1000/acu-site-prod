@@ -7,37 +7,10 @@ function hasChildren(item) {
   return Array.isArray(item.children) && item.children.length > 0;
 }
 
-function DesktopMenuItems({ items }) {
-  return items.map((item) => {
-    if (!hasChildren(item)) {
-      return (
-        <NavLink
-          key={`${item.label}-${item.path}`}
-          to={item.path}
-          className={({ isActive }) => (isActive ? "active" : "")}
-        >
-          {item.label}
-        </NavLink>
-      );
-    }
-
-    return (
-      <div key={`${item.label}-${item.path}`} className="nav-submenu-item">
-        <NavLink
-          to={item.path}
-          className={({ isActive }) =>
-            `nav-submenu-toggle ${isActive ? "is-open" : ""}`
-          }
-        >
-          {item.label}
-          <span aria-hidden="true">›</span>
-        </NavLink>
-        <div className="nav-submenu-menu">
-          <DesktopMenuItems items={item.children} />
-        </div>
-      </div>
-    );
-  });
+// Menu entries may point off-site (student portals). Those need a plain anchor
+// rather than a router link, which would treat them as an internal path.
+function isExternal(path) {
+  return /^https?:\/\//i.test(path || "");
 }
 
 function DesktopMegaMenu({ columns }) {
@@ -61,10 +34,42 @@ function DesktopMegaMenu({ columns }) {
   );
 }
 
+// Children of a dropdown: internal ones route, off-site ones open in a tab.
+function DesktopChildren({ items, onNavigate }) {
+  return items.map((item) =>
+    isExternal(item.path) ? (
+      <a
+        key={`${item.label}-${item.path}`}
+        href={item.path}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={onNavigate}
+      >
+        {item.label}
+        <span className="nav-external" aria-hidden="true">
+          ↗
+        </span>
+      </a>
+    ) : (
+      <NavLink
+        key={`${item.label}-${item.path}`}
+        to={item.path}
+        className={({ isActive }) => (isActive ? "active" : "")}
+        onClick={onNavigate}
+      >
+        {item.label}
+      </NavLink>
+    ),
+  );
+}
+
 export default function Navbar() {
   const { site, nav, portals } = useSite();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  // Only used by the non-clickable grouping headings (e.g. Student Services),
+  // so touch and keyboard users can open the menu without hovering.
+  const [openGroup, setOpenGroup] = useState(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -133,12 +138,15 @@ export default function Navbar() {
 
         <nav className="primary-nav" aria-label="Primary">
           <ul>
-            {nav.map((link) => {
-              const hasChildren = Array.isArray(link.children) && link.children.length > 0;
+            {nav.map((link, index) => {
+              const children = hasChildren(link);
+              const isGroupLabel = children && !link.path;
+              // Menus near the right edge open leftwards so they stay on screen.
+              const alignRight = index >= nav.length - 2;
 
-              if (!hasChildren) {
+              if (!children) {
                 return (
-                  <li key={link.path}>
+                  <li key={link.path || link.label}>
                     <NavLink
                       to={link.path}
                       className={({ isActive }) => (isActive ? "active" : "")}
@@ -150,24 +158,50 @@ export default function Navbar() {
                 );
               }
 
+              const menuOpen = openGroup === link.label;
+
               return (
-                <li key={link.path} className="nav-dropdown">
-                  <NavLink
-                    to={link.path}
-                    className={({ isActive }) =>
-                      `nav-dropdown-toggle ${isActive ? "is-open" : ""}`
-                    }
-                    end={link.path === "/"}
-                  >
-                    {link.label}
-                    <span aria-hidden="true">▾</span>
-                  </NavLink>
+                <li
+                  key={link.path || link.label}
+                  className={`nav-dropdown ${alignRight ? "nav-dropdown--right" : ""} ${
+                    menuOpen ? "is-open" : ""
+                  }`}
+                >
+                  {isGroupLabel ? (
+                    <button
+                      type="button"
+                      className="nav-dropdown-toggle"
+                      aria-expanded={menuOpen}
+                      onClick={() =>
+                        setOpenGroup((current) =>
+                          current === link.label ? null : link.label,
+                        )
+                      }
+                    >
+                      {link.label}
+                      <span aria-hidden="true">▾</span>
+                    </button>
+                  ) : (
+                    <NavLink
+                      to={link.path}
+                      className={({ isActive }) =>
+                        `nav-dropdown-toggle ${isActive ? "is-open" : ""}`
+                      }
+                      end={link.path === "/"}
+                    >
+                      {link.label}
+                      <span aria-hidden="true">▾</span>
+                    </NavLink>
+                  )}
 
                   {link.megaMenu ? (
                     <DesktopMegaMenu columns={link.megaMenu} />
                   ) : (
                     <div className="nav-dropdown-menu">
-                      <DesktopMenuItems items={link.children} />
+                      <DesktopChildren
+                        items={link.children}
+                        onNavigate={() => setOpenGroup(null)}
+                      />
                     </div>
                   )}
                 </li>
@@ -203,42 +237,48 @@ export default function Navbar() {
         <ul>
           {nav.map((link) => {
             if (hasChildren(link)) {
+              const isGroupLabel = !link.path;
               return (
-                <li key={link.path}>
+                <li key={link.path || link.label}>
                   <div className="mobile-dropdown-group">
-                    <NavLink
-                      to={link.path}
-                      className={({ isActive }) => (isActive ? "active" : "")}
-                      onClick={() => setOpen(false)}
-                    >
-                      {link.label}
-                    </NavLink>
+                    {isGroupLabel ? (
+                      <span className="mobile-group-label">{link.label}</span>
+                    ) : (
+                      <NavLink
+                        to={link.path}
+                        className={({ isActive }) =>
+                          isActive ? "active" : ""
+                        }
+                        onClick={() => setOpen(false)}
+                      >
+                        {link.label}
+                      </NavLink>
+                    )}
                     <div className="mobile-submenu">
-                      {link.children.map((child) => (
-                        <div key={`${child.label}-${child.path}`} className="mobile-submenu-group">
+                      {link.children.map((child) =>
+                        isExternal(child.path) ? (
+                          <a
+                            key={`${child.label}-${child.path}`}
+                            href={child.path}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => setOpen(false)}
+                          >
+                            {child.label}
+                          </a>
+                        ) : (
                           <NavLink
+                            key={`${child.label}-${child.path}`}
                             to={child.path}
-                            className={({ isActive }) => (isActive ? "active" : "")}
+                            className={({ isActive }) =>
+                              isActive ? "active" : ""
+                            }
                             onClick={() => setOpen(false)}
                           >
                             {child.label}
                           </NavLink>
-                          {hasChildren(child) && (
-                            <div className="mobile-submenu nested">
-                              {child.children.map((grandchild) => (
-                                <NavLink
-                                  key={`${grandchild.label}-${grandchild.path}`}
-                                  to={grandchild.path}
-                                  className={({ isActive }) => (isActive ? "active" : "")}
-                                  onClick={() => setOpen(false)}
-                                >
-                                  {grandchild.label}
-                                </NavLink>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      ))}
+                        ),
+                      )}
                     </div>
                   </div>
                 </li>
