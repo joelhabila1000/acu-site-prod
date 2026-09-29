@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PageHeader from "../components/PageHeader.jsx";
 import { SITE } from "../data/content.js";
+import { apiSend } from "../lib/api.js";
 
 const STEPS = [
   {
@@ -33,7 +34,8 @@ export default function Admissions() {
     message: "",
   });
   const [errors, setErrors] = useState({});
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState("");
 
   function update(field, value) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -49,15 +51,25 @@ export default function Admissions() {
     return next;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const next = validate();
     setErrors(next);
-    if (Object.keys(next).length === 0) {
-      // No backend is wired up in this demo project — swap this for a real POST
-      // to your admissions API (over HTTPS) or an emailing service.
-      setSubmitted(true);
+    if (Object.keys(next).length !== 0) return;
+
+    setStatus("sending");
+    setError("");
+    try {
+      await apiSend("/api/messages", "POST", {
+        ...form,
+        subject: `Admissions enquiry — ${form.programme}`,
+        source: "admissions",
+      });
+      setStatus("sent");
       setForm({ name: "", email: "", phone: "", programme: "", message: "" });
+    } catch (err) {
+      setError(err.message || "Could not send your enquiry. Please try again.");
+      setStatus("error");
     }
   }
 
@@ -124,10 +136,16 @@ export default function Admissions() {
           </div>
 
           <form className="inquiry-form" onSubmit={handleSubmit} noValidate>
-            {submitted && (
+            {status === "sent" && (
               <div className="form-success" role="status">
                 Thank you, your inquiry has been recorded. Our admissions team
                 will reach out shortly.
+              </div>
+            )}
+
+            {status === "error" && (
+              <div className="form-success form-failure" role="alert">
+                {error}
               </div>
             )}
 
@@ -214,8 +232,12 @@ export default function Admissions() {
               />
             </div>
 
-            <button type="submit" className="btn btn-oxblood btn-block">
-              Send Inquiry
+            <button
+              type="submit"
+              className="btn btn-oxblood btn-block"
+              disabled={status === "sending"}
+            >
+              {status === "sending" ? "Sending…" : "Send Inquiry"}
             </button>
           </form>
         </div>

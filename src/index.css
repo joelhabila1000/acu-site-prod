@@ -651,6 +651,13 @@ textarea:focus-visible {
   margin-bottom: 20px;
 }
 
+/* Shown when a form submission is rejected by the server. */
+.form-failure {
+  background: #fdecec;
+  border-color: #e2a5a5;
+  color: var(--oxblood-700);
+}
+
 /* ---------- Contact page ---------- */
 .contact-info-grid {
   display: grid;

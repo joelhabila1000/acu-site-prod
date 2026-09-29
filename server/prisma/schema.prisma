@@ -273,6 +273,22 @@ model Announcement {
   updatedAt DateTime @updatedAt
 }
 
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String?
+  programme String?
+  subject   String?
+  message   String   @db.Text
+  // Which form it came from: "contact" or "admissions".
+  source    String   @default("contact")
+  status    String   @default("new")
+  ip        String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model HomepageSetting {
   id Int @id @default(autoincrement())
   key String @unique

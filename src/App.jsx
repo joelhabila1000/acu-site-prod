@@ -19,6 +19,7 @@ import NotFound from "./pages/NotFound.jsx";
 import Listofcourses from "./pages/ListOfCourses.jsx";
 import BackToTop from "./components/BackToTop.jsx";
 import NewsEventsPage from "./pages/NewsEventsPage.jsx";
+import NewsArticle from "./pages/NewsArticle.jsx";
 import Gallery from "./pages/Gallery.jsx";
 import Sustainability from "./pages/Sustainability.jsx";
 import Directory from "./pages/Directory.jsx";
@@ -75,6 +76,7 @@ export default function App() {
           />
           <Route path="/portal/:portal" element={<Maintenance />} />
           <Route path="/news" element={<NewsEventsPage />} />
+          <Route path="/news/:slug" element={<NewsArticle />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/sustainability" element={<Sustainability />} />
           <Route path="/directory" element={<Directory />} />

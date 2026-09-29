@@ -165,7 +165,7 @@ export default function ResourcePage({ resource }) {
             value={q}
             onChange={(e) => setQ(e.target.value)}
           />
-          <button className="btn" onClick={openCreate}>
+          <button className="btn" onClick={openCreate} hidden={resource.noCreate}>
             Add {resource.singular}
           </button>
         </div>

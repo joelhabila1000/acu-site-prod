@@ -312,6 +312,7 @@ export function Field({ field, value, onChange }) {
         <textarea
           rows={field.rows || (field.type === "richtext" ? 10 : 4)}
           value={value ?? ""}
+          disabled={field.disabled}
           spellCheck={field.type === "richtext" ? "false" : undefined}
           onChange={(e) => onChange(e.target.value)}
         />
@@ -353,6 +354,7 @@ export function Field({ field, value, onChange }) {
       <input
         type="text"
         value={value ?? ""}
+        disabled={field.disabled}
         placeholder={field.placeholder}
         onChange={(e) => onChange(e.target.value)}
       />

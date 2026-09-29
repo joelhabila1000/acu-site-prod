@@ -1,4 +1,5 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
+import { Link } from "react-router-dom";
 import PageHeader from "../components/PageHeader.jsx";
 import { useNewsEvents } from "../data/cms.js";
 import "./NewsEvensPage.css";
@@ -14,32 +15,10 @@ function formatDate(iso) {
   });
 }
 
-/* ---------------------------------------------------------------
-   PAGE
----------------------------------------------------------------- */
 export default function NewsEventsPage() {
   const items = useNewsEvents();
   const [filter, setFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeItem, setActiveItem] = useState(null);
-  const [photoIndex, setPhotoIndex] = useState(0);
-
-  // Opening a different item always starts at its first photo.
-  function openItem(item) {
-    setPhotoIndex(0);
-    setActiveItem(item);
-  }
-
-  useEffect(() => {
-    if (!activeItem) return;
-    const onKey = (e) => e.key === "Escape" && setActiveItem(null);
-    window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
-    };
-  }, [activeItem]);
 
   const filtered = useMemo(() => {
     return items
@@ -51,16 +30,6 @@ export default function NewsEventsPage() {
       )
       .sort((a, b) => new Date(b.date) - new Date(a.date));
   }, [items, filter, searchTerm]);
-
-  // All photographs for the open item, falling back to its single cover image.
-  const photos = activeItem
-    ? activeItem.images && activeItem.images.length
-      ? activeItem.images
-      : activeItem.image
-        ? [{ url: activeItem.image, caption: "" }]
-        : []
-    : [];
-  const heroPhoto = photos[photoIndex] || photos[0] || null;
 
   return (
     <>
@@ -83,9 +52,7 @@ export default function NewsEventsPage() {
                   key={tab.key}
                   role="tab"
                   aria-selected={filter === tab.key}
-                  className={`news-tab ${
-                    filter === tab.key ? "is-active" : ""
-                  }`}
+                  className={`news-tab ${filter === tab.key ? "is-active" : ""}`}
                   onClick={() => setFilter(tab.key)}
                   type="button"
                 >
@@ -124,19 +91,11 @@ export default function NewsEventsPage() {
           {filtered.length > 0 ? (
             <div className="news-grid">
               {filtered.map((item) => (
-                <article
+                <Link
                   className="news-card"
                   key={item.id}
-                  onClick={() => openItem(item)}
-                  tabIndex={0}
-                  role="button"
+                  to={`/news/${item.slug}`}
                   aria-label={`Read: ${item.title}`}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      openItem(item);
-                    }
-                  }}
                 >
                   {item.image && (
                     <div className="news-card-image">
@@ -161,7 +120,7 @@ export default function NewsEventsPage() {
                     <p className="news-excerpt">{item.excerpt}</p>
                     <span className="news-read-more">Read more →</span>
                   </div>
-                </article>
+                </Link>
               ))}
             </div>
           ) : (
@@ -181,94 +140,6 @@ export default function NewsEventsPage() {
           )}
         </div>
       </section>
-
-      {activeItem && (
-        <div
-          className="news-modal-overlay"
-          onClick={() => setActiveItem(null)}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="news-modal-title"
-        >
-          <div className="news-modal" onClick={(e) => e.stopPropagation()}>
-            <button
-              className="news-modal-close"
-              onClick={() => setActiveItem(null)}
-              aria-label="Close"
-            >
-              ×
-            </button>
-
-            {heroPhoto && (
-              <div className="news-modal-gallery">
-                <div className="news-modal-hero">
-                  <img src={heroPhoto.url} alt={heroPhoto.caption || ""} />
-                </div>
-
-                {photos.length > 1 && (
-                  <div className="news-modal-thumbs">
-                    {photos.map((photo, index) => (
-                      <button
-                        key={`${photo.url}-${index}`}
-                        type="button"
-                        className={`news-thumb ${
-                          index === photoIndex ? "is-active" : ""
-                        }`}
-                        onClick={() => setPhotoIndex(index)}
-                        aria-label={`Show photo ${index + 1} of ${photos.length}`}
-                        aria-current={index === photoIndex}
-                      >
-                        <img src={photo.url} alt="" />
-                      </button>
-                    ))}
-                  </div>
-                )}
-
-                {heroPhoto.caption && (
-                  <p className="news-modal-caption">{heroPhoto.caption}</p>
-                )}
-              </div>
-            )}
-
-            <div className="news-modal-header">
-              <span className={`news-badge news-badge--${activeItem.type}`}>
-                {activeItem.type === "news" ? "News" : "Event"}
-              </span>
-              <h2 id="news-modal-title">{activeItem.title}</h2>
-              <p className="news-modal-date">{formatDate(activeItem.date)}</p>
-            </div>
-
-            <div className="news-modal-body">
-              {String(activeItem.body || "")
-                .split(/\n\n+/)
-                .filter((p) => p.trim().length > 0)
-                .map((para, i) => (
-                  <p key={i}>{para}</p>
-                ))}
-            </div>
-
-            <div className="news-modal-footer">
-              <button
-                type="button"
-                className="news-cta news-cta--ghost"
-                onClick={() => setActiveItem(null)}
-              >
-                Close
-              </button>
-              {activeItem.link && (
-                <a
-                  className="news-cta"
-                  href={activeItem.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Read on acu.edu.ng →
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }

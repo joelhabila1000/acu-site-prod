@@ -402,6 +402,43 @@ export const RESOURCES = {
       },
     ],
   },
+
+  messages: {
+    title: "Enquiries",
+    singular: "enquiry",
+    endpoint: "/api/messages",
+    // Enquiries arrive from the public forms — they are never typed in here.
+    noCreate: true,
+    columns: [
+      { key: "name", label: "From" },
+      { key: "email", label: "Email" },
+      { key: "source", label: "Form" },
+      { key: "status", label: "Status" },
+      { key: "createdAt", label: "Received", format: "date" },
+    ],
+    defaults: { status: "new" },
+    fields: [
+      { name: "name", label: "From", type: "text", disabled: true },
+      { name: "email", label: "Email", type: "text", disabled: true },
+      { name: "phone", label: "Phone", type: "text" },
+      { name: "programme", label: "Programme of interest", type: "text" },
+      { name: "subject", label: "Subject", type: "text" },
+      {
+        name: "message",
+        label: "Message",
+        type: "textarea",
+        rows: 8,
+        disabled: true,
+      },
+      {
+        name: "status",
+        label: "Status",
+        type: "select",
+        options: ["new", "read", "replied", "archived"],
+        help: "The sender's original wording is kept — only these fields are editable.",
+      },
+    ],
+  },
 };
 
 export const ADMIN_NAV = [
@@ -409,6 +446,7 @@ export const ADMIN_NAV = [
   { path: "/admin/news", page: "news", label: "News" },
   { path: "/admin/events", page: "events", label: "Events" },
   { path: "/admin/announcements", page: "announcements", label: "Announcements" },
+  { path: "/admin/messages", page: "messages", label: "Enquiries" },
   { path: "/admin/principal-officers", page: "principal-officers", label: "Principal Officers" },
   { path: "/admin/faculties", page: "faculties", label: "Faculties & Programmes" },
   { path: "/admin/departments", page: "departments", label: "Departments" },

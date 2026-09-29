@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PageHeader from "../components/PageHeader.jsx";
 import { useSite } from "../data/cms.js";
+import { apiSend } from "../lib/api.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -13,7 +14,8 @@ export default function Contact() {
     message: "",
   });
   const [errors, setErrors] = useState({});
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState("");
 
   function update(field, value) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -28,14 +30,21 @@ export default function Contact() {
     return next;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const next = validate();
     setErrors(next);
-    if (Object.keys(next).length === 0) {
-      // Demo only — connect this to a real HTTPS endpoint before going live.
-      setSubmitted(true);
+    if (Object.keys(next).length !== 0) return;
+
+    setStatus("sending");
+    setError("");
+    try {
+      await apiSend("/api/messages", "POST", { ...form, source: "contact" });
+      setStatus("sent");
       setForm({ name: "", email: "", subject: "", message: "" });
+    } catch (err) {
+      setError(err.message || "Could not send your message. Please try again.");
+      setStatus("error");
     }
   }
 
@@ -85,10 +94,16 @@ export default function Contact() {
             </div>
 
             <form className="inquiry-form" onSubmit={handleSubmit} noValidate>
-              {submitted && (
+              {status === "sent" && (
                 <div className="form-success" role="status">
                   Message sent — thank you for reaching out. We'll respond
                   shortly.
+                </div>
+              )}
+
+              {status === "error" && (
+                <div className="form-success form-failure" role="alert">
+                  {error}
                 </div>
               )}
 
@@ -161,8 +176,12 @@ export default function Contact() {
                 )}
               </div>
 
-              <button type="submit" className="btn btn-oxblood btn-block">
-                Send Message
+              <button
+                type="submit"
+                className="btn btn-oxblood btn-block"
+                disabled={status === "sending"}
+              >
+                {status === "sending" ? "Sending…" : "Send Message"}
               </button>
             </form>
           </div>

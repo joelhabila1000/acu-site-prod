@@ -39,6 +39,8 @@ function AdminShell() {
     content = <ResourcePage key="lectures" resource={RESOURCES.lectures} />;
   else if (page === "announcements")
     content = <ResourcePage key="announcements" resource={RESOURCES.announcements} />;
+  else if (page === "messages")
+    content = <ResourcePage key="messages" resource={RESOURCES.messages} />;
   else if (page === "settings") content = <Settings />;
   else if (page === "users") content = <Users />;
 

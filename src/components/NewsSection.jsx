@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { useNews } from "../data/cms.js";
 import "./NewsSection.css";
 
@@ -74,24 +75,17 @@ export default function NewsSection() {
             >
               →
             </button>
-            <a
-              href="/news"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-navy btn-sm"
-            >
+            <Link to="/news" className="btn btn-navy btn-sm">
               View All News
-            </a>
+            </Link>
           </div>
         </div>
 
         <div className="news-carousel" ref={carouselRef}>
           {news.map((n) => (
-            <a
+            <Link
               key={`${n.title}-${n.date}`}
-              href={n.url}
-              target="_blank"
-              rel="noopener noreferrer"
+              to={n.url}
               className="news-card"
             >
               <div className="news-image">
@@ -102,7 +96,7 @@ export default function NewsSection() {
                 <h3>{n.title}</h3>
                 <span className="news-link">Read more →</span>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       </div>

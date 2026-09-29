@@ -26,6 +26,7 @@ export default function Dashboard() {
     officers: 0,
     lectures: 0,
     announcements: 0,
+    messages: 0,
   });
   const [recent, setRecent] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -34,7 +35,7 @@ export default function Dashboard() {
     let cancelled = false;
     async function load() {
       try {
-        const [news, events, faculties, officers, lectures, announcements] =
+        const [news, events, faculties, officers, lectures, announcements, messages] =
           await Promise.all([
             authGet("/api/news"),
             authGet("/api/events"),
@@ -42,6 +43,7 @@ export default function Dashboard() {
             authGet("/api/principal-officers"),
             authGet("/api/lectures"),
             authGet("/api/announcements"),
+            authGet("/api/messages"),
           ]);
         if (cancelled) return;
         const newsItems = (news && news.data) || [];
@@ -52,6 +54,7 @@ export default function Dashboard() {
           officers: ((officers && officers.data) || []).length,
           lectures: ((lectures && lectures.data) || []).length,
           announcements: ((announcements && announcements.data) || []).length,
+          messages: ((messages && messages.data) || []).length,
         });
         setRecent(newsItems.slice(0, 5));
       } catch {
@@ -107,6 +110,10 @@ export default function Dashboard() {
         <Card className="stat-card accent-orange" title="Announcements">
           <div className="stat-value">{loading ? "—" : stats.announcements}</div>
           <div className="muted small">Notices</div>
+        </Card>
+        <Card className="stat-card accent-purple" title="Enquiries">
+          <div className="stat-value">{loading ? "—" : stats.messages}</div>
+          <div className="muted small">Messages received</div>
         </Card>
       </div>
 

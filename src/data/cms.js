@@ -13,6 +13,7 @@ import {
   useState,
 } from "react";
 import { apiGet } from "../lib/api.js";
+import { slugify } from "../lib/format.js";
 import {
   SITE,
   NAV_LINKS,
@@ -192,6 +193,7 @@ const STATIC_NEWS_HOME = NEWS.map((item) => ({ ...item }));
 
 const STATIC_NEWS_EVENTS = NEWS_ITEMS.map((item) => ({
   id: `${item.type}-${item.id}`,
+  slug: slugify(item.title),
   type: item.type,
   title: item.title,
   date: item.date,
@@ -512,7 +514,7 @@ export function ContentProvider({ children }) {
               row.featuredImage ||
               firstImage(photos) ||
               NEWS_IMAGE_FALLBACKS[index % NEWS_IMAGE_FALLBACKS.length],
-            url: "/news",
+            url: `/news/${row.slug || slugify(row.title)}`,
           };
         });
         next.newsEvents = [
@@ -528,7 +530,7 @@ export function ContentProvider({ children }) {
               image: row.featuredImage || firstImage(photos),
               images: photos,
               category: row.category,
-              slug: row.slug,
+              slug: row.slug || slugify(row.title),
               link: null,
             };
           }),
@@ -536,6 +538,7 @@ export function ContentProvider({ children }) {
             const photos = mapImages(row.images);
             return {
               id: `event-${row.id}`,
+              slug: slugify(row.title),
               type: "event",
               title: row.title,
               date: row.eventDate,
@@ -552,6 +555,7 @@ export function ContentProvider({ children }) {
           const photos = mapImages(row.images);
           return {
             id: `event-${row.id}`,
+            slug: slugify(row.title),
             type: "event",
             title: row.title,
             date: row.eventDate,

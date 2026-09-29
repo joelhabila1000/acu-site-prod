@@ -15,6 +15,7 @@ const users = require("./controllers/users");
 const roles = require("./controllers/roles");
 const announcements = require("./controllers/announcements");
 const lectures = require("./controllers/lectures");
+const messages = require("./controllers/messages");
 
 // Auth
 router.post("/auth/login", auth.loginLimiter, auth.login);
@@ -95,6 +96,14 @@ router.delete("/announcements/:id", auth.requireEditor, announcements.remove);
 
 // Roles — read-only reference list for the Users form.
 router.get("/roles", auth.requireAdmin, roles.list);
+
+// Enquiries — the public contact and admissions forms post here; reading and
+// triaging them is an editor task.
+router.post("/messages", messages.submitLimiter, messages.create);
+router.get("/messages", auth.requireEditor, messages.list);
+router.get("/messages/:id", auth.requireEditor, messages.get);
+router.put("/messages/:id", auth.requireEditor, messages.update);
+router.delete("/messages/:id", auth.requireEditor, messages.remove);
 
 // Uploads
 router.post("/uploads", auth.requireEditor, uploads.parseUpload, uploads.put);
