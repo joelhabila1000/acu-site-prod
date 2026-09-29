@@ -33,9 +33,7 @@
 }
 
 .news-carousel {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: calc((100% - 72px) / 4);
+  display: flex;
   gap: 24px;
   overflow-x: auto;
   scroll-snap-type: x proximity;
@@ -49,6 +47,9 @@
 .news-card {
   display: flex;
   flex-direction: column;
+  /* Grow to fill the row when there are only a few stories, but never shrink —
+     so five or more scroll rather than squashing. */
+  flex: 1 0 calc((100% - 72px) / 4);
   min-width: 0;
   scroll-snap-align: start;
   background: var(--white);
@@ -67,6 +68,9 @@
 }
 
 .news-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   aspect-ratio: 4 / 3;
   overflow: hidden;
   background: var(--cream-100);
@@ -74,11 +78,8 @@
 .news-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 400ms ease;
-}
-.news-card:hover .news-image img {
-  transform: scale(1.06);
+  /* Show the whole photograph — never crop it. */
+  object-fit: contain;
 }
 
 .news-body {
@@ -107,12 +108,12 @@
 }
 
 @media (max-width: 960px) {
-  .news-carousel {
-    grid-auto-columns: calc((100% - 24px) / 2);
+  .news-card {
+    flex-basis: calc((100% - 24px) / 2);
   }
 }
 @media (max-width: 560px) {
-  .news-carousel {
-    grid-auto-columns: 100%;
+  .news-card {
+    flex-basis: 100%;
   }
 }

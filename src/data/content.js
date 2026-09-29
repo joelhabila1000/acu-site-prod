@@ -4,8 +4,7 @@
 import logoImg from "../assets/acu-logo-new-1.png";
 import heroImage from "../assets/1784031378408.jpg";
 import campusWideImage from "../assets/1784816484060.jpg";
-import crestImage from "../assets/acu-logo-cd.png";
-import vchanImage from "../assets/vchan.jpg";
+import vchanImage from "../assets/Vice chan.jpeg";
 import heroCampusOne from "../assets/IMG_3272.JPG";
 import heroCampusTwo from "../assets/IMG_3282.JPG";
 import heroCampusThree from "../assets/IMG_3307.JPG";
@@ -47,9 +46,9 @@ export const NAV_LINKS = [
         path: "/about",
         children: [
           { label: "Principal Officers", path: "/about/principal-officers" },
-          { label: "Vice-Chancellary", path: "/about" },
-          { label: "Registry", path: "/about" },
-          { label: "Bursary", path: "/about" },
+          { label: "Vice-Chancellary", path: "/about/vice-chancellary" },
+          { label: "Registry", path: "/about/registry" },
+          { label: "Bursary", path: "/about/bursary" },
         ],
       },
     ],
@@ -76,16 +75,41 @@ export const NAV_LINKS = [
       },
     ],
   },
-  { label: "Academics", path: "/academics" },
+  {
+    label: "Academics",
+    path: "/academics",
+    children: [
+      { label: "Academics Overview", path: "/academics" },
+      { label: "List of Courses", path: "/listofcourses" },
+      { label: "Inaugural Lectures", path: "/academics/inaugural-lectures" },
+    ],
+  },
+  {
+    label: "Postgraduate",
+    path: "/portal/postgraduate",
+    children: [
+      { label: "Postgraduate School", path: "/portal/postgraduate" },
+      { label: "Programmes", path: "/portal/postgraduate/programmes" },
+      { label: "How to Apply", path: "/portal/postgraduate/apply" },
+    ],
+  },
   { label: "Admissions", path: "/admissions" },
-  { label: "Gallery", path: "/gallery" },
+  { label: "Sustainability", path: "/sustainability" },
+  {
+    label: "Directory",
+    path: "/directory",
+    children: [
+      { label: "Staff Directory", path: "/directory/staff" },
+      { label: "Gallery", path: "/gallery" },
+    ],
+  },
   { label: "Contact", path: "/contact" },
 ];
 
 export const PORTALS = [
   { label: "Postgraduate", url: "/portal/postgraduate" },
   { label: "Undergraduate", url: "https://apply.acu.edu.ng/" },
-  { label: "Part-Time", url: "#" },
+  { label: "Part-Time", url: "/admissions" },
   { label: "Foundation", url: "https://cpfpapply.acu.edu.ng" },
 ];
 
@@ -651,6 +675,340 @@ export const PILLARS = [
     desc: "Hostels that offer comfortable living spaces, enabling students to excel both academically and personally.",
   },
 ];
+
+// The 17 Sustainable Development Goals, adopted by all United Nations Member
+// States in 2015. Titles and descriptions are the official summaries published
+// by the UN Department of Economic and Social Affairs (sdgs.un.org/goals).
+// Official SDG icon artwork, downloaded from the United Nations
+// (un.org/sustainabledevelopment → "Download 17 SDG Icons (WEB)"). Used under
+// the UN's SDG communications guidelines, which require the attribution note
+// rendered at the foot of the Sustainability page.
+const sdgIcons = import.meta.glob("../assets/sdg/goal-*.png", {
+  eager: true,
+  import: "default",
+});
+
+const sdgIcon = (number) =>
+  sdgIcons[`../assets/sdg/goal-${String(number).padStart(2, "0")}.png`] || "";
+
+export const SDG_GOALS = [
+  {
+    number: 1,
+    title: "No Poverty",
+    desc: "End poverty in all its forms everywhere.",
+  },
+  {
+    number: 2,
+    title: "Zero Hunger",
+    desc: "End hunger, achieve food security and improved nutrition and promote sustainable agriculture.",
+  },
+  {
+    number: 3,
+    title: "Good Health and Well-being",
+    desc: "Ensure healthy lives and promote well-being for all at all ages.",
+  },
+  {
+    number: 4,
+    title: "Quality Education",
+    desc: "Ensure inclusive and equitable quality education and promote lifelong learning opportunities for all.",
+  },
+  {
+    number: 5,
+    title: "Gender Equality",
+    desc: "Achieve gender equality and empower all women and girls.",
+  },
+  {
+    number: 6,
+    title: "Clean Water and Sanitation",
+    desc: "Ensure availability and sustainable management of water and sanitation for all.",
+  },
+  {
+    number: 7,
+    title: "Affordable and Clean Energy",
+    desc: "Ensure access to affordable, reliable, sustainable and modern energy for all.",
+  },
+  {
+    number: 8,
+    title: "Decent Work and Economic Growth",
+    desc: "Promote sustained, inclusive and sustainable economic growth, full and productive employment and decent work for all.",
+  },
+  {
+    number: 9,
+    title: "Industry, Innovation and Infrastructure",
+    desc: "Build resilient infrastructure, promote inclusive and sustainable industrialization and foster innovation.",
+  },
+  {
+    number: 10,
+    title: "Reduced Inequalities",
+    desc: "Reduce inequality within and among countries.",
+  },
+  {
+    number: 11,
+    title: "Sustainable Cities and Communities",
+    desc: "Make cities and human settlements inclusive, safe, resilient and sustainable.",
+  },
+  {
+    number: 12,
+    title: "Responsible Consumption and Production",
+    desc: "Ensure sustainable consumption and production patterns.",
+  },
+  {
+    number: 13,
+    title: "Climate Action",
+    desc: "Take urgent action to combat climate change and its impacts.",
+  },
+  {
+    number: 14,
+    title: "Life Below Water",
+    desc: "Conserve and sustainably use the oceans, seas and marine resources for sustainable development.",
+  },
+  {
+    number: 15,
+    title: "Life on Land",
+    desc: "Protect, restore and promote sustainable use of terrestrial ecosystems, sustainably manage forests, combat desertification, and halt and reverse land degradation and halt biodiversity loss.",
+  },
+  {
+    number: 16,
+    title: "Peace, Justice and Strong Institutions",
+    desc: "Promote peaceful and inclusive societies for sustainable development, provide access to justice for all and build effective, accountable and inclusive institutions at all levels.",
+  },
+  {
+    number: 17,
+    title: "Partnerships for the Goals",
+    desc: "Strengthen the means of implementation and revitalize the Global Partnership for Sustainable Development.",
+  },
+].map((goal) => ({ ...goal, image: sdgIcon(goal.number) }));
+
+export const SUSTAINABILITY = {
+  heroSlides: [
+    {
+      image: "",
+      imageKey: "heroCampusOne",
+      eyebrow: "United Nations · 2030 Agenda",
+      title: "Sustainability",
+      lede: "How Ajayi Crowther University contributes to the United Nations Sustainable Development Goals — through what we teach, what we research, and how we run our campuses.",
+    },
+    {
+      image: "",
+      imageKey: "heroCampusThree",
+      eyebrow: "Our role",
+      title: "Local action, global goals",
+      lede: "The 2030 Agenda is delivered in places, not abstractions. Our contribution begins on the campuses and in the communities of Oyo.",
+    },
+    {
+      image: "",
+      imageKey: "heroCampusFive",
+      eyebrow: "Teaching & research",
+      title: "Insight into action",
+      lede: "We put our scholarship to work on the problems our region faces — clean energy, food security and climate resilience.",
+    },
+    {
+      image: "",
+      imageKey: "students",
+      eyebrow: "Partnerships",
+      title: "No goal is reached alone",
+      lede: "We work with host communities, schools, alumni and industry, because these goals are too large for any institution to meet by itself.",
+    },
+  ],
+  title: "A University Committed to the 2030 Agenda",
+  body: [
+    "In September 2015, all United Nations Member States adopted the 2030 Agenda for Sustainable Development, a shared blueprint for peace and prosperity for people and the planet. At its heart are 17 Sustainable Development Goals (SDGs) — an urgent call to action for every country, and for every institution within them.",
+    "For a university, the greatest contribution is through education and research. But we are also an employer, a landowner and a neighbour to the communities of Oyo. That gives us a duty to reduce our own footprint, and to put our scholarship at the service of the goals.",
+    "This page sets out the goals we have chosen to prioritise, how we are responding to them, and how students, staff, alumni and partners can take part.",
+  ],
+  introImage: "",
+  stats: [
+    { value: 17, label: "Goals adopted by all UN Member States" },
+    { value: 6, label: "Goals identified as ACU priorities" },
+    { value: 13, label: "Faculties aligning teaching with the goals" },
+    { value: 4, label: "Campuses with active greening programmes" },
+  ],
+  goalsTitle: "The 17 Sustainable Development Goals",
+  goalsIntro:
+    "Adopted by all United Nations Member States in 2015, the 17 goals are a universal call to end poverty, protect the planet and ensure that all people enjoy peace and prosperity. Select a goal to read its targets in full on the United Nations website.",
+  prioritiesTitle: "Our Priority Goals",
+  prioritiesIntro:
+    "We cannot act on everything at once, so we have identified the goals where our teaching, research and operations can make the greatest difference.",
+  priorities: [
+    {
+      goal: 4,
+      title: "Quality Education",
+      desc: "Our core purpose. We are widening access to quality higher education, strengthening teacher formation, and building sustainability into every programme we teach.",
+    },
+    {
+      goal: 7,
+      title: "Affordable and Clean Energy",
+      desc: "We are cutting energy waste across our campuses and introducing renewable power, beginning with solar installations on selected facilities.",
+    },
+    {
+      goal: 12,
+      title: "Responsible Consumption and Production",
+      desc: "From procurement to disposal, we are reducing what we consume and reusing what we can, with segregated waste collection and less single-use plastic.",
+    },
+    {
+      goal: 13,
+      title: "Climate Action",
+      desc: "We are measuring and reducing our emissions, and supporting research on climate resilience for Nigerian agriculture and communities.",
+    },
+    {
+      goal: 15,
+      title: "Life on Land",
+      desc: "We protect and expand the trees, green spaces and habitats on our campuses through annual planting and careful land management.",
+    },
+    {
+      goal: 17,
+      title: "Partnerships for the Goals",
+      desc: "No institution reaches these goals alone. We work with host communities, schools, alumni, industry and other universities to multiply our impact.",
+    },
+  ],
+  contributionsTitle: "How a University Contributes",
+  contributionsIntro:
+    "Universities take part in the 2030 Agenda in four distinct ways, and we pursue all four together.",
+  contributions: [
+    {
+      title: "Teaching & Learning",
+      desc: "Equipping graduates with the knowledge, skills and values to work sustainably in whatever field they enter.",
+    },
+    {
+      title: "Research & Innovation",
+      desc: "Producing evidence and practical solutions to local and national challenges, from clean energy to food security.",
+    },
+    {
+      title: "Campus Operations",
+      desc: "Managing our own buildings, land, energy, water and waste responsibly, and reporting openly on our progress.",
+    },
+    {
+      title: "Community & Partnerships",
+      desc: "Sharing our expertise with host communities and working with partners to extend impact beyond the campus gate.",
+    },
+  ],
+  initiativesTitle: "What We Are Doing",
+  initiatives: [
+    {
+      goal: 15,
+      title: "Campus Greening & Tree Planting",
+      desc: "Annual tree-planting drives and landscaped green spaces across our campuses, carried out with students, staff and alumni.",
+    },
+    {
+      goal: 7,
+      title: "Energy Efficiency Retrofit",
+      desc: "Replacing inefficient lighting and equipment and installing solar power for selected facilities, cutting both running costs and emissions.",
+    },
+    {
+      goal: 12,
+      title: "Waste Reduction & Recycling",
+      desc: "Segregated waste collection, reduced single-use plastics and campus-wide recycling campaigns led by student volunteers.",
+    },
+    {
+      goal: 4,
+      title: "Sustainability Across the Curriculum",
+      desc: "Modules and projects that let students apply sustainability thinking within their own disciplines.",
+    },
+  ],
+  galleryTitle: "Sustainability on Campus",
+  galleryIntro:
+    "A look at the places where this work happens, and the people carrying it out.",
+  gallery: [
+    {
+      image: "",
+      imageKey: "heroCampusOne",
+      caption: "Green spaces across our Oyo campus",
+    },
+    {
+      image: "",
+      imageKey: "heroCampusThree",
+      caption: "Gardens and walkways between teaching blocks",
+    },
+    {
+      image: "",
+      imageKey: "heroCampusFive",
+      caption: "Tree planting carried out with students and staff",
+    },
+    {
+      image: "",
+      imageKey: "students",
+      caption: "Students leading environmental initiatives",
+    },
+  ],
+  storiesTitle: "Impact Stories",
+  storiesIntro:
+    "Short accounts of work already under way across our campuses and communities.",
+  stories: [
+    {
+      image: "",
+      imageKey: "heroCampusTwo",
+      category: "Energy",
+      title: "Cutting energy waste across our campuses",
+      summary:
+        "A phased retrofit of lighting and equipment, reducing both our running costs and our emissions.",
+    },
+    {
+      image: "",
+      imageKey: "heroCampusSix",
+      category: "Land",
+      title: "A greener campus, year on year",
+      summary:
+        "Annual tree planting and careful management of the green spaces within and around our campuses.",
+    },
+    {
+      image: "",
+      imageKey: "students",
+      category: "Community",
+      title: "Working with local schools",
+      summary:
+        "Students and staff joining with nearby schools on environmental education and campus clean-ups.",
+    },
+  ],
+  collaboratorsTitle: "Working Together",
+  collaboratorsIntro:
+    "These goals are met through partnership. Among those we work with are:",
+  collaborators: [
+    "Church of Nigeria (Anglican Communion)",
+    "Host communities around our campuses",
+    "Local schools and colleges",
+    "Alumni and friends of the University",
+    "Nigerian universities and research networks",
+    "Industry, agriculture and energy partners",
+    "Environmental and community organisations",
+  ],
+  documentsTitle: "Reports & Documents",
+  documentsIntro:
+    "Download our sustainability reports, policies and publications. Files are managed in the admin under Documents & Reports.",
+  commitmentsTitle: "What We Hold Ourselves To",
+  commitments: [
+    {
+      title: "Measure what we use",
+      desc: "Track energy, water and waste across our campuses so that decisions rest on evidence rather than assumption.",
+    },
+    {
+      title: "Teach it, not just practise it",
+      desc: "Give every student the opportunity to engage seriously with the goals as part of their academic programme.",
+    },
+    {
+      title: "Report openly",
+      desc: "Publish our progress, including where we have fallen short, so that our commitments can be held to account.",
+    },
+  ],
+  involvementTitle: "Get Involved",
+  involvementIntro:
+    "Students, staff, alumni and partners all have a part to play in meeting these goals.",
+  involvement: [
+    {
+      title: "Students",
+      desc: "Join environmental volunteering and campus greening drives, and bring the goals into your own projects and research.",
+    },
+    {
+      title: "Staff & Faculty",
+      desc: "Bring sustainability into your courses, research and day-to-day operations, and help us hold the university to its commitments.",
+    },
+    {
+      title: "Partners & Alumni",
+      desc: "Support campus greening, renewable energy projects and sustainability research through partnership, mentoring and giving.",
+    },
+  ],
+  sourceNote:
+    "Goal icons, titles and descriptions are published by the United Nations. The content of this publication has not been approved by the United Nations and does not reflect the views of the United Nations or its officials or Member States.",
+};
 
 export const IMAGES = {
   hero: heroImage,

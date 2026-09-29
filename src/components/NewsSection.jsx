@@ -21,26 +21,23 @@ export default function NewsSection() {
 
   useEffect(() => {
     const container = carouselRef.current;
-    if (!container || !news.length) return;
+    if (!container || news.length === 0) return undefined;
 
+    // An earlier version cloned the cards to fake a seamless loop, which made
+    // every story appear twice when there were only a few. Clear any left over.
     container
       .querySelectorAll('[data-clone="true"]')
       .forEach((node) => node.remove());
-
-    const originals = [...container.querySelectorAll(".news-card")];
-    originals.forEach((item) => {
-      const clone = item.cloneNode(true);
-      clone.setAttribute("data-clone", "true");
-      container.appendChild(clone);
-    });
 
     const timer = window.setInterval(() => {
       const firstCard = container.querySelector(".news-card");
       const cardWidth = firstCard ? firstCard.getBoundingClientRect().width : 320;
       const gap = 24;
-
       const step = cardWidth + gap;
       const maxScroll = container.scrollWidth - container.clientWidth;
+
+      // Nothing to scroll through — a short list on a wide screen.
+      if (maxScroll <= 8) return;
 
       if (container.scrollLeft >= maxScroll - 8) {
         container.scrollTo({ left: 0, behavior: "auto" });

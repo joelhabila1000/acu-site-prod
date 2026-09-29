@@ -8,3 +8,49 @@
 .faculty-detail-sidebar { display: grid; align-content: start; gap: 20px; }.faculty-apply-card, .faculty-side-card { padding: 28px; border: 1px solid var(--line); border-radius: var(--radius-md); }.faculty-apply-card { background: var(--navy-900); color: var(--white); }.faculty-apply-card h2 { color: var(--white); font-size: 1.45rem; }.faculty-apply-card p { color: rgba(255,255,255,.74); font-size: .9rem; }.faculty-apply-card .btn { width: 100%; margin-top: 10px; }.faculty-apply-card .btn-outline { border-color: rgba(255,255,255,.5); }.faculty-side-card h2 { font-size: 1rem; text-transform: uppercase; letter-spacing: .1em; }.faculty-side-card dl { margin: 0; display: grid; gap: 18px; }.faculty-side-card dl div { display: grid; gap: 3px; }.faculty-side-card dt { color: var(--ink-500); font-size: .75rem; }.faculty-side-card dd { margin: 0; color: var(--ink-700); font-size: .88rem; font-weight: 600; overflow-wrap: anywhere; }.faculty-side-card dd a { color: var(--oxblood-600); }
 .faculty-bottom-cta { padding: 72px 0; background: var(--cream-100); text-align: center; border-top: 1px solid var(--line); }.faculty-bottom-cta p { max-width: 520px; margin: 0 auto 28px; color: var(--ink-500); }.faculty-bottom-cta > .container > div { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }.btn-outline-navy { border: 1.5px solid var(--navy-900); color: var(--navy-900); }.btn-outline-navy:hover { background: var(--navy-900); color: var(--white); }
 @media (max-width: 860px) { .faculty-detail-layout { grid-template-columns: 1fr; gap: 48px; }.faculty-detail-sidebar { grid-template-columns: repeat(2, minmax(0, 1fr)); }.faculty-apply-card { grid-column: 1 / -1; } }@media (max-width: 560px) { .faculty-detail-hero { padding: 52px 0; }.faculty-detail-stats div { min-width: 100px; padding: 0 14px; }.faculty-detail-layout { padding-top: 52px; padding-bottom: 52px; }.faculty-detail-main { gap: 46px; }.faculty-detail-sidebar, .faculty-facility-list { grid-template-columns: 1fr; }.faculty-apply-card { grid-column: auto; } }
+
+/* ---------- Faculty photo ---------- */
+/* Sits inside the navy hero, so it is cropped to a banner rather than
+   letterboxed against the gradient. */
+.faculty-hero-image {
+  display: block;
+  width: 100%;
+  height: clamp(200px, 30vw, 380px);
+  margin-top: 42px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+}
+
+/* ---------- Highlights ---------- */
+.faculty-highlight-list { display: grid; gap: 12px; }
+.faculty-highlight-list div {
+  padding: 18px 20px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--gold-500);
+  border-radius: var(--radius-sm);
+  color: var(--ink-700);
+  font-weight: 600;
+}
+
+/* ---------- Career outcomes ---------- */
+.faculty-career-list { display: flex; flex-wrap: wrap; gap: 10px; }
+.faculty-career-list span {
+  padding: 10px 16px;
+  background: var(--cream-100);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--navy-900);
+}
+
+/* ---------- Facility photos ---------- */
+.faculty-facility-image {
+  display: block;
+  width: 100%;
+  height: 180px;
+  /* Show the whole photograph — never crop it. */
+  object-fit: contain;
+  background: var(--cream-100);
+}

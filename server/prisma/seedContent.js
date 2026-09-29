@@ -75,7 +75,15 @@ const NAV_LINKS = [
   },
   { label: "Academics", path: "/academics" },
   { label: "Admissions", path: "/admissions" },
-  { label: "Gallery", path: "/gallery" },
+  { label: "Sustainability", path: "/sustainability" },
+  {
+    label: "Directory",
+    path: "/directory",
+    children: [
+      { label: "Staff Directory", path: "/directory/staff" },
+      { label: "Gallery", path: "/gallery" },
+    ],
+  },
   { label: "Contact", path: "/contact" },
 ];
 
@@ -134,6 +142,237 @@ const PILLARS = [
     desc: "Hostels that offer comfortable living spaces, enabling students to excel both academically and personally.",
   },
 ];
+
+const SUSTAINABILITY = {
+  heroSlides: [
+    {
+      image: "",
+      imageKey: "heroCampusOne",
+      eyebrow: "United Nations · 2030 Agenda",
+      title: "Sustainability",
+      lede: "How Ajayi Crowther University contributes to the United Nations Sustainable Development Goals — through what we teach, what we research, and how we run our campuses.",
+    },
+    {
+      image: "",
+      imageKey: "heroCampusThree",
+      eyebrow: "Our role",
+      title: "Local action, global goals",
+      lede: "The 2030 Agenda is delivered in places, not abstractions. Our contribution begins on the campuses and in the communities of Oyo.",
+    },
+    {
+      image: "",
+      imageKey: "heroCampusFive",
+      eyebrow: "Teaching & research",
+      title: "Insight into action",
+      lede: "We put our scholarship to work on the problems our region faces — clean energy, food security and climate resilience.",
+    },
+    {
+      image: "",
+      imageKey: "students",
+      eyebrow: "Partnerships",
+      title: "No goal is reached alone",
+      lede: "We work with host communities, schools, alumni and industry, because these goals are too large for any institution to meet by itself.",
+    },
+  ],
+  title: "A University Committed to the 2030 Agenda",
+  body: [
+    "In September 2015, all United Nations Member States adopted the 2030 Agenda for Sustainable Development, a shared blueprint for peace and prosperity for people and the planet. At its heart are 17 Sustainable Development Goals (SDGs) — an urgent call to action for every country, and for every institution within them.",
+    "For a university, the greatest contribution is through education and research. But we are also an employer, a landowner and a neighbour to the communities of Oyo. That gives us a duty to reduce our own footprint, and to put our scholarship at the service of the goals.",
+    "This page sets out the goals we have chosen to prioritise, how we are responding to them, and how students, staff, alumni and partners can take part.",
+  ],
+  introImage: "",
+  stats: [
+    { value: 17, label: "Goals adopted by all UN Member States" },
+    { value: 6, label: "Goals identified as ACU priorities" },
+    { value: 13, label: "Faculties aligning teaching with the goals" },
+    { value: 4, label: "Campuses with active greening programmes" },
+  ],
+  goalsTitle: "The 17 Sustainable Development Goals",
+  goalsIntro:
+    "Adopted by all United Nations Member States in 2015, the 17 goals are a universal call to end poverty, protect the planet and ensure that all people enjoy peace and prosperity. Select a goal to read its targets in full on the United Nations website.",
+  prioritiesTitle: "Our Priority Goals",
+  prioritiesIntro:
+    "We cannot act on everything at once, so we have identified the goals where our teaching, research and operations can make the greatest difference.",
+  priorities: [
+    {
+      goal: 4,
+      title: "Quality Education",
+      desc: "Our core purpose. We are widening access to quality higher education, strengthening teacher formation, and building sustainability into every programme we teach.",
+    },
+    {
+      goal: 7,
+      title: "Affordable and Clean Energy",
+      desc: "We are cutting energy waste across our campuses and introducing renewable power, beginning with solar installations on selected facilities.",
+    },
+    {
+      goal: 12,
+      title: "Responsible Consumption and Production",
+      desc: "From procurement to disposal, we are reducing what we consume and reusing what we can, with segregated waste collection and less single-use plastic.",
+    },
+    {
+      goal: 13,
+      title: "Climate Action",
+      desc: "We are measuring and reducing our emissions, and supporting research on climate resilience for Nigerian agriculture and communities.",
+    },
+    {
+      goal: 15,
+      title: "Life on Land",
+      desc: "We protect and expand the trees, green spaces and habitats on our campuses through annual planting and careful land management.",
+    },
+    {
+      goal: 17,
+      title: "Partnerships for the Goals",
+      desc: "No institution reaches these goals alone. We work with host communities, schools, alumni, industry and other universities to multiply our impact.",
+    },
+  ],
+  contributionsTitle: "How a University Contributes",
+  contributionsIntro:
+    "Universities take part in the 2030 Agenda in four distinct ways, and we pursue all four together.",
+  contributions: [
+    {
+      title: "Teaching & Learning",
+      desc: "Equipping graduates with the knowledge, skills and values to work sustainably in whatever field they enter.",
+    },
+    {
+      title: "Research & Innovation",
+      desc: "Producing evidence and practical solutions to local and national challenges, from clean energy to food security.",
+    },
+    {
+      title: "Campus Operations",
+      desc: "Managing our own buildings, land, energy, water and waste responsibly, and reporting openly on our progress.",
+    },
+    {
+      title: "Community & Partnerships",
+      desc: "Sharing our expertise with host communities and working with partners to extend impact beyond the campus gate.",
+    },
+  ],
+  initiativesTitle: "What We Are Doing",
+  initiatives: [
+    {
+      goal: 15,
+      title: "Campus Greening & Tree Planting",
+      desc: "Annual tree-planting drives and landscaped green spaces across our campuses, carried out with students, staff and alumni.",
+    },
+    {
+      goal: 7,
+      title: "Energy Efficiency Retrofit",
+      desc: "Replacing inefficient lighting and equipment and installing solar power for selected facilities, cutting both running costs and emissions.",
+    },
+    {
+      goal: 12,
+      title: "Waste Reduction & Recycling",
+      desc: "Segregated waste collection, reduced single-use plastics and campus-wide recycling campaigns led by student volunteers.",
+    },
+    {
+      goal: 4,
+      title: "Sustainability Across the Curriculum",
+      desc: "Modules and projects that let students apply sustainability thinking within their own disciplines.",
+    },
+  ],
+  galleryTitle: "Sustainability on Campus",
+  galleryIntro:
+    "A look at the places where this work happens, and the people carrying it out.",
+  gallery: [
+    {
+      image: "",
+      imageKey: "heroCampusOne",
+      caption: "Green spaces across our Oyo campus",
+    },
+    {
+      image: "",
+      imageKey: "heroCampusThree",
+      caption: "Gardens and walkways between teaching blocks",
+    },
+    {
+      image: "",
+      imageKey: "heroCampusFive",
+      caption: "Tree planting carried out with students and staff",
+    },
+    {
+      image: "",
+      imageKey: "students",
+      caption: "Students leading environmental initiatives",
+    },
+  ],
+  storiesTitle: "Impact Stories",
+  storiesIntro:
+    "Short accounts of work already under way across our campuses and communities.",
+  stories: [
+    {
+      image: "",
+      imageKey: "heroCampusTwo",
+      category: "Energy",
+      title: "Cutting energy waste across our campuses",
+      summary:
+        "A phased retrofit of lighting and equipment, reducing both our running costs and our emissions.",
+    },
+    {
+      image: "",
+      imageKey: "heroCampusSix",
+      category: "Land",
+      title: "A greener campus, year on year",
+      summary:
+        "Annual tree planting and careful management of the green spaces within and around our campuses.",
+    },
+    {
+      image: "",
+      imageKey: "students",
+      category: "Community",
+      title: "Working with local schools",
+      summary:
+        "Students and staff joining with nearby schools on environmental education and campus clean-ups.",
+    },
+  ],
+  collaboratorsTitle: "Working Together",
+  collaboratorsIntro:
+    "These goals are met through partnership. Among those we work with are:",
+  collaborators: [
+    "Church of Nigeria (Anglican Communion)",
+    "Host communities around our campuses",
+    "Local schools and colleges",
+    "Alumni and friends of the University",
+    "Nigerian universities and research networks",
+    "Industry, agriculture and energy partners",
+    "Environmental and community organisations",
+  ],
+  documentsTitle: "Reports & Documents",
+  documentsIntro:
+    "Download our sustainability reports, policies and publications. Files are managed in the admin under Documents & Reports.",
+  commitmentsTitle: "What We Hold Ourselves To",
+  commitments: [
+    {
+      title: "Measure what we use",
+      desc: "Track energy, water and waste across our campuses so that decisions rest on evidence rather than assumption.",
+    },
+    {
+      title: "Teach it, not just practise it",
+      desc: "Give every student the opportunity to engage seriously with the goals as part of their academic programme.",
+    },
+    {
+      title: "Report openly",
+      desc: "Publish our progress, including where we have fallen short, so that our commitments can be held to account.",
+    },
+  ],
+  involvementTitle: "Get Involved",
+  involvementIntro:
+    "Students, staff, alumni and partners all have a part to play in meeting these goals.",
+  involvement: [
+    {
+      title: "Students",
+      desc: "Join environmental volunteering and campus greening drives, and bring the goals into your own projects and research.",
+    },
+    {
+      title: "Staff & Faculty",
+      desc: "Bring sustainability into your courses, research and day-to-day operations, and help us hold the university to its commitments.",
+    },
+    {
+      title: "Partners & Alumni",
+      desc: "Support campus greening, renewable energy projects and sustainability research through partnership, mentoring and giving.",
+    },
+  ],
+  sourceNote:
+    "Goal icons, titles and descriptions are published by the United Nations. The content of this publication has not been approved by the United Nations and does not reflect the views of the United Nations or its officials or Member States.",
+};
 
 // `imageKey` references the bundled IMAGES map on the frontend; `image` is an
 // optional uploaded URL that takes precedence.
@@ -908,6 +1147,7 @@ module.exports = {
   STATS,
   PROGRAMMES,
   PILLARS,
+  SUSTAINABILITY,
   HERO_SLIDES,
   FACULTIES,
   PRINCIPAL_OFFICERS,

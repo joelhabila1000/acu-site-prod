@@ -7,3 +7,13 @@ dist
 
 .vercel
 .env*
+
+# Uploaded images and documents are user data, not source. Committing these
+# would publish staff photos and any uploaded reports to the public repo.
+uploads/
+
+# Local AI-tooling configuration — developer machine state, not site source.
+.commandcode/
+.agents/
+.neon
+skills-lock.json

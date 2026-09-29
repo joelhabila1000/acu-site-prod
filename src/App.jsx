@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
+import AnnouncementBar from "./components/AnnouncementBar.jsx";
 import Footer from "./components/Footer.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import Home from "./pages/Home.jsx";
@@ -19,11 +20,26 @@ import Listofcourses from "./pages/ListOfCourses.jsx";
 import BackToTop from "./components/BackToTop.jsx";
 import NewsEventsPage from "./pages/NewsEventsPage.jsx";
 import Gallery from "./pages/Gallery.jsx";
-import PrincipalOfficerDetail from "./pages/PrincipalOfficerDetail";
+import Sustainability from "./pages/Sustainability.jsx";
+import Directory from "./pages/Directory.jsx";
+import StaffDirectory from "./pages/StaffDirectory.jsx";
+import PrincipalOfficerDetail from "./pages/PrincipalOfficerDetail.jsx";
+import InauguralLectures from "./pages/InauguralLectures.jsx";
+import { useRefreshContent } from "./data/cms.js";
 
 export default function App() {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
+  const refreshContent = useRefreshContent();
+  const wasAdminRoute = useRef(isAdminRoute);
+
+  // CMS content is pulled once per page load, so edits made in the admin would
+  // otherwise not show until a hard refresh. Re-pull when the editor leaves the
+  // admin for the public site.
+  useEffect(() => {
+    if (wasAdminRoute.current && !isAdminRoute) refreshContent();
+    wasAdminRoute.current = isAdminRoute;
+  }, [isAdminRoute, refreshContent]);
 
   if (isAdminRoute) {
     return <Admin />;
@@ -36,6 +52,7 @@ export default function App() {
       </a>
       <ScrollToTop />
       <Navbar />
+      <AnnouncementBar />
       <main id="main-content">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -43,6 +60,10 @@ export default function App() {
           <Route path="/about/principal-officers" element={<PrincipalOfficers />} />
           <Route path="/about/:page" element={<AboutDetailRoute />} />
           <Route path="/academics" element={<Academics />} />
+          <Route
+            path="/academics/inaugural-lectures"
+            element={<InauguralLectures />}
+          />
           <Route path="/faculties/:slug" element={<FacultyPage />} />
           <Route path="/admissions" element={<Admissions />} />
           <Route path="/contact" element={<Contact />} />
@@ -55,6 +76,9 @@ export default function App() {
           <Route path="/portal/:portal" element={<Maintenance />} />
           <Route path="/news" element={<NewsEventsPage />} />
           <Route path="/gallery" element={<Gallery />} />
+          <Route path="/sustainability" element={<Sustainability />} />
+          <Route path="/directory" element={<Directory />} />
+          <Route path="/directory/staff" element={<StaffDirectory />} />
           <Route
             path="/principal-officers/:slug"
             element={<PrincipalOfficerDetail />}

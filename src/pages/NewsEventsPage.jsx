@@ -22,6 +22,13 @@ export default function NewsEventsPage() {
   const [filter, setFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [activeItem, setActiveItem] = useState(null);
+  const [photoIndex, setPhotoIndex] = useState(0);
+
+  // Opening a different item always starts at its first photo.
+  function openItem(item) {
+    setPhotoIndex(0);
+    setActiveItem(item);
+  }
 
   useEffect(() => {
     if (!activeItem) return;
@@ -44,6 +51,16 @@ export default function NewsEventsPage() {
       )
       .sort((a, b) => new Date(b.date) - new Date(a.date));
   }, [items, filter, searchTerm]);
+
+  // All photographs for the open item, falling back to its single cover image.
+  const photos = activeItem
+    ? activeItem.images && activeItem.images.length
+      ? activeItem.images
+      : activeItem.image
+        ? [{ url: activeItem.image, caption: "" }]
+        : []
+    : [];
+  const heroPhoto = photos[photoIndex] || photos[0] || null;
 
   return (
     <>
@@ -110,14 +127,14 @@ export default function NewsEventsPage() {
                 <article
                   className="news-card"
                   key={item.id}
-                  onClick={() => setActiveItem(item)}
+                  onClick={() => openItem(item)}
                   tabIndex={0}
                   role="button"
                   aria-label={`Read: ${item.title}`}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault();
-                      setActiveItem(item);
+                      openItem(item);
                     }
                   }}
                 >
@@ -182,9 +199,34 @@ export default function NewsEventsPage() {
               ×
             </button>
 
-            {activeItem.image && (
-              <div className="news-modal-hero">
-                <img src={activeItem.image} alt="" />
+            {heroPhoto && (
+              <div className="news-modal-gallery">
+                <div className="news-modal-hero">
+                  <img src={heroPhoto.url} alt={heroPhoto.caption || ""} />
+                </div>
+
+                {photos.length > 1 && (
+                  <div className="news-modal-thumbs">
+                    {photos.map((photo, index) => (
+                      <button
+                        key={`${photo.url}-${index}`}
+                        type="button"
+                        className={`news-thumb ${
+                          index === photoIndex ? "is-active" : ""
+                        }`}
+                        onClick={() => setPhotoIndex(index)}
+                        aria-label={`Show photo ${index + 1} of ${photos.length}`}
+                        aria-current={index === photoIndex}
+                      >
+                        <img src={photo.url} alt="" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {heroPhoto.caption && (
+                  <p className="news-modal-caption">{heroPhoto.caption}</p>
+                )}
               </div>
             )}
 

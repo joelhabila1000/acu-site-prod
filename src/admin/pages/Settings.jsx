@@ -20,6 +20,8 @@ function setPath(object, path, value) {
   return copy;
 }
 
+const SDG_OPTIONS = Array.from({ length: 17 }, (_, i) => String(i + 1));
+
 const SECTIONS = [
   {
     key: "site",
@@ -113,6 +115,176 @@ const SECTIONS = [
       { name: "title", label: "Title", type: "text" },
       { name: "subtitle", label: "Subtitle", type: "text" },
       { name: "description", label: "Description", type: "textarea" },
+    ],
+  },
+  {
+    key: "sustainability",
+    label: "Sustainability",
+    kind: "object",
+    fields: [
+      {
+        name: "heroSlides",
+        label: "Hero slides",
+        type: "list",
+        itemLabel: "slide",
+        itemFields: [
+          { name: "image", label: "Image", type: "image" },
+          {
+            name: "imageKey",
+            label: "Fallback image key",
+            type: "text",
+            help: "Used when no image is uploaded, e.g. heroCampusOne.",
+          },
+          { name: "eyebrow", label: "Eyebrow", type: "text" },
+          { name: "title", label: "Title", type: "text" },
+          { name: "lede", label: "Text", type: "textarea" },
+        ],
+      },
+      { name: "title", label: "Intro section — heading", type: "text" },
+      {
+        name: "body",
+        label: "Intro paragraphs",
+        type: "tags",
+        rows: 6,
+        help: "One paragraph per line.",
+      },
+      { name: "introImage", label: "Intro section — image", type: "image" },
+      {
+        name: "stats",
+        label: "Statistics",
+        type: "list",
+        itemLabel: "statistic",
+        itemFields: [
+          { name: "value", label: "Number", type: "number" },
+          { name: "label", label: "Label", type: "text" },
+        ],
+      },
+      { name: "goalsTitle", label: "The 17 goals — heading", type: "text" },
+      { name: "goalsIntro", label: "The 17 goals — intro", type: "textarea" },
+      { name: "prioritiesTitle", label: "Priority goals — heading", type: "text" },
+      { name: "prioritiesIntro", label: "Priority goals — intro", type: "textarea" },
+      {
+        name: "priorities",
+        label: "Priority goals",
+        type: "list",
+        itemLabel: "goal",
+        itemFields: [
+          { name: "goal", label: "SDG number", type: "select", options: SDG_OPTIONS },
+          { name: "title", label: "Title", type: "text" },
+          { name: "desc", label: "Description", type: "textarea" },
+        ],
+      },
+      { name: "contributionsTitle", label: "University role — heading", type: "text" },
+      {
+        name: "contributionsIntro",
+        label: "University role — intro",
+        type: "textarea",
+      },
+      {
+        name: "contributions",
+        label: "Ways a university contributes",
+        type: "list",
+        itemLabel: "role",
+        itemFields: [
+          { name: "title", label: "Title", type: "text" },
+          { name: "desc", label: "Description", type: "textarea" },
+        ],
+      },
+      { name: "initiativesTitle", label: "Initiatives — heading", type: "text" },
+      {
+        name: "initiatives",
+        label: "Current initiatives",
+        type: "list",
+        itemLabel: "initiative",
+        itemFields: [
+          { name: "goal", label: "SDG number", type: "select", options: SDG_OPTIONS },
+          { name: "title", label: "Title", type: "text" },
+          { name: "desc", label: "Description", type: "textarea" },
+        ],
+      },
+      { name: "galleryTitle", label: "Campus gallery — heading", type: "text" },
+      { name: "galleryIntro", label: "Campus gallery — intro", type: "textarea" },
+      {
+        name: "gallery",
+        label: "Campus gallery images",
+        type: "list",
+        itemLabel: "image",
+        itemFields: [
+          { name: "image", label: "Image", type: "image" },
+          {
+            name: "imageKey",
+            label: "Fallback image key",
+            type: "text",
+            help: "Used when no image is uploaded, e.g. heroCampusOne.",
+          },
+          { name: "caption", label: "Caption", type: "text" },
+        ],
+      },
+      { name: "storiesTitle", label: "Impact stories — heading", type: "text" },
+      { name: "storiesIntro", label: "Impact stories — intro", type: "textarea" },
+      {
+        name: "stories",
+        label: "Impact stories",
+        type: "list",
+        itemLabel: "story",
+        itemFields: [
+          { name: "image", label: "Image", type: "image" },
+          {
+            name: "imageKey",
+            label: "Fallback image key",
+            type: "text",
+            help: "Used when no image is uploaded, e.g. heroCampusTwo.",
+          },
+          { name: "category", label: "Category", type: "text" },
+          { name: "title", label: "Title", type: "text" },
+          { name: "summary", label: "Summary", type: "textarea" },
+        ],
+      },
+      { name: "collaboratorsTitle", label: "Collaborators — heading", type: "text" },
+      {
+        name: "collaboratorsIntro",
+        label: "Collaborators — intro",
+        type: "textarea",
+      },
+      {
+        name: "collaborators",
+        label: "Collaborators",
+        type: "tags",
+        rows: 8,
+        help: "One partner per line.",
+      },
+      { name: "documentsTitle", label: "Downloads — heading", type: "text" },
+      { name: "documentsIntro", label: "Downloads — intro", type: "textarea" },
+      { name: "commitmentsTitle", label: "Commitments — heading", type: "text" },
+      {
+        name: "commitments",
+        label: "Commitments",
+        type: "list",
+        itemLabel: "commitment",
+        itemFields: [
+          { name: "title", label: "Title", type: "text" },
+          { name: "desc", label: "Description", type: "textarea" },
+        ],
+      },
+      { name: "involvementTitle", label: "Get involved — heading", type: "text" },
+      { name: "involvementIntro", label: "Get involved — intro", type: "textarea" },
+      {
+        name: "involvement",
+        label: "Get involved cards",
+        type: "list",
+        itemLabel: "card",
+        itemFields: [
+          { name: "title", label: "Title", type: "text" },
+          { name: "desc", label: "Description", type: "textarea" },
+        ],
+      },
+      {
+        name: "sourceNote",
+        label: "Source note",
+        type: "textarea",
+        rows: 2,
+        help: "Credit shown at the foot of the page.",
+      },
     ],
   },
   { key: "nav", label: "Navigation (read-only)", kind: "raw" },

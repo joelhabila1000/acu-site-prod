@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const slugify = require("slugify");
 const prisma = new PrismaClient();
 const content = require("./seedContent");
+const { INAUGURAL_LECTURES } = require("./lectures");
 
 function slug(value) {
   return slugify(value, { lower: true, strict: true });
@@ -56,6 +57,7 @@ async function seedSettings() {
     stats: content.STATS,
     programmes: content.PROGRAMMES,
     pillars: content.PILLARS,
+    sustainability: content.SUSTAINABILITY,
     homepage: { slides: content.HERO_SLIDES },
   };
 
@@ -176,6 +178,44 @@ async function seedNewsAndEvents(adminId) {
   }
 }
 
+async function seedLectures() {
+  for (const [index, lecture] of INAUGURAL_LECTURES.entries()) {
+    const existing = await prisma.inauguralLecture.findFirst({
+      where: { number: lecture.number },
+    });
+    const data = {
+      number: lecture.number,
+      lecturer: lecture.lecturer,
+      lecturerRole: lecture.lecturerRole || "",
+      title: lecture.title,
+      lectureDate: lecture.lectureDate ? new Date(lecture.lectureDate) : null,
+      venue: lecture.venue || "",
+      status: "published",
+      sortOrder: index,
+    };
+    if (existing) {
+      await prisma.inauguralLecture.update({ where: { id: existing.id }, data });
+    } else {
+      await prisma.inauguralLecture.create({ data });
+    }
+  }
+}
+
+async function seedAnnouncements() {
+  const count = await prisma.announcement.count();
+  if (count > 0) return;
+  await prisma.announcement.create({
+    data: {
+      title: "2026/2027 Admissions Now Open",
+      content:
+        "Applications for the 2026/2027 academic session are open. Visit the Admissions page to begin your application.",
+      priority: 1,
+      status: "published",
+      publishedAt: new Date(),
+    },
+  });
+}
+
 async function main() {
   console.log("Seeding database...");
   const admin = await seedRolesAndAdmin();
@@ -183,6 +223,8 @@ async function main() {
   await seedFaculties();
   await seedPrincipalOfficers();
   await seedNewsAndEvents(admin.id);
+  await seedLectures();
+  await seedAnnouncements();
   console.log("Seeding completed");
 }
 

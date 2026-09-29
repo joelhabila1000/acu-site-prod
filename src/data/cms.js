@@ -5,9 +5,11 @@
 import {
   createContext,
   createElement,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { apiGet } from "../lib/api.js";
@@ -21,9 +23,11 @@ import {
   FACULTIES,
   NEWS,
   IMAGES,
+  SUSTAINABILITY,
 } from "./content.js";
 import { NEWS_ITEMS } from "./News.js";
 import { PRINCIPAL_OFFICERS } from "./principalOfficers.js";
+import { INAUGURAL_LECTURES } from "./lectures.js";
 
 const OFFICER_IMAGES = Object.fromEntries(
   PRINCIPAL_OFFICERS.map((officer) => [officer.slug, officer.image]),
@@ -84,6 +88,40 @@ function asArray(value) {
   return Array.isArray(value) ? value : [];
 }
 
+// Photographs are stored as [{ url, caption }]; tolerate a bare string too so
+// older/imported data still renders.
+function mapImages(value) {
+  return asArray(value)
+    .map((item) =>
+      typeof item === "string"
+        ? { url: item, caption: "" }
+        : {
+            url: (item && item.url) || "",
+            caption: (item && item.caption) || "",
+          },
+    )
+    .filter((item) => item.url);
+}
+
+function firstImage(images) {
+  return images.length ? images[0].url : null;
+}
+
+// Facilities are stored as [{ name, image }]; rows created before photos were
+// supported are a plain list of strings, so accept both.
+function mapFacilities(value) {
+  return asArray(value)
+    .map((item) =>
+      typeof item === "string"
+        ? { name: item, image: "" }
+        : {
+            name: (item && item.name) || "",
+            image: (item && item.image) || "",
+          },
+    )
+    .filter((item) => item.name);
+}
+
 function formatDate(value) {
   if (!value) return "";
   const date = new Date(value);
@@ -132,7 +170,7 @@ function mapFaculty(row) {
     programmes: asArray(row.programmes),
     researchAreas: asArray(row.researchAreas),
     highlights: asArray(row.highlights),
-    facilities: asArray(row.facilities),
+    facilities: mapFacilities(row.facilities),
     careerOutcomes: asArray(row.careerOutcomes),
   };
 }
@@ -223,35 +261,92 @@ const DEFAULT_CONTENT = {
   stats: STATS,
   programmes: PROGRAMMES,
   pillars: PILLARS,
+  sustainability: SUSTAINABILITY,
   slides: DEFAULT_SLIDES.map(resolveSlide),
-  faculties: FACULTIES.map((faculty) => ({ ...faculty })),
+  faculties: FACULTIES.map((faculty) => ({
+    ...faculty,
+    facilities: mapFacilities(faculty.facilities),
+  })),
   principalOfficers: PRINCIPAL_OFFICERS.map((officer) => ({ ...officer })),
   news: STATIC_NEWS_HOME,
   newsEvents: STATIC_NEWS_EVENTS,
   gallery: DEFAULT_GALLERY,
+  documents: [],
+  staff: [],
+  lectures: INAUGURAL_LECTURES.map((lecture) => ({ ...lecture })),
+  announcements: [],
   ready: false,
 };
+
+// Sustainability is edited as one object, so a saved value may only carry the
+// fields the editor changed. Merge over the bundled defaults and keep the
+// bundled copy for any list that came back empty.
+function mapSustainability(value) {
+  const base = DEFAULT_CONTENT.sustainability;
+  const src = value && typeof value === "object" ? value : {};
+  const merged = { ...base, ...src };
+  for (const key of [
+    "heroSlides",
+    "body",
+    "stats",
+    "priorities",
+    "contributions",
+    "initiatives",
+    "stories",
+    "collaborators",
+    "gallery",
+    "commitments",
+    "involvement",
+  ]) {
+    if (!asArray(src[key]).length) merged[key] = base[key];
+  }
+  return merged;
+}
 
 const ContentContext = createContext(null);
 
 export function ContentProvider({ children }) {
   const [content, setContent] = useState(DEFAULT_CONTENT);
+  const [reloadToken, setReloadToken] = useState(0);
+  // Tracks whether the API answered, so we can retry when it did not.
+  const lastLoadFailed = useRef(true);
+
+  // Lets consumers re-pull everything, e.g. after editing in the admin.
+  const refresh = useCallback(() => setReloadToken((n) => n + 1), []);
 
   useEffect(() => {
     let cancelled = false;
 
     async function load() {
-      const [settingsR, facultiesR, officersR, newsR, eventsR, galleryR] =
-        await Promise.allSettled([
-          apiGet("/api/settings"),
-          apiGet("/api/faculties"),
-          apiGet("/api/principal-officers"),
-          apiGet("/api/news?status=published"),
-          apiGet("/api/events?status=published"),
-          apiGet("/api/gallery?status=published"),
-        ]);
+      const [
+        settingsR,
+        facultiesR,
+        officersR,
+        newsR,
+        eventsR,
+        galleryR,
+        documentsR,
+        staffR,
+        lecturesR,
+        announcementsR,
+      ] = await Promise.allSettled([
+        apiGet("/api/settings"),
+        apiGet("/api/faculties"),
+        apiGet("/api/principal-officers"),
+        apiGet("/api/news?status=published"),
+        apiGet("/api/events?status=published"),
+        apiGet("/api/gallery?status=published"),
+        apiGet("/api/documents?status=active"),
+        apiGet("/api/staff?status=active"),
+        apiGet("/api/lectures?status=published"),
+        apiGet("/api/announcements?status=published"),
+      ]);
 
       if (cancelled) return;
+
+      // The settings call is the canary: if it never answered, the API is
+      // unreachable and the page is showing bundled fallback content.
+      lastLoadFailed.current = settingsR.status !== "fulfilled";
 
       const settings =
         settingsR.status === "fulfilled" && settingsR.value
@@ -290,6 +385,9 @@ export function ContentProvider({ children }) {
         if (asArray(settings.pillars).length) next.pillars = settings.pillars;
         const slides = settings.homepage && settings.homepage.slides;
         if (asArray(slides).length) next.slides = slides.map(resolveSlide);
+        if (settings.sustainability) {
+          next.sustainability = mapSustainability(settings.sustainability);
+        }
       }
 
       if (
@@ -317,56 +415,153 @@ export function ContentProvider({ children }) {
         if (albums.length) next.gallery = albums;
       }
 
+      if (
+        documentsR.status === "fulfilled" &&
+        asArray(documentsR.value && documentsR.value.data).length
+      ) {
+        next.documents = documentsR.value.data.map((row) => ({
+          id: row.id,
+          title: row.title,
+          description: row.description || "",
+          category: row.category || "",
+          url: row.fileUrl,
+          fileName: row.fileName || "",
+          fileType: row.fileType || "",
+          fileSize: row.fileSize || 0,
+          date: formatDate(row.createdAt),
+        }));
+      }
+
+      if (
+        staffR.status === "fulfilled" &&
+        asArray(staffR.value && staffR.value.data).length
+      ) {
+        next.staff = staffR.value.data.map((row) => ({
+          id: row.id,
+          slug: row.slug,
+          title: row.title || "",
+          name: row.name,
+          position: row.position || "",
+          staffType: row.staffType || "academic",
+          image: row.profileImage || "",
+          facultyId: row.facultyId || null,
+          departmentId: row.departmentId || null,
+          facultyName: row.facultyName || "",
+          departmentName: row.departmentName || "",
+          unit: row.unit || "",
+          biography: row.biography || "",
+          email: row.email || "",
+          phone: row.phone || "",
+          linkedin: row.linkedin || "",
+          orcid: row.orcid || "",
+          googleScholar: row.googleScholar || "",
+          scopus: row.scopus || "",
+          researchGate: row.researchGate || "",
+          academia: row.academia || "",
+          webOfScience: row.webOfScience || "",
+          ssrn: row.ssrn || "",
+        }));
+      }
+
+      const lectureRows =
+        lecturesR.status === "fulfilled"
+          ? asArray(lecturesR.value && lecturesR.value.data)
+          : [];
+
+      if (lectureRows.length) {
+        next.lectures = lectureRows.map((row) => ({
+          id: row.id,
+          number: row.number,
+          lecturer: row.lecturer || "",
+          lecturerRole: row.lecturerRole || "",
+          title: row.title || "",
+          date: row.lectureDate || "",
+          venue: row.venue || "",
+          fileUrl: row.fileUrl || "",
+        }));
+      }
+
+      const announcementRows =
+        announcementsR.status === "fulfilled"
+          ? asArray(announcementsR.value && announcementsR.value.data)
+          : [];
+
+      if (announcementRows.length) {
+        next.announcements = announcementRows.map((row) => ({
+          id: row.id,
+          title: row.title,
+          content: row.content,
+          priority: row.priority || 1,
+          date: formatDate(row.publishedAt),
+        }));
+      }
+
       const newsRows =
         newsR.status === "fulfilled" ? asArray(newsR.value && newsR.value.data) : [];
       const eventRows =
         eventsR.status === "fulfilled" ? asArray(eventsR.value && eventsR.value.data) : [];
 
       if (newsRows.length) {
-        next.news = newsRows.map((row, index) => ({
-          id: row.id,
-          title: row.title,
-          date: formatDate(row.publishedAt || row.createdAt),
-          image:
-            row.featuredImage ||
-            NEWS_IMAGE_FALLBACKS[index % NEWS_IMAGE_FALLBACKS.length],
-          url: "/news",
-        }));
-        next.newsEvents = [
-          ...newsRows.map((row) => ({
-            id: `news-${row.id}`,
-            type: "news",
+        next.news = newsRows.map((row, index) => {
+          const photos = mapImages(row.images);
+          return {
+            id: row.id,
             title: row.title,
-            date: row.publishedAt || row.createdAt,
-            excerpt: row.excerpt || stripHtml(row.content),
-            body: htmlToParagraphs(row.content),
-            image: row.featuredImage || null,
-            category: row.category,
-            slug: row.slug,
-            link: null,
-          })),
-          ...eventRows.map((row) => ({
+            date: formatDate(row.publishedAt || row.createdAt),
+            image:
+              row.featuredImage ||
+              firstImage(photos) ||
+              NEWS_IMAGE_FALLBACKS[index % NEWS_IMAGE_FALLBACKS.length],
+            url: "/news",
+          };
+        });
+        next.newsEvents = [
+          ...newsRows.map((row) => {
+            const photos = mapImages(row.images);
+            return {
+              id: `news-${row.id}`,
+              type: "news",
+              title: row.title,
+              date: row.publishedAt || row.createdAt,
+              excerpt: row.excerpt || stripHtml(row.content),
+              body: htmlToParagraphs(row.content),
+              image: row.featuredImage || firstImage(photos),
+              images: photos,
+              category: row.category,
+              slug: row.slug,
+              link: null,
+            };
+          }),
+          ...eventRows.map((row) => {
+            const photos = mapImages(row.images);
+            return {
+              id: `event-${row.id}`,
+              type: "event",
+              title: row.title,
+              date: row.eventDate,
+              excerpt: row.description,
+              body: row.description,
+              image: row.image || firstImage(photos),
+              images: photos,
+              category: row.venue || null,
+            };
+          }),
+        ];
+      } else if (eventRows.length) {
+        next.newsEvents = eventRows.map((row) => {
+          const photos = mapImages(row.images);
+          return {
             id: `event-${row.id}`,
             type: "event",
             title: row.title,
             date: row.eventDate,
             excerpt: row.description,
             body: row.description,
-            image: row.image || null,
+            image: row.image || firstImage(photos),
+            images: photos,
             category: row.venue || null,
-          })),
-        ];
-      } else if (eventRows.length) {
-        next.newsEvents = eventRows.map((row) => ({
-          id: `event-${row.id}`,
-          type: "event",
-          title: row.title,
-          date: row.eventDate,
-          excerpt: row.description,
-          body: row.description,
-          image: row.image || null,
-          category: row.venue || null,
-        }));
+          };
+        });
       }
 
       next.ready = true;
@@ -377,14 +572,33 @@ export function ContentProvider({ children }) {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [reloadToken]);
 
-  const value = useMemo(() => content, [content]);
+  // If the API was unreachable when the page loaded we are showing fallback
+  // content, so try again as soon as the user comes back to the tab.
+  useEffect(() => {
+    const onFocus = () => {
+      if (lastLoadFailed.current) refresh();
+    };
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, [refresh]);
+
+  const value = useMemo(() => ({ ...content, refresh }), [content, refresh]);
   return createElement(ContentContext.Provider, { value }, children);
 }
 
+const noop = () => {};
+
 function useContent() {
   return useContext(ContentContext) || DEFAULT_CONTENT;
+}
+
+// Re-pulls all CMS content. Used when returning to the public site from the
+// admin, so edits appear without a hard refresh.
+export function useRefreshContent() {
+  const content = useContent();
+  return content.refresh || noop;
 }
 
 export function useSite() {
@@ -398,6 +612,18 @@ export function useSite() {
     pillars: c.pillars,
     slides: c.slides,
   };
+}
+
+export function useSustainability() {
+  return useContent().sustainability;
+}
+
+export function useDocuments() {
+  return useContent().documents;
+}
+
+export function useStaff() {
+  return useContent().staff;
 }
 
 export function useFaculties() {
@@ -418,4 +644,12 @@ export function useNewsEvents() {
 
 export function useGallery() {
   return useContent().gallery;
+}
+
+export function useLectures() {
+  return useContent().lectures;
+}
+
+export function useAnnouncements() {
+  return useContent().announcements;
 }

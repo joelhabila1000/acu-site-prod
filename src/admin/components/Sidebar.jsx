@@ -1,11 +1,21 @@
 import { Link, useLocation } from "react-router-dom";
 import { ADMIN_NAV } from "../schema/resources.js";
+import { useAuth } from "../context/AuthContext.jsx";
 import logo from "../../assets/acu-logo-new-1.png";
 import "../admin.css";
 
+// Users & Roles talks to admin-only endpoints, so it is hidden from editors.
+const ADMIN_ROLE = "Super Admin";
+
 export default function Sidebar() {
   const location = useLocation();
+  const { user } = useAuth();
+  const roleName = (user && user.role && user.role.name) || "";
   const pathname = (location.pathname || "/admin").replace(/\/$/, "") || "/admin";
+
+  const items = ADMIN_NAV.filter(
+    (item) => !item.adminOnly || roleName === ADMIN_ROLE,
+  );
 
   return (
     <aside className="admin-sidebar">
@@ -17,7 +27,7 @@ export default function Sidebar() {
         </div>
       </div>
       <nav>
-        {ADMIN_NAV.map((item) => (
+        {items.map((item) => (
           <Link
             key={item.path}
             to={item.path}

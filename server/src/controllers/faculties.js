@@ -37,8 +37,8 @@ async function list(req, res) {
   if (status) where.status = status;
   if (q) {
     where.OR = [
-      { name: { contains: q, mode: "insensitive" } },
-      { summary: { contains: q, mode: "insensitive" } },
+      { name: { contains: q } },
+      { summary: { contains: q } },
     ];
   }
   const items = await prisma.faculty.findMany({

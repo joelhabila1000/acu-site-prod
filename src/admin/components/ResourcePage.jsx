@@ -70,7 +70,32 @@ export default function ResourcePage({ resource }) {
 
   function openEdit(item) {
     setFormError("");
-    setEditing({ ...item });
+    const next = { ...item };
+    // A `file` field edits one object but lives on several columns; rebuild it
+    // from the row so the uploader shows the current file.
+    for (const field of resource.fields) {
+      if (field.type === "file" && field.targets) {
+        const targets = field.targets;
+        next[field.name] = {
+          url: item[targets.url] || "",
+          name: (targets.name && item[targets.name]) || "",
+          size: (targets.size && item[targets.size]) || 0,
+          type: (targets.type && item[targets.type]) || "",
+        };
+      }
+
+      // A list field can hold plain strings from before it gained sub-fields.
+      // Convert them on open so saving the form cannot silently drop them.
+      if (field.type === "list" && Array.isArray(item[field.name])) {
+        const first = (field.itemFields || [])[0];
+        if (first) {
+          next[field.name] = item[field.name].map((entry) =>
+            typeof entry === "string" ? { [first.name]: entry } : entry,
+          );
+        }
+      }
+    }
+    setEditing(next);
   }
 
   function setField(name, value) {
@@ -80,7 +105,10 @@ export default function ResourcePage({ resource }) {
   async function save(event) {
     event.preventDefault();
     for (const field of resource.fields) {
-      if (field.required && !String(editing[field.name] ?? "").trim()) {
+      const value = editing[field.name];
+      const empty =
+        field.type === "file" ? !(value && value.url) : !String(value ?? "").trim();
+      if (field.required && empty) {
         setFormError(`${field.label} is required.`);
         return;
       }
@@ -88,7 +116,17 @@ export default function ResourcePage({ resource }) {
     setSaving(true);
     setFormError("");
     const payload = {};
-    for (const field of resource.fields) payload[field.name] = editing[field.name];
+    for (const field of resource.fields) {
+      if (field.type === "file" && field.targets) {
+        const v = editing[field.name] || {};
+        for (const [source, column] of Object.entries(field.targets)) {
+          if (!column) continue;
+          payload[column] = source === "size" ? Number(v.size) || 0 : v[source] || "";
+        }
+      } else {
+        payload[field.name] = editing[field.name];
+      }
+    }
     try {
       if (editing.id) {
         await authSend(`${resource.endpoint}/${editing.id}`, "PUT", payload);

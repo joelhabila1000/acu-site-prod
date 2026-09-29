@@ -5,6 +5,7 @@ const WRITABLE = [
   "title",
   "description",
   "image",
+  "images",
   "eventDate",
   "startTime",
   "endTime",
@@ -30,8 +31,8 @@ async function list(req, res) {
   if (status) where.status = status;
   if (q) {
     where.OR = [
-      { title: { contains: q, mode: "insensitive" } },
-      { description: { contains: q, mode: "insensitive" } },
+      { title: { contains: q } },
+      { description: { contains: q } },
     ];
   }
   const items = await prisma.event.findMany({

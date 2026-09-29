@@ -30,8 +30,8 @@ async function list(req, res) {
   if (status) where.status = status;
   if (q) {
     where.OR = [
-      { name: { contains: q, mode: "insensitive" } },
-      { role: { contains: q, mode: "insensitive" } },
+      { name: { contains: q } },
+      { role: { contains: q } },
     ];
   }
   const items = await prisma.principalOfficer.findMany({

@@ -17,12 +17,15 @@ function formatDate(value) {
 }
 
 export default function Dashboard() {
-  const { authGet } = useAuth();
+  const { authGet, user } = useAuth();
+  const isSuperAdmin = Boolean(user && user.role && user.role.name === "Super Admin");
   const [stats, setStats] = useState({
     news: 0,
     events: 0,
     faculties: 0,
     officers: 0,
+    lectures: 0,
+    announcements: 0,
   });
   const [recent, setRecent] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,12 +34,15 @@ export default function Dashboard() {
     let cancelled = false;
     async function load() {
       try {
-        const [news, events, faculties, officers] = await Promise.all([
-          authGet("/api/news"),
-          authGet("/api/events"),
-          authGet("/api/faculties"),
-          authGet("/api/principal-officers"),
-        ]);
+        const [news, events, faculties, officers, lectures, announcements] =
+          await Promise.all([
+            authGet("/api/news"),
+            authGet("/api/events"),
+            authGet("/api/faculties"),
+            authGet("/api/principal-officers"),
+            authGet("/api/lectures"),
+            authGet("/api/announcements"),
+          ]);
         if (cancelled) return;
         const newsItems = (news && news.data) || [];
         setStats({
@@ -44,6 +50,8 @@ export default function Dashboard() {
           events: ((events && events.data) || []).length,
           faculties: ((faculties && faculties.data) || []).length,
           officers: ((officers && officers.data) || []).length,
+          lectures: ((lectures && lectures.data) || []).length,
+          announcements: ((announcements && announcements.data) || []).length,
         });
         setRecent(newsItems.slice(0, 5));
       } catch {
@@ -92,6 +100,14 @@ export default function Dashboard() {
           <div className="stat-value">{loading ? "—" : stats.officers}</div>
           <div className="muted small">Officers</div>
         </Card>
+        <Card className="stat-card accent-blue" title="Inaugural Lectures">
+          <div className="stat-value">{loading ? "—" : stats.lectures}</div>
+          <div className="muted small">Lectures in the series</div>
+        </Card>
+        <Card className="stat-card accent-orange" title="Announcements">
+          <div className="stat-value">{loading ? "—" : stats.announcements}</div>
+          <div className="muted small">Notices</div>
+        </Card>
       </div>
 
       <div className="dashboard-panels">
@@ -121,11 +137,19 @@ export default function Dashboard() {
               <Link to="/admin/principal-officers">Manage principal officers →</Link>
             </li>
             <li>
-              <Link to="/admin/settings">Edit site settings →</Link>
+              <Link to="/admin/lectures">Manage inaugural lectures →</Link>
             </li>
             <li>
-              <Link to="/admin/users">Manage users &amp; roles →</Link>
+              <Link to="/admin/announcements">Post an announcement →</Link>
             </li>
+            <li>
+              <Link to="/admin/settings">Edit site settings →</Link>
+            </li>
+            {isSuperAdmin && (
+              <li>
+                <Link to="/admin/users">Manage users &amp; roles →</Link>
+              </li>
+            )}
           </ul>
         </Card>
       </div>

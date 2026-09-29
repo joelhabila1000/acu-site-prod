@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 export default function Users() {
   const { authGet, authSend } = useAuth();
   const [users, setUsers] = useState([]);
+  const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
   const [editing, setEditing] = useState(null);
@@ -13,8 +14,18 @@ export default function Users() {
 
   useEffect(() => {
     fetchUsers();
+    fetchRoles();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  async function fetchRoles() {
+    try {
+      const data = await authGet("/api/roles");
+      setRoles(Array.isArray(data && data.data) ? data.data : []);
+    } catch {
+      setRoles([]);
+    }
+  }
 
   async function fetchUsers() {
     setLoading(true);
@@ -143,12 +154,24 @@ export default function Users() {
               />
             </div>
             <div className="form-row">
-              <label>Role ID</label>
-              <input
+              <label>Role</label>
+              <select
                 name="roleId"
                 defaultValue={editing.role?.id || ""}
-                placeholder="Role ID (use seed roles)"
-              />
+                required
+              >
+                <option value="">Select a role…</option>
+                {roles.map((role) => (
+                  <option key={role.id} value={role.id}>
+                    {role.name}
+                  </option>
+                ))}
+              </select>
+              {roles.length === 0 && (
+                <span className="field-help">
+                  Could not load roles. Only a Super Admin can assign roles.
+                </span>
+              )}
             </div>
             <div className="modal-actions">
               <button

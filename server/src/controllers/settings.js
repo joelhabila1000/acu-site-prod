@@ -10,6 +10,7 @@ const ALLOWED = [
   "pillars",
   "programmes",
   "homepage",
+  "sustainability",
 ];
 
 async function getAll(req, res) {

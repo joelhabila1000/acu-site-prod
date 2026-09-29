@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { apiUpload } from "../../lib/api.js";
+import { useEffect, useState } from "react";
+import { formatFileSize } from "../../lib/format.js";
 import { useAuth } from "../context/AuthContext.jsx";
 
 function toDateInput(value) {
@@ -33,7 +33,7 @@ function TagsField({ field, value, onChange }) {
 }
 
 function ImageField({ field, value, onChange }) {
-  const { token } = useAuth();
+  const { authUpload } = useAuth();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -43,7 +43,7 @@ function ImageField({ field, value, onChange }) {
     setBusy(true);
     setError("");
     try {
-      const res = await apiUpload("/api/uploads", file, { token });
+      const res = await authUpload("/api/uploads", file);
       onChange(res.url);
     } catch (err) {
       setError(err.message || "Upload failed");
@@ -75,6 +75,132 @@ function ImageField({ field, value, onChange }) {
           </label>
         </div>
       </div>
+      {error && <span className="field-error">{error}</span>}
+      {field.help && <span className="field-help">{field.help}</span>}
+    </div>
+  );
+}
+
+// Uploads any file (PDF, DOCX, …) and reports back its URL plus the metadata
+// the Document model stores. ResourcePage expands the object onto the mapped
+// fields on save, and rebuilds it when opening a row for edit.
+function FileField({ field, value, onChange }) {
+  const { authUpload } = useAuth();
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+
+  const current = value && typeof value === "object" ? value : {};
+
+  async function handleFile(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    setBusy(true);
+    setError("");
+    try {
+      const res = await authUpload("/api/uploads/document", file);
+      onChange({ url: res.url, name: res.name, size: res.size, type: res.type });
+    } catch (err) {
+      setError(err.message || "Upload failed");
+    } finally {
+      setBusy(false);
+      event.target.value = "";
+    }
+  }
+
+  return (
+    <div className="form-row">
+      <label>{field.label}</label>
+      <div className="file-field">
+        {current.url ? (
+          <a
+            className="file-field-current"
+            href={current.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {current.name || current.url}
+          </a>
+        ) : (
+          <div className="file-field-placeholder">No file uploaded</div>
+        )}
+
+        <div className="image-field-controls">
+          <input
+            type="text"
+            value={current.url || ""}
+            placeholder="File URL"
+            onChange={(e) => onChange({ ...current, url: e.target.value })}
+          />
+          <label className="btn secondary upload-btn">
+            {busy ? "Uploading…" : "Upload file"}
+            <input type="file" onChange={handleFile} hidden />
+          </label>
+        </div>
+
+        {current.size > 0 && (
+          <span className="field-help">
+            {formatFileSize(current.size)}
+            {current.type ? ` · ${current.type}` : ""}
+          </span>
+        )}
+      </div>
+      {error && <span className="field-error">{error}</span>}
+      {field.help && <span className="field-help">{field.help}</span>}
+    </div>
+  );
+}
+
+// Dropdown backed by another resource, e.g. picking the faculty a staff
+// member belongs to. Options are fetched from `field.endpoint`.
+function ReferenceField({ field, value, onChange }) {
+  const { authGet } = useAuth();
+  const [rows, setRows] = useState([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      try {
+        const res = await authGet(field.endpoint);
+        if (cancelled) return;
+        setRows(Array.isArray(res && res.data) ? res.data : []);
+      } catch (err) {
+        if (!cancelled) setError(err.message || "Could not load options");
+      }
+    }
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [field.endpoint, authGet]);
+
+  // Derived during render so the effect keeps a stable dependency list.
+  const labelKeys = field.labelKeys || [field.labelKey || "name"];
+  const options = rows.map((row) => ({
+    value: row.id,
+    label:
+      labelKeys
+        .map((key) => row[key])
+        .filter(Boolean)
+        .join(" · ") || `#${row.id}`,
+  }));
+
+  return (
+    <div className="form-row">
+      <label>{field.label}</label>
+      <select
+        value={value ?? ""}
+        onChange={(e) =>
+          onChange(e.target.value === "" ? "" : Number(e.target.value))
+        }
+      >
+        <option value="">—</option>
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
       {error && <span className="field-error">{error}</span>}
       {field.help && <span className="field-help">{field.help}</span>}
     </div>
@@ -143,7 +269,10 @@ function ListField({ field, value, onChange }) {
 export function Field({ field, value, onChange }) {
   if (field.type === "tags") return <TagsField field={field} value={value} onChange={onChange} />;
   if (field.type === "image") return <ImageField field={field} value={value} onChange={onChange} />;
+  if (field.type === "file") return <FileField field={field} value={value} onChange={onChange} />;
   if (field.type === "list") return <ListField field={field} value={value} onChange={onChange} />;
+  if (field.type === "reference")
+    return <ReferenceField field={field} value={value} onChange={onChange} />;
 
   if (field.type === "boolean") {
     return (

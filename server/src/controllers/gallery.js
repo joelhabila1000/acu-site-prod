@@ -38,8 +38,8 @@ async function list(req, res) {
   if (status) where.status = status;
   if (q) {
     where.OR = [
-      { name: { contains: q, mode: "insensitive" } },
-      { description: { contains: q, mode: "insensitive" } },
+      { name: { contains: q } },
+      { description: { contains: q } },
     ];
   }
   const items = await prisma.galleryAlbum.findMany({

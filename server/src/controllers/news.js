@@ -8,9 +8,9 @@ async function list(req, res) {
   if (status) where.status = status;
   if (q)
     where.OR = [
-      { title: { contains: q, mode: "insensitive" } },
-      { excerpt: { contains: q, mode: "insensitive" } },
-      { content: { contains: q, mode: "insensitive" } },
+      { title: { contains: q } },
+      { excerpt: { contains: q } },
+      { content: { contains: q } },
     ];
   const take = limit ? Number(limit) : Number(per);
   const skip = limit ? 0 : (Number(page) - 1) * take;
@@ -34,24 +34,28 @@ async function get(req, res) {
 }
 
 async function create(req, res) {
-  const { title, excerpt, content, category, featured, status } = req.body;
+  const { title, content } = req.body;
   if (!title || !content)
     return res.status(400).json({ error: "Title and content required" });
-  const slug = slugify(title, { lower: true, strict: true });
-  const existing = await prisma.news.findUnique({ where: { slug } });
-  let finalSlug = slug;
-  if (existing) finalSlug = `${slug}-${Date.now().toString().slice(-4)}`;
-  const data = {
-    title,
-    slug: finalSlug,
-    excerpt,
-    content,
-    category,
-    featured: !!featured,
-    status: status || "draft",
-    authorId: req.user.userId,
-    publishedAt: status === "published" ? new Date() : null,
-  };
+
+  // Use the same writable list as update(), otherwise fields such as the cover
+  // image and the extra photos are silently dropped when creating.
+  const data = pick(req.body);
+
+  if (!data.slug) {
+    const slug = slugify(title, { lower: true, strict: true });
+    const existing = await prisma.news.findUnique({ where: { slug } });
+    data.slug = existing ? `${slug}-${Date.now().toString().slice(-4)}` : slug;
+  }
+
+  if (data.publishedAt) data.publishedAt = new Date(data.publishedAt);
+  data.featured = !!data.featured;
+  data.status = data.status || "draft";
+  if (data.status === "published" && !data.publishedAt) {
+    data.publishedAt = new Date();
+  }
+  data.authorId = req.user.userId;
+
   const created = await prisma.news.create({ data });
   res.json(created);
 }
@@ -62,6 +66,7 @@ const WRITABLE = [
   "excerpt",
   "content",
   "featuredImage",
+  "images",
   "category",
   "featured",
   "status",

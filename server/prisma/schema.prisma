@@ -1,12 +1,10 @@
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -54,7 +52,7 @@ model Page {
   id           Int @id @default(autoincrement())
   title        String
   slug         String @unique
-  content      String
+  content      String @db.Text
   featuredImage String?
   status       String @default("draft")
   authorId     Int
@@ -68,9 +66,11 @@ model News {
   id           Int @id @default(autoincrement())
   title        String
   slug         String @unique
-  excerpt      String?
-  content      String
+  excerpt      String? @db.Text
+  content      String @db.Text
   featuredImage String?
+  // Extra photographs for the article: [{ url, caption }]
+  images       Json?
   category     String?
   authorId     Int
   author       User @relation(fields: [authorId], references: [id])
@@ -84,8 +84,10 @@ model News {
 model Event {
   id          Int @id @default(autoincrement())
   title       String
-  description String
+  description String @db.Text
   image       String?
+  // Extra photographs from the event: [{ url, caption }]
+  images      Json?
   eventDate   DateTime
   startTime   String?
   endTime     String?
@@ -99,9 +101,9 @@ model Faculty {
   id Int @id @default(autoincrement())
   name String
   slug String @unique
-  description String?
+  description String? @db.Text
   tagline String?
-  summary String?
+  summary String? @db.Text
   dean String?
   image String?
   programmes Json?
@@ -123,7 +125,7 @@ model PrincipalOfficer {
   name String
   role String
   image String?
-  summary String?
+  summary String? @db.Text
   bio Json?
   qualifications Json?
   memberships Json?
@@ -146,7 +148,7 @@ model Department {
   faculty Faculty @relation(fields:[facultyId], references:[id])
   name String
   slug String @unique
-  description String?
+  description String? @db.Text
   headOfDepartment String?
   email String?
   phone String?
@@ -165,8 +167,8 @@ model Programme {
   name String
   slug String @unique
   degreeType String?
-  description String?
-  requirements String?
+  description String? @db.Text
+  requirements String? @db.Text
   duration String?
   programmeType String?
   status String @default("active")
@@ -176,15 +178,28 @@ model Programme {
 
 model Staff {
   id Int @id @default(autoincrement())
+  title String?
   name String
   slug String @unique
   profileImage String?
   position String?
+  // "academic" (teaching) or "non-academic" (ICT, bursary, bookshop, …)
+  staffType String @default("academic")
   facultyId Int?
   departmentId Int?
-  biography String?
+  // Place of work for non-academic staff, who have no faculty or department.
+  unit String?
+  biography String? @db.Text
   email String?
   phone String?
+  linkedin String?
+  orcid String?
+  googleScholar String?
+  scopus String?
+  researchGate String?
+  academia String?
+  webOfScience String?
+  ssrn String?
   status String @default("active")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -194,7 +209,7 @@ model GalleryAlbum {
   id Int @id @default(autoincrement())
   name String
   slug String? @unique
-  description String?
+  description String? @db.Text
   coverImage String?
   sortOrder Int @default(0)
   status String @default("published")
@@ -208,7 +223,7 @@ model GalleryImage {
   albumId Int
   album GalleryAlbum @relation(fields:[albumId], references:[id], onDelete: Cascade)
   imageUrl String
-  caption String?
+  caption String? @db.Text
   sortOrder Int @default(0)
   uploadedBy Int?
   createdAt DateTime @default(now())
@@ -217,7 +232,7 @@ model GalleryImage {
 model Document {
   id Int @id @default(autoincrement())
   title String
-  description String?
+  description String? @db.Text
   category String?
   fileUrl String
   fileName String
@@ -229,10 +244,26 @@ model Document {
   updatedAt DateTime @updatedAt
 }
 
+model InauguralLecture {
+  id           Int       @id @default(autoincrement())
+  number       Int
+  lecturer     String?
+  lecturerRole String?
+  title        String?
+  summary      String?   @db.Text
+  lectureDate  DateTime?
+  venue        String?
+  fileUrl      String?
+  status       String    @default("published")
+  sortOrder    Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
 model Announcement {
   id Int @id @default(autoincrement())
   title String
-  content String
+  content String @db.Text
   priority Int @default(1)
   status String @default("draft")
   publishedAt DateTime?
@@ -245,13 +276,13 @@ model Announcement {
 model HomepageSetting {
   id Int @id @default(autoincrement())
   key String @unique
-  value String
+  value String @db.Text
   updatedAt DateTime @updatedAt
 }
 
 model ContactInfo {
   id Int @id @default(autoincrement())
-  address String?
+  address String? @db.Text
   phone String?
   email String?
   social Json?
@@ -265,7 +296,7 @@ model ActivityLog {
   action String
   entity String
   entityId Int?
-  description String?
+  description String? @db.Text
   createdAt DateTime @default(now())
   user User? @relation(fields:[userId], references:[id])
 }

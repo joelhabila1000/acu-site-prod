@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import "../admin.css";
 
 export default function Login() {
-  const { login } = useAuth();
+  const { login, sessionExpired } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -30,6 +30,12 @@ export default function Login() {
         <p className="muted small" style={{ marginBottom: 18 }}>
           Manage news, events, faculties and site content.
         </p>
+
+        {sessionExpired && !error && (
+          <div className="login-notice">
+            Your session has expired. Please sign in again.
+          </div>
+        )}
 
         {error && <div className="login-error">{error}</div>}
 

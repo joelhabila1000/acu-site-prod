@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt')
 async function list(req,res){
   const { q, page = 1, per = 20 } = req.query
   const where = {}
-  if(q) where.OR = [{ name: { contains: q, mode: 'insensitive' } }, { email: { contains: q, mode: 'insensitive' } }]
+  if(q) where.OR = [{ name: { contains: q } }, { email: { contains: q } }]
   const take = Number(per)
   const skip = (Number(page)-1) * take
   const [items, total] = await Promise.all([

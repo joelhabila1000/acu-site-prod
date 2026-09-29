@@ -638,6 +638,41 @@ body .admin-shell {
   background: #fbfcff;
 }
 
+.file-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.login-notice {
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #fff8e6;
+  border: 1px solid rgba(201, 162, 39, 0.45);
+  color: #7a5c12;
+  font-size: 13px;
+}
+
+.file-field-current {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(17, 48, 79, 0.08);
+  background: #fbfcff;
+  font-size: 13px;
+  color: #11304f;
+  word-break: break-all;
+}
+
+.file-field-placeholder {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px dashed rgba(17, 48, 79, 0.25);
+  color: var(--muted);
+  font-size: 12px;
+}
+
 .upload-btn {
   display: inline-flex;
   align-items: center;

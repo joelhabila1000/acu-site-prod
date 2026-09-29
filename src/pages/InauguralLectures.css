@@ -1,0 +1,129 @@
+.lectures-intro {
+  max-width: 820px;
+}
+.lectures-intro h2 {
+  margin-bottom: 16px;
+}
+.lectures-intro p {
+  color: var(--ink-700);
+  margin-bottom: 14px;
+}
+.lectures-note a {
+  color: var(--oxblood-600);
+  font-weight: 600;
+}
+
+.lectures-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.lectures-count {
+  color: var(--ink-500);
+  font-size: 0.9rem;
+}
+.lectures-empty {
+  color: var(--ink-500);
+}
+
+.lectures-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 20px;
+}
+
+.lecture-card {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 24px;
+  background: #fff;
+  border: 1px solid rgba(8, 19, 38, 0.08);
+  border-left: 4px solid var(--gold-500);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+}
+
+.lecture-number {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--navy-900);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  padding: 14px 8px;
+  height: max-content;
+}
+.lecture-number span {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.lecture-number em {
+  font-style: normal;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-400);
+}
+
+.lecture-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.lecture-badge {
+  background: var(--oxblood-600);
+  color: #fff;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.lecture-date {
+  color: var(--ink-500);
+  font-size: 0.85rem;
+}
+
+.lecture-title {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: var(--navy-900);
+}
+.lecture-lecturer {
+  color: var(--ink-700);
+  margin-bottom: 6px;
+}
+.lecture-role {
+  color: var(--ink-500);
+}
+.lecture-venue {
+  color: var(--ink-500);
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+.lecture-download {
+  margin-top: 8px;
+}
+
+@media (max-width: 640px) {
+  .lecture-card {
+    grid-template-columns: 1fr;
+  }
+  .lecture-number {
+    flex-direction: row;
+    gap: 4px;
+    width: max-content;
+  }
+  .lecture-number span {
+    font-size: 1.3rem;
+  }
+}

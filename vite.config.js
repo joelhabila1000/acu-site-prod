@@ -7,6 +7,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': 'http://localhost:4000',
+      // Uploaded images and documents are served by the API, not by Vite.
+      '/uploads': 'http://localhost:4000',
     },
   },
 })

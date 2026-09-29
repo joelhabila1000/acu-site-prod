@@ -1,48 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import Counter from "./Counter.jsx";
 import { useSite } from "../data/cms.js";
 import "./StatsBar.css";
-
-function Counter({ value }) {
-  const ref = useRef(null);
-  const [display, setDisplay] = useState(0);
-
-  useEffect(() => {
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReduced) {
-      setDisplay(value);
-      return;
-    }
-
-    const el = ref.current;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const duration = 1200;
-            const start = performance.now();
-            const tick = (now) => {
-              const progress = Math.min((now - start) / duration, 1);
-              const eased = 1 - Math.pow(1 - progress, 3);
-              setDisplay(Math.round(eased * value));
-              if (progress < 1) requestAnimationFrame(tick);
-            };
-            requestAnimationFrame(tick);
-            observer.disconnect();
-          }
-        });
-      },
-      { threshold: 0.4 }
-    );
-    if (el) observer.observe(el);
-    return () => observer.disconnect();
-  }, [value]);
-
-  return (
-    <span ref={ref} className="stat-value">
-      {display}
-    </span>
-  );
-}
 
 export default function StatsBar() {
   const { stats } = useSite();
