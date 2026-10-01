@@ -1,31 +1,71 @@
-# Going live on Hostinger
+# Going live on GoDaddy
 
-The whole stack runs on one Hostinger plan: the static site, the Express API and
-the MySQL database. Nothing here depends on Vercel or Neon any more.
+The stack is three pieces that deploy differently:
 
-> **Plan requirement:** Hostinger only supports Node.js apps on **Business** or
-> **Cloud** plans. On Premium you'd have to keep the API elsewhere.
-
-| Piece | Host | Where |
+| Piece | What it is | Where it goes on GoDaddy |
 | --- | --- | --- |
-| Public site (static `dist/`) | main domain | `public_html` |
-| API (Express + Prisma) | `api.your-domain.com` | Node.js web app |
-| Database | Hostinger MySQL | same plan |
-| Uploads | persistent folder on the host | outside the build directory |
+| Public site | static `dist/` built by Vite | static hosting (`public_html`) **or** served by the API app |
+| API | Express + Prisma (Node) | a **GoDaddy Node.js Hosting** app |
+| Database | MySQL (`provider = "mysql"`) | a GoDaddy MySQL database |
+| Uploads | images/PDFs written to disk | a **persistent** folder (see step 5) |
 
-Hostinger requires a Node.js app to be its own *website*, so the API gets a
-subdomain and the main domain stays a plain static site.
+The API is a long-running Node process with a MySQL database and a Prisma native
+engine, so it needs GoDaddy's **Node.js Hosting** product — plain cPanel web
+hosting cannot run it.
 
 ---
 
-## 1. Create the database
+## 0. First: which GoDaddy product do you have?
 
-1. hPanel → **Databases → MySQL Databases**. Create `acu_cms` and a user.
-2. Note the database name, username, password and host (usually `localhost`).
+The steps differ, so identify what you actually bought before doing anything.
 
-## 2. Move the data across
+| Product | How to tell | Can it run this API? |
+| --- | --- | --- |
+| **Node.js Hosting** (new, in beta) | You see "Connect GitHub / My Apps / Publish Now" at [godaddy.com/nodejs](https://www.godaddy.com/nodejs) | **Yes** — this is the product for the API. Node 20/22, secrets, per-app Database, persistent `public/assets`, preview → publish. |
+| **Linux Web Hosting (cPanel)** | You log into cPanel and see `public_html`, MySQL Databases, phpMyAdmin | Static site ✅ and MySQL ✅ — but **not** a persistent Node process ❌ |
+| **VPS / Dedicated** | You have root SSH | **Yes** — most control, most setup (nginx + Node + MySQL) |
 
-The local database is already MySQL, so this is a straight dump and import.
+**Recommended for this stack:** a **Node.js Hosting** app for the API plus either
+the app's Database or a cPanel MySQL database, and the static site served by
+either cPanel `public_html` or the Node app itself.
+
+> GoDaddy Node.js Hosting is in **beta** — features may change. Keep the source in
+> Git so you can re-deploy.
+
+---
+
+## 1. Deploy shape: one app or two?
+
+**Two apps (fewest code changes)** — use this if you also have cPanel web hosting:
+
+- **API** → a Node.js Hosting app, project root `server/`
+- **Site** → upload `dist/` into cPanel `public_html`
+
+This matches how the repo is already structured; the only change is a `build`
+script in `server/package.json` (step 3).
+
+**One app** — use this if you *only* have Node.js Hosting:
+
+- The Express app also serves the built SPA (`dist/`) and the SPA fallback.
+- Requires a small code change to `server/src/app.js` (step 5b).
+
+Pick one and follow that path throughout.
+
+---
+
+## 2. Create the database
+
+The API needs **MySQL** (Prisma is configured with `provider = "mysql"`).
+
+1. In cPanel → **MySQL Databases**, create `acu_cms` and a user, and grant it all
+   privileges on that database.
+2. Note the name, user, password and host (usually `localhost`).
+3. If your Node.js Hosting app exposes its own **Database** panel, check the
+   engine first — only use it if it is MySQL.
+
+### Move the data across
+
+The local database is already MySQL, so it is a straight dump and import.
 
 ```bash
 # export from the local XAMPP MariaDB
@@ -33,74 +73,166 @@ C:\xampp\mysql\bin\mysqldump.exe -u acu -pacu_local_dev -h 127.0.0.1 -P 3380 ^
   --default-character-set=utf8mb4 --no-tablespaces acu_cms > acu_cms.sql
 ```
 
-Then in hPanel → **phpMyAdmin**, select `acu_cms`, and **Import** `acu_cms.sql`.
+Then in cPanel → **phpMyAdmin**, select `acu_cms` and **Import** `acu_cms.sql`.
 
-Alternative for a clean start: point `DATABASE_URL` at the Hostinger database,
-enable **Remote MySQL** for your IP, and run `npx prisma db push` +
-`npm run seed` from your machine instead of importing.
+For a clean start instead: allow your IP under cPanel → **Remote MySQL**, point
+`DATABASE_URL` at the GoDaddy database, and run `npx prisma db push` +
+`npm run seed` from your machine.
 
-## 3. Deploy the API
+---
 
-1. hPanel → **Websites → Add Website → Deploy Web App**, pick the `api`
-   subdomain, and deploy the `server/` folder (upload a `.zip`, or connect the
-   GitHub repo and set the project root to `server/`).
-2. Build settings:
-   - **Framework:** Express (or "Other")
-   - **Entry file:** `src/index.js`
-   - **Install:** `npm install`
-3. Environment variables (hPanel → **Environment variables**):
+## 3. Prepare the API for GoDaddy
 
-   | Name | Value |
-   | --- | --- |
-   | `DATABASE_URL` | `mysql://USER:PASSWORD@localhost:3306/acu_cms` |
-   | `AUTH_SECRET` | a long random string — **change this** |
-   | `CORS_ORIGINS` | `https://your-domain.com,https://www.your-domain.com` |
-   | `UPLOAD_DIR` | `/home/USERNAME/uploads` (see step 5) |
+GoDaddy's Node.js Hosting has hard requirements. Most are already met; two are
+not.
 
-   Generate a secret:
-   ```bash
-   node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
+**Already fine in `server/`:**
+
+- Listens on `process.env.PORT` (`src/index.js`). ✅
+- `start` script → `node src/index.js`. ✅
+- `prisma` is in **dependencies** (not devDependencies), so the `postinstall`
+  `prisma generate` runs. ✅ *(GoDaddy installs only `dependencies`.)*
+
+**Changes required:**
+
+1. **Add a `build` script.** GoDaddy always runs `npm run build`; without it the
+   deploy fails. In `server/package.json`:
+   ```json
+   "scripts": {
+     "build": "prisma generate",
+     "start": "node src/index.js"
+   },
+   "engines": { "node": "20.x" }
    ```
-4. Deploy, then check `https://api.your-domain.com/api/settings` returns JSON.
+2. **Exclude `node_modules/`** (and any `.env`) from the zip/Git deploy — the
+   platform runs `npm install` itself and will not install `devDependencies`.
 
-## 4. Build and upload the site
+**Watch for:**
 
-The site needs the API URL **at build time**:
+- **`bcrypt` native binary.** If the build log shows a native compile failure,
+  swap it for `bcryptjs` (same `hash`/`compare` API) in
+  `server/src/controllers/auth.js`, `server/src/controllers/users.js` and
+  `server/prisma/seed.js`.
+- **Prisma engine target.** `schema.prisma` uses `provider = "mysql"` with the
+  default `native` target — correct when `prisma generate` runs on the host.
+
+---
+
+## 4. Deploy the API (GoDaddy Node.js Hosting)
+
+1. Go to [godaddy.com/nodejs](https://www.godaddy.com/nodejs) → **Connect GitHub**
+   (or use *upload as a file* if you are not using GitHub).
+2. Pick the **repository** and **branch**. If the repo is the whole project, set
+   the **project root to `server/`** so `package.json` is at the top level of the
+   app.
+3. When prompted, add **secrets** (Environment variables) — see the table in
+   step 6. Add at least `DATABASE_URL`, `AUTH_SECRET`, `CORS_ORIGINS` and
+   `PUBLIC_BASE_URL`.
+4. **Import & Deploy**, open the preview URL, and check
+   `https://<preview-url>/api/settings` returns JSON.
+5. When it is working, **Publish Now** and attach your `api.` subdomain under
+   **Settings → domain**.
+6. Use **Runtime Logs** to debug, **File Manager** to inspect files, **Restart
+   Preview App** after changing secrets.
+
+> There is a GoDaddy helper skill for preparing projects:
+> `npx skills add godaddy/nodejs-hosting-agent-skill` — handy if the deploy
+> rejects the app structure.
+
+---
+
+## 5. Build and ship the site
+
+The site needs the API URL **at build time**.
 
 ```bash
 # .env.production
 VITE_API_BASE=https://api.your-domain.com
-```
 
-```bash
-npm install --include=dev
+npm install --include=dev   # vite is a devDependency — do not let NODE_ENV strip it
 npm run build
 ```
 
+### 5a. Two-app path — upload `dist/` to cPanel
+
 Upload **the contents of `dist/`** (not the folder) into the main domain's
-`public_html`, including the hidden `.htaccess` — it makes deep links such as
-`/sustainability` and `/admin` work on refresh instead of 404ing.
+`public_html`, **including the hidden `.htaccess`** — it makes deep links such as
+`/sustainability`, `/student-life` and `/admin` work on refresh instead of 404ing.
 
-## 5. Uploads
+### 5b. One-app path — let Express serve the SPA
 
-The API stores images on disk. Hostinger **overwrites the build directory on
-every deploy**, so `UPLOAD_DIR` must point somewhere persistent:
+Add static serving + SPA fallback to `server/src/app.js`, after the API routes:
 
+```js
+const path = require("path");
+const distDir = path.join(__dirname, "..", "..", "dist");
+
+app.use(express.static(distDir));
+app.get(/^(?!\/(api|uploads)).*/, (req, res) => {
+  res.sendFile(path.join(distDir, "index.html"));
+});
 ```
-UPLOAD_DIR=/home/USERNAME/uploads
+
+Then commit/locally build `dist/` so it is present in the app, and the single
+app serves both the API and the site.
+
+---
+
+## 6. Environment variables (secrets)
+
+Set these in the Node.js Hosting app's **Settings → secrets** (never commit a
+real `.env`).
+
+| Name | Value |
+| --- | --- |
+| `DATABASE_URL` | `mysql://USER:PASSWORD@HOST:3306/acu_cms` |
+| `AUTH_SECRET` | a long random string — **change this** |
+| `CORS_ORIGINS` | `https://your-domain.com,https://www.your-domain.com` |
+| `PUBLIC_BASE_URL` | `https://api.your-domain.com` (so upload URLs are absolute) |
+| `TRUST_PROXY` | `1` (you are behind GoDaddy's proxy — needed for rate limiting) |
+| `UPLOAD_DIR` | persistent folder — see step 7 |
+
+Generate a secret:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
 ```
 
-Create that folder in File Manager (or over SSH). Uploads are served by the API
-at `/uploads/<file>`.
+---
 
-> **Known issue to fix before launch:** the upload endpoint currently returns a
-> *relative* URL (`/uploads/foo.jpg`). With the API on a subdomain the browser
-> resolves that against the **site** origin, so images will 404. Either return
-> an absolute URL from `server/src/controllers/uploads.js` (deriving it from the
-> request, with `app.set("trust proxy", 1)` set in `server/src/app.js`), or set
-> a `PUBLIC_BASE_URL` env var and prefix it there.
+## 7. Uploads must survive deployments
 
-## 6. First login
+Uploads are written to disk (`server/src/controllers/uploads.js`). On GoDaddy,
+app files are replaced on each deploy, so uploads must go to a folder that
+persists — GoDaddy says to use the app's **`public/assets`** folder.
+
+1. Set `UPLOAD_DIR` to that folder (e.g. `<app>/public/assets/uploads`).
+2. Make the API serve uploads from `UPLOAD_DIR` rather than the hard-coded
+   `<repo>/uploads` in `server/src/app.js`:
+   ```js
+   const uploadsDir = process.env.UPLOAD_DIR || path.join(__dirname, "..", "..", "uploads");
+   app.use("/uploads", express.static(uploadsDir));
+   ```
+3. Alternatively set `BLOB_READ_WRITE_TOKEN` to store uploads off-box entirely.
+
+> **Upload URLs:** the API already returns absolute URLs via `PUBLIC_BASE_URL`
+> (falling back to the request host), so images load from the API host. Without
+> `PUBLIC_BASE_URL` set they can resolve against the wrong origin.
+
+---
+
+## 8. Domain and DNS
+
+- If the domain is registered at GoDaddy, attach it to the app/site in the
+  product's **Settings** and DNS is handled for you.
+- Otherwise point the domain's **A record** at the hosting IP and the `api`
+  subdomain at the API app.
+- Make sure `CORS_ORIGINS` lists the exact site origin(s), including `www`, and
+  use **https**.
+
+---
+
+## 9. First login
 
 - Visit `https://your-domain.com/admin`
 - Sign in with `admin@acu.edu.ng` / `adminchangeme`
@@ -110,85 +242,51 @@ at `/uploads/<file>`.
 
 ## Before you go live — outstanding items
 
-Collected as we built things locally. Nothing here blocks you building the site
-out; they all have to be dealt with before it is public.
-
 **Must fix**
 
-1. **Relative upload URLs.** Uploads are stored and returned as `/uploads/foo.jpg`.
-   On a subdomain the browser resolves that against the *site* origin and images
-   break. See the note in step 5.
-2. **Downloads won't "save as".** The `download` attribute on the Reports cards
-   is ignored cross-origin, so a PDF opens in a tab instead of downloading. Fix
-   by also proxying `/uploads` on the main domain.
-3. ~~Authorization is not enforced.~~ **Done.** Write routes now require an
-   editor role, user and settings management requires Super Admin, and disabled
-   accounts are refused at sign-in *and* on every request. Two notes:
-   - Roles are matched by **name**, so when you create a new privileged role,
-     add it to `EDITOR_ROLES` / `ADMIN_ROLES` in
-     `server/src/controllers/auth.js`. Anything not listed gets no access.
-   - Your existing accounts keep working — "Super Admin" is in both lists.
-4. **Rate limiting needs the real client IP.** The sign-in limiter keys off the
-   request IP, but behind Hostinger's proxy every request appears to come from
-   the proxy, so all visitors would share one bucket. Set
-   `app.set("trust proxy", 1)` in `server/src/app.js` once you are behind that
-   proxy. (Deliberately not set locally — it would let a direct client spoof
-   its IP.)
-5. **Change the admin password** (`adminchangeme`) and set a real `AUTH_SECRET`.
-   Sessions last 8 hours — `expiresIn` in `server/src/controllers/auth.js` —
-   and there is currently **no way to revoke a token** short of changing the
-   secret, which signs everyone out.
-6. **Production env**: `DATABASE_URL`, `AUTH_SECRET`, `CORS_ORIGINS`,
-   `UPLOAD_DIR` (must point outside the deploy directory).
-
-**Deferred until the API has a public URL**
-
-6. **Staff self-service.** A Google Form (or an on-site form) posting to a
-   `POST /api/staff/ingest` endpoint, matched on email so re-submissions update.
-   Google cannot reach `localhost`, so this only works once deployed. Note that
-   Google Forms file-upload questions return Drive share links that will not
-   render as images — an on-site form avoids that.
-7. **Staff accounts.** Give a staff member a login that can edit only their own
-   profile. Role enforcement (item 3) is now in place, so adding accounts is
-   safe — a new role that isn't in `EDITOR_ROLES` can reach nothing.
+1. **Change the admin password** (`adminchangeme`) and set a real `AUTH_SECRET`.
+   Sessions last 8 hours (`expiresIn` in `server/src/controllers/auth.js`) and
+   there is no token revocation short of changing the secret.
+2. **`TRUST_PROXY=1`** behind GoDaddy's proxy, or all visitors share one rate-limit
+   bucket and `req.protocol` reports `http`.
+3. **Downloads won't "save as".** The `download` attribute is ignored
+   cross-origin, so a PDF opens in a tab — proxy `/uploads` on the main domain if
+   you need real downloads.
+4. **Contact and Admissions forms** validate on the client only. Connect them to
+   something real before accepting submissions.
+5. **Roles are matched by name** — when you add a privileged role, add it to
+   `EDITOR_ROLES` / `ADMIN_ROLES` in `server/src/controllers/auth.js`.
 
 **Housekeeping**
 
-8. **Image weight.** The campus photos are 3.5–4.8 MB each, used as the hero and
-   gallery backgrounds. Worth compressing or serving WebP.
-9. **`vercel.json` and `api/`** are dead weight from the old Vercel setup — safe
-   to delete once the deploy is confirmed.
-10. **Contact and Admissions forms** do client-side validation only. Connect
-    them to something real before accepting submissions.
-11. **Staff faculty/department** are plain integer columns with no Prisma
-    relations, so names are resolved in the controller. Fine as-is, but real
-    relations would be cleaner if you build on it much further.
+6. **Image weight** — campus photos are 3.5–4.8 MB each. Compress or serve WebP.
+7. **`vercel.json` and `api/`** are dead weight from the old Vercel setup — safe
+   to delete once the GoDaddy deploy is confirmed.
+8. **Staff faculty/department** are integer columns with no Prisma relations;
+   names are resolved in the controller. Fine as-is.
 
 ---
 
 ## Things that commonly bite
 
-- **`npm install` skips dev dependencies** if `NODE_ENV=production`, which
-  removes `vite` and breaks the build. Use `npm install --include=dev`.
-- **Native modules** — `bcrypt` needs a prebuilt binary for the host. If the
-  deploy log shows a build failure, swap it for `bcryptjs` (same API:
-  `hash` / `compare`), in `server/src/controllers/auth.js`,
-  `server/src/controllers/users.js` and `server/prisma/seed.js`.
-- **Prisma engine target** — `schema.prisma` uses `provider = "mysql"` and the
-  default `native` binary target, which is correct when `prisma generate` runs
-  on the host during install.
-- **Search** — MySQL's default `utf8mb4_unicode_ci` collation is
-  case-insensitive, which is why the `mode: "insensitive"` filters were removed
-  from the controllers. That is expected, not a regression.
-- **CORS errors in the browser console** — the site origin must be listed in
-  `CORS_ORIGINS`.
-- **API returns HTML instead of JSON** — the request is hitting the static site
-  rather than the API subdomain.
-- **Deep links 404** — `.htaccess` wasn't uploaded (hidden files are easy to
-  miss).
+- **`MODULE_NOT_FOUND` at startup** — a runtime package is in `devDependencies`.
+  GoDaddy installs only `dependencies`.
+- **Deploy fails at build** — no `build` script in `package.json`. Add
+  `"build": "prisma generate"`.
+- **App receives no traffic** — it is not reading `process.env.PORT`.
+- **`npm install` skipped `vite`** for the SPA build — `NODE_ENV=production`
+  strips devDependencies; build with `npm install --include=dev`.
+- **Native module build failure** — `bcrypt`; switch to `bcryptjs`.
+- **CORS errors in the console** — the site origin is missing from `CORS_ORIGINS`.
+- **API returns HTML instead of JSON** — the request hit the site, not the API
+  subdomain.
+- **Deep links 404** (two-app path) — `.htaccess` wasn't uploaded (hidden files
+  are easy to miss).
+- **Uploaded images vanish after a deploy** — `UPLOAD_DIR` isn't persistent; use
+  `public/assets`.
 
 ## Not used any more
 
 `vercel.json` and the `api/` entry points were for the old Vercel deployment.
-They're dead weight on this path and can be deleted once the Hostinger deploy is
+They are dead weight on this path and can be deleted once the GoDaddy deploy is
 confirmed working.

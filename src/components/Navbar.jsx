@@ -22,15 +22,29 @@ function DesktopMegaMenu({ columns }) {
       {columns.map((column) => (
         <div key={column.heading} className="nav-mega-column">
           <h3>{column.heading}</h3>
-          {column.items.map((item) => (
-            <NavLink
-              key={item.label}
-              to={item.path}
-              className={({ isActive }) => (isActive ? "active" : "")}
-            >
-              {item.label}
-            </NavLink>
-          ))}
+          {column.items.map((item) =>
+            isExternal(item.path) ? (
+              <a
+                key={`${item.label}-${item.path}`}
+                href={item.path}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {item.label}
+                <span className="nav-external" aria-hidden="true">
+                  ↗
+                </span>
+              </a>
+            ) : (
+              <NavLink
+                key={`${item.label}-${item.path}`}
+                to={item.path}
+                className={({ isActive }) => (isActive ? "active" : "")}
+              >
+                {item.label}
+              </NavLink>
+            ),
+          )}
         </div>
       ))}
     </div>
@@ -190,8 +204,8 @@ export default function Navbar() {
                 <li
                   key={link.path || link.label}
                   className={`nav-dropdown ${alignRight ? "nav-dropdown--right" : ""} ${
-                    menuOpen ? "is-open" : ""
-                  }`}
+                    link.highlight ? "nav-dropdown--cta" : ""
+                  } ${menuOpen ? "is-open" : ""}`}
                 >
                   {isGroupLabel ? (
                     <button
@@ -237,14 +251,6 @@ export default function Navbar() {
         </nav>
 
         <div className="navbar-actions">
-          <a
-            href={site.applyUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-oxblood btn-sm"
-          >
-            Apply Now
-          </a>
           <button
             className={`menu-toggle ${open ? "is-open" : ""}`}
             aria-label={open ? "Close menu" : "Open menu"}
@@ -266,7 +272,11 @@ export default function Navbar() {
               const isGroupLabel = !link.path;
               return (
                 <li key={link.path || link.label}>
-                  <div className="mobile-dropdown-group">
+                  <div
+                    className={`mobile-dropdown-group ${
+                      link.highlight ? "mobile-cta" : ""
+                    }`}
+                  >
                     {isGroupLabel ? (
                       <span className="mobile-group-label">{link.label}</span>
                     ) : (

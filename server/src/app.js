@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const fs = require("fs");
 const path = require("path");
 const routes = require("./routes");
 
@@ -25,12 +26,25 @@ const corsOrigins = (process.env.CORS_ORIGINS || "")
 app.use(cors(corsOrigins.length ? { origin: corsOrigins } : {}));
 
 app.use(express.json({ limit: "8mb" }));
-app.use(
-  "/uploads",
-  express.static(path.join(__dirname, "..", "..", "uploads")),
-);
+
+// Uploads live outside the code so they survive redeploys. Point UPLOAD_DIR at a
+// persistent folder on the host; locally it falls back to <repo>/uploads.
+const uploadsDir =
+  process.env.UPLOAD_DIR || path.join(__dirname, "..", "..", "uploads");
+app.use("/uploads", express.static(uploadsDir));
 
 app.use("/api", routes);
+
+// Single-app deploys bundle the built SPA next to the API: serve it and fall
+// back to index.html so client-side routes resolve on refresh. Skipped in dev,
+// where Vite serves the site, and whenever dist/ has not been built.
+const distDir = path.join(__dirname, "..", "..", "dist");
+if (fs.existsSync(distDir)) {
+  app.use(express.static(distDir));
+  app.get(/^\/(?!api(\/|$)|uploads(\/|$)).*/, (req, res) => {
+    res.sendFile(path.join(distDir, "index.html"));
+  });
+}
 
 // Central error handler so a rejected handler returns a response instead of
 // crashing the process.

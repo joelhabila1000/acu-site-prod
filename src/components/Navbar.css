@@ -161,6 +161,31 @@
   font-size: 0.8rem;
 }
 
+/* Highlighted call-to-action item (e.g. Admissions) — styled as a button. */
+.nav-dropdown--cta > .nav-dropdown-toggle {
+  gap: 8px;
+  padding: 9px 18px;
+  background: var(--oxblood-600);
+  color: var(--white);
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+.nav-dropdown--cta > .nav-dropdown-toggle::after {
+  display: none;
+}
+.nav-dropdown--cta > .nav-dropdown-toggle > span {
+  color: inherit;
+}
+.nav-dropdown--cta:hover > .nav-dropdown-toggle,
+.nav-dropdown--cta:focus-within > .nav-dropdown-toggle,
+.nav-dropdown--cta.is-open > .nav-dropdown-toggle,
+.nav-dropdown--cta > .nav-dropdown-toggle.active {
+  background: var(--oxblood-700);
+  color: var(--white);
+}
+
 .nav-dropdown-menu {
   position: absolute;
   top: calc(100% - 8px);
@@ -493,6 +518,18 @@
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
+  }
+  /* Highlighted call-to-action item in the mobile menu. */
+  .mobile-cta > a {
+    margin: 12px 0 10px;
+    padding: 13px 18px;
+    background: var(--oxblood-600);
+    color: var(--white);
+    border-radius: var(--radius-sm);
+    text-align: center;
+  }
+  .mobile-cta > a.active {
+    color: var(--white);
   }
   .mobile-portals {
     display: flex;

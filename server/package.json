@@ -2,7 +2,11 @@
   "name": "acu-cms-server",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
+    "build": "prisma generate",
     "dev": "node src/index.js",
     "start": "node src/index.js",
     "postinstall": "prisma generate",

@@ -26,6 +26,7 @@ import Directory from "./pages/Directory.jsx";
 import StaffDirectory from "./pages/StaffDirectory.jsx";
 import PrincipalOfficerDetail from "./pages/PrincipalOfficerDetail.jsx";
 import InauguralLectures from "./pages/InauguralLectures.jsx";
+import SectionPage from "./pages/SectionPage.jsx";
 import { useRefreshContent } from "./data/cms.js";
 
 export default function App() {
@@ -76,6 +77,17 @@ export default function App() {
           />
           <Route path="/portal/:portal" element={<Maintenance />} />
           <Route path="/news" element={<NewsEventsPage />} />
+          {/* Section pages must precede /news/:slug or they'd be read as articles */}
+          <Route path="/admissions/:page" element={<SectionPage />} />
+          <Route path="/resources" element={<SectionPage />} />
+          <Route path="/resources/:page" element={<SectionPage />} />
+          <Route path="/student-life" element={<SectionPage />} />
+          <Route path="/student-life/:page" element={<SectionPage />} />
+          <Route path="/research" element={<SectionPage />} />
+          <Route path="/research/:page" element={<SectionPage />} />
+          <Route path="/news/events" element={<SectionPage />} />
+          <Route path="/news/press-releases" element={<SectionPage />} />
+          <Route path="/news/convocation" element={<SectionPage />} />
           <Route path="/news/:slug" element={<NewsArticle />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/sustainability" element={<Sustainability />} />
