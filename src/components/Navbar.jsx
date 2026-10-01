@@ -4,7 +4,10 @@ import { useSite } from "../data/cms.js";
 import "./Navbar.css";
 
 function hasChildren(item) {
-  return Array.isArray(item.children) && item.children.length > 0;
+  return (
+    (Array.isArray(item.children) && item.children.length > 0) ||
+    (Array.isArray(item.megaMenu) && item.megaMenu.length > 0)
+  );
 }
 
 // Menu entries may point off-site (student portals). Those need a plain anchor
@@ -60,6 +63,29 @@ function DesktopChildren({ items, onNavigate }) {
         {item.label}
       </NavLink>
     ),
+  );
+}
+
+// One row in the mobile menu — off-site entries open in a new tab, internal
+// ones close the menu and route.
+function MobileChild({ item, onNavigate }) {
+  return isExternal(item.path) ? (
+    <a
+      href={item.path}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={onNavigate}
+    >
+      {item.label}
+    </a>
+  ) : (
+    <NavLink
+      to={item.path}
+      className={({ isActive }) => (isActive ? "active" : "")}
+      onClick={onNavigate}
+    >
+      {item.label}
+    </NavLink>
   );
 }
 
@@ -254,32 +280,37 @@ export default function Navbar() {
                         {link.label}
                       </NavLink>
                     )}
-                    <div className="mobile-submenu">
-                      {link.children.map((child) =>
-                        isExternal(child.path) ? (
-                          <a
-                            key={`${child.label}-${child.path}`}
-                            href={child.path}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => setOpen(false)}
+                    {link.megaMenu ? (
+                      <div className="mobile-submenu mobile-mega">
+                        {link.megaMenu.map((column) => (
+                          <div
+                            key={column.heading}
+                            className="mobile-mega-column"
                           >
-                            {child.label}
-                          </a>
-                        ) : (
-                          <NavLink
+                            <span className="mobile-mega-heading">
+                              {column.heading}
+                            </span>
+                            {column.items.map((child) => (
+                              <MobileChild
+                                key={`${child.label}-${child.path}`}
+                                item={child}
+                                onNavigate={() => setOpen(false)}
+                              />
+                            ))}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="mobile-submenu">
+                        {link.children.map((child) => (
+                          <MobileChild
                             key={`${child.label}-${child.path}`}
-                            to={child.path}
-                            className={({ isActive }) =>
-                              isActive ? "active" : ""
-                            }
-                            onClick={() => setOpen(false)}
-                          >
-                            {child.label}
-                          </NavLink>
-                        ),
-                      )}
-                    </div>
+                            item={child}
+                            onNavigate={() => setOpen(false)}
+                          />
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </li>
               );

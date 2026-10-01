@@ -38,18 +38,6 @@ const NAV_LINKS = [
   {
     label: "About",
     path: "/about",
-    children: [
-      {
-        label: "Administration",
-        path: "/about",
-        children: [
-          { label: "Principal Officers", path: "/about/principal-officers" },
-          { label: "Vice-Chancellary", path: "/about/vice-chancellary" },
-          { label: "Registry", path: "/about/registry" },
-          { label: "Bursary", path: "/about/bursary" },
-        ],
-      },
-    ],
     megaMenu: [
       {
         heading: "About ACU",
@@ -73,6 +61,7 @@ const NAV_LINKS = [
       },
     ],
   },
+  { label: "Admissions", path: "/admissions" },
   {
     label: "Academics",
     path: "/academics",
@@ -82,11 +71,10 @@ const NAV_LINKS = [
       { label: "Inaugural Lectures", path: "/academics/inaugural-lectures" },
     ],
   },
-  { label: "Admissions", path: "/admissions" },
   {
     // A grouping label rather than a destination — no `path`, so the navbar
     // renders it as a non-clickable heading that reveals the menu on hover.
-    label: "Student Services",
+    label: "Students",
     children: [
       { label: "Postgraduate School", path: "/portal/postgraduate" },
       { label: "Undergraduate Study", path: "https://apply.acu.edu.ng/" },
@@ -94,6 +82,7 @@ const NAV_LINKS = [
       { label: "Foundation Programme", path: "https://cpfpapply.acu.edu.ng" },
     ],
   },
+  { label: "News", path: "/news" },
   { label: "Sustainability", path: "/sustainability" },
   {
     label: "Directory",

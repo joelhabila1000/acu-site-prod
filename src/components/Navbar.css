@@ -82,7 +82,7 @@
 }
 .brand-text strong {
   font-family: var(--font-display);
-  font-size: 1.08rem;
+  font-size: 1rem;
   color: var(--navy-900);
   white-space: nowrap;
 }
@@ -96,7 +96,7 @@
 .primary-nav ul {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 20px;
 }
 .primary-nav li {
   position: relative;
@@ -108,6 +108,7 @@
   font-weight: 600;
   color: var(--ink-700);
   padding: 8px 2px;
+  white-space: nowrap;
 }
 .primary-nav a::after,
 .primary-nav button::after {
@@ -248,31 +249,36 @@
 .nav-mega-menu {
   position: absolute;
   top: calc(100% - 8px);
-  left: 50%;
-  width: min(760px, calc(100vw - 32px));
+  left: 0;
+  width: min(720px, calc(100vw - 48px));
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 64px;
-  padding: 32px 36px 34px;
+  gap: 48px;
+  padding: 30px 34px 32px;
   background: var(--white);
   border: 1px solid var(--line);
   border-radius: 14px;
   box-shadow: 0 20px 44px -20px rgba(8, 19, 38, 0.45);
   opacity: 0;
   visibility: hidden;
-  transform: translateX(-50%) translateY(8px);
+  transform: translateY(8px);
   transition:
     opacity 160ms ease,
     transform 160ms ease,
     visibility 160ms ease;
   z-index: 20;
 }
+/* Triggers near the right edge open the panel leftwards so it stays on screen. */
+.nav-dropdown--right .nav-mega-menu {
+  left: auto;
+  right: 0;
+}
 .nav-dropdown:hover .nav-mega-menu,
 .nav-dropdown:focus-within .nav-mega-menu,
 .nav-dropdown.is-open .nav-mega-menu {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%) translateY(0);
+  transform: translateY(0);
 }
 .nav-mega-column {
   display: flex;
@@ -339,6 +345,10 @@
   display: flex;
   align-items: center;
   gap: 14px;
+  flex-shrink: 0;
+}
+.navbar-actions .btn {
+  white-space: nowrap;
 }
 
 .menu-toggle {
@@ -376,7 +386,24 @@
   display: none;
 }
 
-@media (max-width: 960px) {
+/* Tighten the row before the hamburger takes over so items never crowd. */
+@media (max-width: 1300px) and (min-width: 1181px) {
+  .navbar-inner {
+    gap: 14px;
+  }
+  .primary-nav ul {
+    gap: 18px;
+  }
+  .primary-nav a,
+  .primary-nav button {
+    font-size: 0.88rem;
+  }
+  .brand-text strong {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 1180px) {
   .topbar-portals {
     display: none;
   }
@@ -400,8 +427,11 @@
     background: var(--navy-900);
     transition: max-height 260ms ease;
   }
+  /* Fill the space left under the topbar + logo row and scroll inside it. */
   .mobile-menu.is-open {
-    max-height: 640px;
+    max-height: calc(100dvh - 116px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
   .mobile-menu ul {
     padding: 10px 24px 0;
@@ -444,6 +474,25 @@
   }
   .mobile-submenu.nested {
     padding-left: 18px;
+  }
+  /* Mega menus collapse into labelled column groups on small screens. */
+  .mobile-mega {
+    gap: 8px;
+  }
+  .mobile-mega-column {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-bottom: 6px;
+  }
+  .mobile-mega-heading {
+    display: block;
+    padding: 12px 4px 4px;
+    color: var(--gold-400);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
   .mobile-portals {
     display: flex;
