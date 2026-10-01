@@ -12,6 +12,10 @@ dist
 # would publish staff photos and any uploaded reports to the public repo.
 uploads/
 
+# Local build/deploy artifacts (API zip, site zip, database dump). The dump
+# contains password hashes and staff data, so it must never be committed.
+deploy/
+
 # Local AI-tooling configuration — developer machine state, not site source.
 .commandcode/
 .agents/
