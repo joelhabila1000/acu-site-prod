@@ -106,7 +106,6 @@ const NAV_LINKS = [
         heading: "Resources",
         items: [
           { label: "Academic Calendar", path: "/resources/academic-calendar" },
-          { label: "Course Catalogue", path: "/listofcourses" },
           { label: "Library", path: "/resources/library" },
           { label: "E-Learning", path: "/resources/e-learning" },
           { label: "Research & Publications", path: "/research/publications" },
