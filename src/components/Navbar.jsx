@@ -178,11 +178,9 @@ export default function Navbar() {
 
         <nav className="primary-nav" aria-label="Primary">
           <ul>
-            {nav.map((link, index) => {
+            {nav.map((link) => {
               const children = hasChildren(link);
               const isGroupLabel = children && !link.path;
-              // Menus near the right edge open leftwards so they stay on screen.
-              const alignRight = index >= nav.length - 2;
 
               if (!children) {
                 return (
@@ -203,7 +201,7 @@ export default function Navbar() {
               return (
                 <li
                   key={link.path || link.label}
-                  className={`nav-dropdown ${alignRight ? "nav-dropdown--right" : ""} ${
+                  className={`nav-dropdown ${
                     link.highlight ? "nav-dropdown--cta" : ""
                   } ${menuOpen ? "is-open" : ""}`}
                 >

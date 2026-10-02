@@ -12,26 +12,47 @@ export const SECTION_PAGES = {
   "/resources/academic-calendar": {
     crumb: "Academics",
     title: "Academic Calendar",
-    lede: "Key dates for the session, from resumption and registration through examinations to graduation.",
+    lede: "Key dates for the 2026/2027 academic session, from resumption and registration through examinations to convocation.",
+    calendar: {
+      session: "2026/2027",
+      note: "Dates are confirmed by the Registry and published here before each semester begins. Activities marked TBC are awaiting confirmation.",
+      semesters: [
+        {
+          name: "First Semester",
+          events: [
+            { label: "Resumption and arrival of students" },
+            { label: "Registration and clearance (fresh students)" },
+            { label: "Registration (returning students)" },
+            { label: "Orientation programme for fresh students" },
+            { label: "Matriculation ceremony" },
+            { label: "Lectures begin" },
+            { label: "Continuous assessment" },
+            { label: "Lectures end" },
+            { label: "Revision week" },
+            { label: "First semester examinations" },
+            { label: "Inter-semester break" },
+          ],
+        },
+        {
+          name: "Second Semester",
+          events: [
+            { label: "Resumption and registration" },
+            { label: "Lectures begin" },
+            { label: "Continuous assessment" },
+            { label: "Lectures end" },
+            { label: "Revision week" },
+            { label: "Second semester examinations" },
+            { label: "Faculty and Senate approval of results" },
+            { label: "Convocation ceremony" },
+          ],
+        },
+      ],
+    },
     sections: [
-      {
-        heading: "Session dates",
-        paragraphs: [
-          "The academic session runs across two semesters. Dates for resumption, matriculation, lectures, examinations and vacation are published here before each session begins.",
-        ],
-        list: [
-          "First semester resumption and course registration",
-          "Matriculation ceremony",
-          "First semester examinations",
-          "Second semester resumption and registration",
-          "Second semester examinations",
-          "Convocation ceremony",
-        ],
-      },
       {
         heading: "Staying on schedule",
         paragraphs: [
-          "Students should confirm deadlines with their Faculty Officer. Registration and examination timetables are announced through the Registry and the student portal.",
+          "Students should confirm deadlines with their Faculty Officer. Registration and examination timetables are announced through the Registry and the student portal, and this calendar is updated as each date is confirmed.",
         ],
       },
     ],

@@ -186,12 +186,15 @@
   color: var(--white);
 }
 
+/* Closed panels are display:none rather than merely transparent. An absolutely
+   positioned panel that is still laid out widens the document and forces a
+   horizontal scrollbar across the whole site even while it is invisible. */
 .nav-dropdown-menu {
   position: absolute;
   top: calc(100% - 8px);
   left: 0;
   min-width: 252px;
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: 2px;
   padding: 12px;
@@ -199,18 +202,14 @@
   border: 1px solid var(--line);
   border-radius: 14px;
   box-shadow: 0 20px 44px -20px rgba(8, 19, 38, 0.45);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(8px);
-  transition:
-    opacity 160ms ease,
-    transform 160ms ease,
-    visibility 160ms ease;
   z-index: 20;
 }
 
-/* Menus near the right edge open leftwards so they stay on screen. */
-.nav-dropdown--right .nav-dropdown-menu {
+/* A 640px panel only fits to the right of the first few triggers, so everything
+   from the fourth item onwards opens leftwards. Expressed as "the last five" so
+   it keeps working if items are added or removed. */
+.nav-dropdown:nth-last-child(-n + 5) .nav-dropdown-menu,
+.nav-dropdown:nth-last-child(-n + 5) .nav-mega-menu {
   left: auto;
   right: 0;
 }
@@ -218,9 +217,19 @@
 .nav-dropdown:hover .nav-dropdown-menu,
 .nav-dropdown:focus-within .nav-dropdown-menu,
 .nav-dropdown.is-open .nav-dropdown-menu {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
+  display: flex;
+  animation: nav-pop 160ms ease;
+}
+
+@keyframes nav-pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .nav-dropdown:hover > .nav-dropdown-toggle,
@@ -275,35 +284,22 @@
   position: absolute;
   top: calc(100% - 8px);
   left: 0;
-  width: min(720px, calc(100vw - 48px));
-  display: grid;
+  width: min(640px, calc(100vw - 40px));
+  display: none;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 48px;
-  padding: 30px 34px 32px;
+  gap: 36px;
+  padding: 28px 30px 30px;
   background: var(--white);
   border: 1px solid var(--line);
   border-radius: 14px;
   box-shadow: 0 20px 44px -20px rgba(8, 19, 38, 0.45);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(8px);
-  transition:
-    opacity 160ms ease,
-    transform 160ms ease,
-    visibility 160ms ease;
   z-index: 20;
-}
-/* Triggers near the right edge open the panel leftwards so it stays on screen. */
-.nav-dropdown--right .nav-mega-menu {
-  left: auto;
-  right: 0;
 }
 .nav-dropdown:hover .nav-mega-menu,
 .nav-dropdown:focus-within .nav-mega-menu,
 .nav-dropdown.is-open .nav-mega-menu {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
+  display: grid;
+  animation: nav-pop 160ms ease;
 }
 .nav-mega-column {
   display: flex;

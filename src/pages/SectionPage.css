@@ -1,0 +1,98 @@
+/* Academic-calendar block rendered by SectionPage. */
+
+.calendar {
+  margin-bottom: 48px;
+}
+
+.calendar-session {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0 0 18px;
+}
+.calendar-session .eyebrow {
+  margin: 0;
+}
+.calendar-session strong {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--navy-900);
+}
+
+.calendar-note {
+  max-width: 660px;
+  margin: 0 0 32px;
+  color: var(--ink-500);
+  font-size: 0.92rem;
+}
+
+.calendar-semester {
+  margin-bottom: 40px;
+}
+.calendar-semester h2 {
+  margin-bottom: 16px;
+  font-size: 1.35rem;
+}
+
+.calendar-table-wrap {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+}
+
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.calendar-table th {
+  padding: 12px 18px;
+  background: var(--navy-900);
+  color: var(--white);
+  text-align: left;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.calendar-table td {
+  padding: 12px 18px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-700);
+}
+
+.calendar-table tbody tr:nth-child(even) {
+  background: var(--cream-50);
+}
+
+.calendar-date {
+  width: 210px;
+  color: var(--navy-900);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.calendar-tbc {
+  display: inline-block;
+  padding: 4px 13px;
+  background: var(--cream-50);
+  border: 1px dashed rgba(12, 35, 64, 0.28);
+  border-radius: 999px;
+  color: var(--ink-500);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 560px) {
+  .calendar-table th,
+  .calendar-table td {
+    padding: 11px 14px;
+  }
+  .calendar-date {
+    width: auto;
+    white-space: normal;
+  }
+}
