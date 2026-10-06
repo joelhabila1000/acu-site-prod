@@ -35,7 +35,10 @@
 }
 
 .calendar-table-wrap {
-  overflow: hidden;
+  /* Scroll rather than clip: the date column keeps its nowrap width on small
+     screens, so the table can be wider than the viewport. */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border: 1px solid var(--line);
   border-radius: 12px;
   box-shadow: var(--shadow-md);
@@ -43,6 +46,7 @@
 
 .calendar-table {
   width: 100%;
+  min-width: 520px;
   border-collapse: collapse;
 }
 

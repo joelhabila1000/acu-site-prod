@@ -48,3 +48,21 @@
     border-right: 1px solid var(--line);
   }
 }
+
+@media (max-width: 460px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 28px 20px;
+  }
+  .stat-item,
+  .stat-item:nth-child(1),
+  .stat-item:nth-child(2),
+  .stat-item:nth-child(3) {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .stat-item:last-child {
+    border-bottom: none;
+  }
+}

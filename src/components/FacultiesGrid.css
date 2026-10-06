@@ -46,8 +46,8 @@
 }
 
 .faculty-letter-filter button {
-  min-width: 29px;
-  min-height: 29px;
+  min-width: 36px;
+  min-height: 36px;
   padding: 4px 7px;
   border-radius: var(--radius-sm);
 }

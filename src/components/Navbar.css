@@ -265,7 +265,7 @@
   position: absolute;
   top: calc(100% - 8px);
   left: 50%;
-  width: min(760px, calc(100vw - 32px));
+  width: min(760px, calc(100svw - 32px));
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 64px;
@@ -368,8 +368,8 @@
   flex-direction: column;
   justify-content: center;
   gap: 5px;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border: 1px solid var(--line);
   background: var(--white);
   border-radius: var(--radius-sm);
@@ -494,6 +494,9 @@
     gap: 2px;
   }
   .mobile-submenu a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
     padding: 10px 4px;
     color: var(--gold-100);
     font-size: 0.9rem;

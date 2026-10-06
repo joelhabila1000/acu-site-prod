@@ -57,7 +57,8 @@
 }
 
 .pg-hero h1 {
-  font-size: clamp(2.8rem, 4vw, 4.6rem);
+  font-size: clamp(2rem, 6vw, 4.6rem);
+  overflow-wrap: anywhere;
   line-height: 1.02;
   margin-bottom: 18px;
   letter-spacing: -0.05em;
@@ -661,7 +662,7 @@
 }
 
 .pg-panel-value {
-  font-size: 42px;
+  font-size: clamp(1.9rem, 4vw, 2.75rem);
   font-weight: 800;
 }
 

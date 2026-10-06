@@ -76,16 +76,18 @@
   z-index: 2;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
 }
 .hero-dots button {
-  width: 10px;
-  height: 10px;
+  /* 26px touch target around a 10px visible dot. */
+  width: 26px;
+  height: 26px;
+  padding: 8px;
   border-radius: 999px;
   border: 0;
   background: rgba(255, 255, 255, 0.5);
+  background-clip: content-box;
   cursor: pointer;
-  padding: 0;
   transition:
     transform 180ms ease,
     background 180ms ease;

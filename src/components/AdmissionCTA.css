@@ -24,3 +24,14 @@
   gap: 14px;
   flex-wrap: wrap;
 }
+
+@media (max-width: 640px) {
+  .cta-inner {
+    padding: 40px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .cta-actions {
+    width: 100%;
+  }
+}

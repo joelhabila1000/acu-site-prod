@@ -8,7 +8,7 @@
 .principal-officers-hero .eyebrow,
 .principal-officers-message .eyebrow { color: var(--gold-400); }
 .principal-officers-hero .eyebrow { justify-content: center; }
-.principal-officers-hero h1 { color: var(--white); font-size: clamp(2.4rem, 5vw, 4rem); }
+.principal-officers-hero h1 { color: var(--white); font-size: clamp(2rem, 6vw, 4rem); overflow-wrap: anywhere; }
 .principal-officers-hero > .container > p:last-child { max-width: 700px; margin: 0 auto; color: rgba(255,255,255,.78); }
 
 .principal-officers-grid {
@@ -33,9 +33,10 @@
   background: var(--cream-100);
 } */
 .principal-officer-card > img {
-    display: block;
+  display: block;
   width: calc(100% - 28px);        /* inset from card edges */
-  height: 320px;                    /* uniform image area */
+  height: auto;
+  aspect-ratio: 4 / 3;              /* scales with the card */
   margin: 14px auto 0;              /* center + top spacing */
   object-fit: contain;              /* shows the ENTIRE image */
   object-position: center;
