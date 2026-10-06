@@ -16,7 +16,10 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 8px 24px;
+  /* Full width: the header runs to the window edges rather than sitting inside
+     the centred content column. */
+  max-width: none;
+  padding: 8px 16px;
   flex-wrap: wrap;
 }
 .topbar-contact a {
@@ -47,14 +50,19 @@
 }
 
 .navbar-inner {
-  display: flex;
+  display: grid;
+  /* Brand left, menu centred, actions right. */
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 12px 24px;
+  gap: 28px;
+  /* Full width so the crest sits at the window edge, not the content column. */
+  max-width: none;
+  padding: 12px 16px;
 }
 
 .brand {
+  grid-column: 1;
+  justify-self: start;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -85,6 +93,8 @@
   font-size: 1rem;
   color: var(--navy-900);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .brand-text em {
   font-style: normal;
@@ -93,10 +103,14 @@
   letter-spacing: 0.03em;
 }
 
+.primary-nav {
+  grid-column: 2;
+  justify-self: center;
+}
 .primary-nav ul {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 22px;
 }
 .primary-nav li {
   position: relative;
@@ -161,40 +175,12 @@
   font-size: 0.8rem;
 }
 
-/* Highlighted call-to-action item (e.g. Admissions) — styled as a button. */
-.nav-dropdown--cta > .nav-dropdown-toggle {
-  gap: 8px;
-  padding: 9px 18px;
-  background: var(--oxblood-600);
-  color: var(--white);
-  border-radius: var(--radius-sm);
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-}
-.nav-dropdown--cta > .nav-dropdown-toggle::after {
-  display: none;
-}
-.nav-dropdown--cta > .nav-dropdown-toggle > span {
-  color: inherit;
-}
-.nav-dropdown--cta:hover > .nav-dropdown-toggle,
-.nav-dropdown--cta:focus-within > .nav-dropdown-toggle,
-.nav-dropdown--cta.is-open > .nav-dropdown-toggle,
-.nav-dropdown--cta > .nav-dropdown-toggle.active {
-  background: var(--oxblood-700);
-  color: var(--white);
-}
-
-/* Closed panels are display:none rather than merely transparent. An absolutely
-   positioned panel that is still laid out widens the document and forces a
-   horizontal scrollbar across the whole site even while it is invisible. */
 .nav-dropdown-menu {
   position: absolute;
   top: calc(100% - 8px);
   left: 0;
   min-width: 252px;
-  display: none;
+  display: flex;
   flex-direction: column;
   gap: 2px;
   padding: 12px;
@@ -202,14 +188,18 @@
   border: 1px solid var(--line);
   border-radius: 14px;
   box-shadow: 0 20px 44px -20px rgba(8, 19, 38, 0.45);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease,
+    visibility 160ms ease;
   z-index: 20;
 }
 
-/* A 640px panel only fits to the right of the first few triggers, so everything
-   from the fourth item onwards opens leftwards. Expressed as "the last five" so
-   it keeps working if items are added or removed. */
-.nav-dropdown:nth-last-child(-n + 5) .nav-dropdown-menu,
-.nav-dropdown:nth-last-child(-n + 5) .nav-mega-menu {
+/* Menus near the right edge open leftwards so they stay on screen. */
+.nav-dropdown--right .nav-dropdown-menu {
   left: auto;
   right: 0;
 }
@@ -217,19 +207,9 @@
 .nav-dropdown:hover .nav-dropdown-menu,
 .nav-dropdown:focus-within .nav-dropdown-menu,
 .nav-dropdown.is-open .nav-dropdown-menu {
-  display: flex;
-  animation: nav-pop 160ms ease;
-}
-
-@keyframes nav-pop {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 .nav-dropdown:hover > .nav-dropdown-toggle,
@@ -283,23 +263,31 @@
 .nav-mega-menu {
   position: absolute;
   top: calc(100% - 8px);
-  left: 0;
-  width: min(640px, calc(100vw - 40px));
-  display: none;
+  left: 50%;
+  width: min(760px, calc(100vw - 32px));
+  display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 36px;
-  padding: 28px 30px 30px;
+  gap: 64px;
+  padding: 32px 36px 34px;
   background: var(--white);
   border: 1px solid var(--line);
   border-radius: 14px;
   box-shadow: 0 20px 44px -20px rgba(8, 19, 38, 0.45);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(8px);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease,
+    visibility 160ms ease;
   z-index: 20;
 }
 .nav-dropdown:hover .nav-mega-menu,
 .nav-dropdown:focus-within .nav-mega-menu,
 .nav-dropdown.is-open .nav-mega-menu {
-  display: grid;
-  animation: nav-pop 160ms ease;
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
 }
 .nav-mega-column {
   display: flex;
@@ -363,6 +351,8 @@
 }
 
 .navbar-actions {
+  grid-column: 3;
+  justify-self: end;
   display: flex;
   align-items: center;
   gap: 14px;
@@ -407,8 +397,8 @@
   display: none;
 }
 
-/* Tighten the row before the hamburger takes over so items never crowd. */
-@media (max-width: 1300px) and (min-width: 1181px) {
+/* Tighten the row before the hamburger takes over, so the items never crowd. */
+@media (max-width: 1300px) and (min-width: 1121px) {
   .navbar-inner {
     gap: 14px;
   }
@@ -424,7 +414,22 @@
   }
 }
 
-@media (max-width: 1180px) {
+/* Below ~1280px there is not enough room to centre the menu without it
+   colliding with the brand, so let it sit next to the brand instead. */
+@media (max-width: 1279px) and (min-width: 1121px) {
+  .navbar-inner {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+  .primary-nav {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 1120px) {
+  /* The menu collapses into the hamburger, so drop the empty centre column. */
+  .navbar-inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
   .topbar-portals {
     display: none;
   }
@@ -448,11 +453,8 @@
     background: var(--navy-900);
     transition: max-height 260ms ease;
   }
-  /* Fill the space left under the topbar + logo row and scroll inside it. */
   .mobile-menu.is-open {
-    max-height: calc(100dvh - 116px);
-    overflow-y: auto;
-    overscroll-behavior: contain;
+    max-height: 640px;
   }
   .mobile-menu ul {
     padding: 10px 24px 0;
@@ -495,37 +497,6 @@
   }
   .mobile-submenu.nested {
     padding-left: 18px;
-  }
-  /* Mega menus collapse into labelled column groups on small screens. */
-  .mobile-mega {
-    gap: 8px;
-  }
-  .mobile-mega-column {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding-bottom: 6px;
-  }
-  .mobile-mega-heading {
-    display: block;
-    padding: 12px 4px 4px;
-    color: var(--gold-400);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-  /* Highlighted call-to-action item in the mobile menu. */
-  .mobile-cta > a {
-    margin: 12px 0 10px;
-    padding: 13px 18px;
-    background: var(--oxblood-600);
-    color: var(--white);
-    border-radius: var(--radius-sm);
-    text-align: center;
-  }
-  .mobile-cta > a.active {
-    color: var(--white);
   }
   .mobile-portals {
     display: flex;

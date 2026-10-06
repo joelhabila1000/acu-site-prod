@@ -61,6 +61,7 @@ export const INAUGURAL_LECTURES = [
     date: "",
     venue: "",
     fileUrl: "",
+    status: "hidden",
   },
   {
     number: 24,
@@ -70,5 +71,6 @@ export const INAUGURAL_LECTURES = [
     date: "2025-08-07",
     venue: "",
     fileUrl: "",
+    status: "hidden",
   },
 ];

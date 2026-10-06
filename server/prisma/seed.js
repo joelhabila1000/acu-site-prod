@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 const content = require("./seedContent");
 const { INAUGURAL_LECTURES } = require("./lectures");
 const { POSTGRADUATE_PROGRAMMES } = require("./programmes");
+const { PUBLICATIONS } = require("./publications");
 
 function slug(value) {
   return slugify(value, { lower: true, strict: true });
@@ -191,7 +192,7 @@ async function seedLectures() {
       title: lecture.title,
       lectureDate: lecture.lectureDate ? new Date(lecture.lectureDate) : null,
       venue: lecture.venue || "",
-      status: "published",
+      status: lecture.status || "published",
       sortOrder: index,
     };
     if (existing) {
@@ -233,6 +234,32 @@ async function seedPostgraduateProgrammes() {
   }
 }
 
+async function seedPublications() {
+  const count = await prisma.publication.count();
+  if (count > 0) return;
+  for (const [index, publication] of PUBLICATIONS.entries()) {
+    await prisma.publication.create({
+      data: {
+        title: publication.title,
+        authors: publication.authors,
+        publicationType: publication.publicationType,
+        venue: publication.venue || null,
+        year: publication.year ?? null,
+        volume: publication.volume || null,
+        issue: publication.issue || null,
+        pages: publication.pages || null,
+        doi: publication.doi || null,
+        url: publication.url || null,
+        abstract: publication.abstract || null,
+        faculty: publication.faculty || null,
+        featured: publication.featured || false,
+        status: "published",
+        sortOrder: index,
+      },
+    });
+  }
+}
+
 async function main() {
   console.log("Seeding database...");
   const admin = await seedRolesAndAdmin();
@@ -243,6 +270,7 @@ async function main() {
   await seedLectures();
   await seedAnnouncements();
   await seedPostgraduateProgrammes();
+  await seedPublications();
   console.log("Seeding completed");
 }
 

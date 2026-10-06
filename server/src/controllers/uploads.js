@@ -48,19 +48,13 @@ function parseWith(instance, maxMb) {
 const parseUpload = parseWith(imageUpload, IMAGE_MAX_MB);
 const parseDocumentUpload = parseWith(documentUpload, DOCUMENT_MAX_MB);
 
-// Uploads are served by the API, which normally lives on its own subdomain. A
-// relative URL would be resolved by the browser against the *site* origin and
-// 404, so always return an absolute one: PUBLIC_BASE_URL when configured,
-// otherwise derived from the incoming request.
-function publicBase(req) {
-  const configured = (process.env.PUBLIC_BASE_URL || "").replace(/\/+$/, "");
-  if (configured) return configured;
-  return `${req.protocol}://${req.get("host")}`;
-}
-
 // Writes the buffer to Vercel Blob when configured, otherwise to local disk,
-// and returns the public URL of the stored file.
-async function storeFile(file, req) {
+// and returns the URL of the stored file. Local uploads come back as a path
+// relative to the API (`/uploads/<name>`); the client rebases it against
+// VITE_API_BASE, so it resolves through the same origin as the rest of the API
+// — the dev proxy locally, the API host when the site is deployed apart —
+// rather than a host baked in at upload time.
+async function storeFile(file) {
   const token = process.env.BLOB_READ_WRITE_TOKEN;
   if (token) {
     const { put: blobPut } = require("@vercel/blob");
@@ -75,7 +69,7 @@ async function storeFile(file, req) {
   fs.mkdirSync(LOCAL_DIR, { recursive: true });
   const name = safeName(file.originalname);
   fs.writeFileSync(path.join(LOCAL_DIR, name), file.buffer);
-  return `${publicBase(req)}/uploads/${name}`;
+  return `/uploads/${name}`;
 }
 
 function storageError(error) {
@@ -90,7 +84,7 @@ function storageError(error) {
 async function put(req, res) {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
   try {
-    const url = await storeFile(req.file, req);
+    const url = await storeFile(req.file);
     res.json({ url });
   } catch (error) {
     res.status(500).json({ error: storageError(error) });
@@ -102,7 +96,7 @@ async function put(req, res) {
 async function putDocument(req, res) {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
   try {
-    const url = await storeFile(req.file, req);
+    const url = await storeFile(req.file);
     res.json({
       url,
       name: req.file.originalname,

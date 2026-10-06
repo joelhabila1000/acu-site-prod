@@ -53,6 +53,7 @@ module.exports.INAUGURAL_LECTURES = [
     title: null,
     lectureDate: null,
     venue: "",
+    status: "hidden",
   },
   {
     number: 24,
@@ -61,5 +62,6 @@ module.exports.INAUGURAL_LECTURES = [
     title: null,
     lectureDate: "2025-08-07",
     venue: "",
+    status: "hidden",
   },
 ];

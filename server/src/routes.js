@@ -17,6 +17,7 @@ const announcements = require("./controllers/announcements");
 const lectures = require("./controllers/lectures");
 const messages = require("./controllers/messages");
 const programmes = require("./controllers/programmes");
+const publications = require("./controllers/publications");
 
 // Auth
 router.post("/auth/login", auth.loginLimiter, auth.login);
@@ -112,6 +113,13 @@ router.get("/programmes/:id", programmes.get);
 router.post("/programmes", auth.requireEditor, programmes.create);
 router.put("/programmes/:id", auth.requireEditor, programmes.update);
 router.delete("/programmes/:id", auth.requireEditor, programmes.remove);
+
+// Research & publications
+router.get("/publications", publications.list);
+router.get("/publications/:id", publications.get);
+router.post("/publications", auth.requireEditor, publications.create);
+router.put("/publications/:id", auth.requireEditor, publications.update);
+router.delete("/publications/:id", auth.requireEditor, publications.remove);
 
 // Uploads
 router.post("/uploads", auth.requireEditor, uploads.parseUpload, uploads.put);

@@ -6,11 +6,30 @@
 
 export const API_BASE = (import.meta.env.VITE_API_BASE || "").replace(/\/+$/, "");
 
+// Uploaded assets are stored as paths (`/uploads/<file>`), but older rows may
+// carry an absolute URL with the host that happened to serve the upload. Either
+// way, rebase the `/uploads/` path onto the API origin so it is fetched from
+// the same place as the rest of the API: through the dev proxy locally (empty
+// base) or from the deployed API host when VITE_API_BASE is set.
+function resolveUploadUrl(value) {
+  if (typeof value === "string") {
+    const index = value.indexOf("/uploads/");
+    return index === -1 ? value : `${API_BASE}${value.slice(index)}`;
+  }
+  if (Array.isArray(value)) return value.map(resolveUploadUrl);
+  if (value && typeof value === "object") {
+    const out = {};
+    for (const key of Object.keys(value)) out[key] = resolveUploadUrl(value[key]);
+    return out;
+  }
+  return value;
+}
+
 async function parse(res) {
   const text = await res.text();
   if (!text) return null;
   try {
-    return JSON.parse(text);
+    return resolveUploadUrl(JSON.parse(text));
   } catch {
     return text;
   }

@@ -279,6 +279,7 @@ const DEFAULT_CONTENT = {
   lectures: INAUGURAL_LECTURES.map((lecture) => ({ ...lecture })),
   announcements: [],
   pgProgrammes: PG_PROGRAMMES.map((programme) => ({ ...programme })),
+  publications: [],
   ready: false,
 };
 
@@ -334,6 +335,7 @@ export function ContentProvider({ children }) {
         lecturesR,
         announcementsR,
         programmesR,
+        publicationsR,
       ] = await Promise.allSettled([
         apiGet("/api/settings"),
         apiGet("/api/faculties"),
@@ -346,6 +348,7 @@ export function ContentProvider({ children }) {
         apiGet("/api/lectures?status=published"),
         apiGet("/api/announcements?status=published"),
         apiGet("/api/programmes?status=published"),
+        apiGet("/api/publications?status=published"),
       ]);
 
       if (cancelled) return;
@@ -516,6 +519,31 @@ export function ContentProvider({ children }) {
         }));
       }
 
+      const publicationRows =
+        publicationsR.status === "fulfilled"
+          ? asArray(publicationsR.value && publicationsR.value.data)
+          : [];
+
+      if (publicationRows.length) {
+        next.publications = publicationRows.map((row) => ({
+          id: row.id,
+          title: row.title,
+          authors: row.authors || "",
+          type: row.publicationType || "",
+          venue: row.venue || "",
+          year: row.year || null,
+          volume: row.volume || "",
+          issue: row.issue || "",
+          pages: row.pages || "",
+          doi: row.doi || "",
+          url: row.url || "",
+          abstract: row.abstract || "",
+          faculty: row.faculty || "",
+          fileUrl: row.fileUrl || "",
+          featured: !!row.featured,
+        }));
+      }
+
       const newsRows =
         newsR.status === "fulfilled" ? asArray(newsR.value && newsR.value.data) : [];
       const eventRows =
@@ -678,4 +706,8 @@ export function useAnnouncements() {
 
 export function usePostgraduateProgrammes() {
   return useContent().pgProgrammes;
+}
+
+export function usePublications() {
+  return useContent().publications;
 }

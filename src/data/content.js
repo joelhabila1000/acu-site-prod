@@ -40,6 +40,18 @@ export const NAV_LINKS = [
   {
     label: "About",
     path: "/about",
+    children: [
+      {
+        label: "Administration",
+        path: "/about",
+        children: [
+          { label: "Principal Officers", path: "/about/principal-officers" },
+          { label: "Vice-Chancellary", path: "/about/vice-chancellary" },
+          { label: "Registry", path: "/about/registry" },
+          { label: "Bursary", path: "/about/bursary" },
+        ],
+      },
+    ],
     megaMenu: [
       {
         heading: "About ACU",
@@ -64,123 +76,36 @@ export const NAV_LINKS = [
     ],
   },
   {
-    label: "Admissions",
-    path: "/admissions",
-    // Rendered as the highlighted call-to-action rather than a plain link.
-    highlight: true,
-    megaMenu: [
-      {
-        heading: "How to Apply",
-        items: [
-          { label: "How to Apply", path: "/admissions/how-to-apply" },
-          { label: "Admission Requirements", path: "/admissions/requirements" },
-          { label: "UTME & Direct Entry", path: "/admissions/utme-direct-entry" },
-          { label: "Postgraduate Admissions", path: "/admissions/postgraduate" },
-          {
-            label: "International Students",
-            path: "/admissions/international-students",
-          },
-        ],
-      },
-      {
-        heading: "Fees & Support",
-        items: [
-          { label: "Scholarships & Financial Aid", path: "/admissions/scholarships" },
-          { label: "Fees & Payment Plans", path: "/admissions/fees" },
-          { label: "Apply Now", path: "https://apply.acu.edu.ng/" },
-        ],
-      },
-    ],
-  },
-  {
     label: "Academics",
     path: "/academics",
-    megaMenu: [
-      {
-        heading: "Programmes",
-        items: [
-          { label: "Academics Overview", path: "/academics" },
-          { label: "List of Courses", path: "/listofcourses" },
-          { label: "Inaugural Lectures", path: "/academics/inaugural-lectures" },
-        ],
-      },
-      {
-        heading: "Resources",
-        items: [
-          { label: "Academic Calendar", path: "/resources/academic-calendar" },
-          { label: "Library", path: "/resources/library" },
-          { label: "E-Learning", path: "/resources/e-learning" },
-          { label: "Research & Publications", path: "/research/publications" },
-          {
-            label: "Directorate of Academic Planning",
-            path: "/resources/directorate-of-academic-planning",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: "Student Life",
-    path: "/student-life",
-    megaMenu: [
-      {
-        heading: "Living & Campus",
-        items: [
-          {
-            label: "Accommodation & Hostels",
-            path: "/student-life/accommodation",
-          },
-          { label: "Campus Life", path: "/student-life/campus-life" },
-          { label: "Clubs & Societies", path: "/student-life/clubs-societies" },
-          { label: "Sports", path: "/student-life/sports" },
-        ],
-      },
-      {
-        heading: "Support & Welfare",
-        items: [
-          { label: "Health Centre", path: "/student-life/health-centre" },
-          { label: "Student Affairs", path: "/student-life/student-affairs" },
-          { label: "Counselling", path: "/student-life/counselling" },
-          { label: "Chapel & Worship", path: "/student-life/chapel" },
-          { label: "Security", path: "/student-life/security" },
-        ],
-      },
-    ],
-  },
-  {
-    label: "Research",
-    path: "/research",
     children: [
-      { label: "Centres & Institutes", path: "/research/centres-institutes" },
-      { label: "Publications", path: "/research/publications" },
-      { label: "Journals", path: "/research/journals" },
-      {
-        label: "Innovation & Entrepreneurship",
-        path: "/research/innovation-entrepreneurship",
-      },
-      { label: "Research Ethics", path: "/research/ethics" },
-      { label: "Sustainability", path: "/sustainability" },
+      { label: "Academics Overview", path: "/academics" },
+      { label: "List of Courses", path: "/listofcourses" },
+      { label: "Inaugural Lectures", path: "/academics/inaugural-lectures" },
     ],
   },
+  { label: "Admissions", path: "/admissions" },
   {
-    label: "News & Events",
-    path: "/news",
+    // A grouping label rather than a destination — no `path`, so the navbar
+    // renders it as a non-clickable heading that reveals the menu on hover.
+    label: "Student Services",
     children: [
-      { label: "Latest News", path: "/news" },
-      { label: "Upcoming Events", path: "/news/events" },
-      { label: "Gallery", path: "/gallery" },
-      { label: "Press Releases", path: "/news/press-releases" },
-      { label: "Convocation", path: "/news/convocation" },
+      { label: "Postgraduate School", path: "/portal/postgraduate" },
+      { label: "Undergraduate Study", path: "https://apply.acu.edu.ng/" },
+      { label: "Part-Time Study", path: "/admissions" },
+      { label: "Foundation Programme", path: "https://cpfpapply.acu.edu.ng" },
     ],
   },
+  { label: "Sustainability", path: "/sustainability" },
   {
-    label: "Contact",
-    path: "/contact",
+    label: "Directory",
+    path: "/directory",
     children: [
-      { label: "Contact Us", path: "/contact" },
       { label: "Staff Directory", path: "/directory/staff" },
+      { label: "Gallery", path: "/gallery" },
     ],
   },
+  { label: "Contact", path: "/contact" },
 ];
 
 export const PORTALS = [

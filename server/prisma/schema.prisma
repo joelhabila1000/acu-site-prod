@@ -328,3 +328,27 @@ model ActivityLog {
   createdAt DateTime @default(now())
   user User? @relation(fields:[userId], references:[id])
 }
+
+model Publication {
+  id              Int      @id @default(autoincrement())
+  title           String
+  // Comma-separated author names, in the order they should be displayed.
+  authors         String   @db.Text
+  // Journal article | Book | Book chapter | Conference paper | Thesis
+  publicationType String   @default("Journal article")
+  venue           String?
+  year            Int?
+  volume          String?
+  issue           String?
+  pages           String?
+  doi             String?
+  url             String?
+  abstract        String?  @db.Text
+  faculty         String?
+  fileUrl         String?
+  featured        Boolean  @default(false)
+  status          String   @default("published")
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

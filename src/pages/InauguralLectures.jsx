@@ -27,9 +27,9 @@ function ordinalSuffix(n) {
 
 export default function InauguralLectures() {
   const lectures = useLectures() || [];
-  const ordered = [...lectures].sort(
-    (a, b) => (b.number ?? 0) - (a.number ?? 0),
-  );
+  const ordered = [...lectures]
+    .filter((lecture) => lecture.status !== "hidden")
+    .sort((a, b) => (b.number ?? 0) - (a.number ?? 0));
 
   return (
     <>
@@ -52,8 +52,8 @@ export default function InauguralLectures() {
             otherwise announced.
           </p>
           <p className="lectures-note">
-            Full texts and downloadable proceedings for every lecture in the
-            series are published by the university.{" "}
+            Full texts and downloadable proceedings are published by the
+            university as they become available.{" "}
             <a
               href="https://acu.edu.ng/inaugural-lectures/"
               target="_blank"
@@ -69,7 +69,7 @@ export default function InauguralLectures() {
       <section className="section section-cream">
         <div className="container">
           <div className="lectures-head">
-            <h2>Lectures in the Series</h2>
+            <h2>Upcoming and Recent Lectures</h2>
             <span className="lectures-count">
               {ordered.length} {ordered.length === 1 ? "entry" : "entries"}
             </span>

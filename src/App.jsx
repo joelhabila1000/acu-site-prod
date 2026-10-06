@@ -27,6 +27,7 @@ import StaffDirectory from "./pages/StaffDirectory.jsx";
 import PrincipalOfficerDetail from "./pages/PrincipalOfficerDetail.jsx";
 import InauguralLectures from "./pages/InauguralLectures.jsx";
 import SectionPage from "./pages/SectionPage.jsx";
+import Publications from "./pages/Publications.jsx";
 import { useRefreshContent } from "./data/cms.js";
 
 export default function App() {
@@ -84,6 +85,7 @@ export default function App() {
           <Route path="/student-life" element={<SectionPage />} />
           <Route path="/student-life/:page" element={<SectionPage />} />
           <Route path="/research" element={<SectionPage />} />
+          <Route path="/research/publications" element={<Publications />} />
           <Route path="/research/:page" element={<SectionPage />} />
           <Route path="/news/events" element={<SectionPage />} />
           <Route path="/news/press-releases" element={<SectionPage />} />

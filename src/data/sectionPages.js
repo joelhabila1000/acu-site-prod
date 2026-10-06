@@ -611,26 +611,6 @@ export const SECTION_PAGES = {
     ],
   },
 
-  "/research/publications": {
-    crumb: "Research",
-    title: "Research & Publications",
-    lede: "Books, chapters, journal articles and conference papers by ACU scholars.",
-    sections: [
-      {
-        heading: "Scholarly output",
-        paragraphs: [
-          "Staff and postgraduate students publish across peer-reviewed journals, edited volumes and conference proceedings.",
-        ],
-      },
-      {
-        heading: "Finding our work",
-        paragraphs: [
-          "Publications by ACU researchers are listed against their staff profiles in the staff directory.",
-        ],
-      },
-    ],
-  },
-
   "/research/journals": {
     crumb: "Research",
     title: "Journals",
