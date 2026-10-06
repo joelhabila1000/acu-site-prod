@@ -1,6 +1,5 @@
-const { PrismaClient } = require("@prisma/client");
 const rateLimit = require("express-rate-limit");
-const prisma = new PrismaClient();
+const prisma = require("../lib/prisma");
 
 const SOURCES = ["contact", "admissions"];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

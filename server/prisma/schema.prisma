@@ -3,7 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  // PostgreSQL (Neon on Vercel). DATABASE_URL is a Neon Postgres connection
+  // string; the "-pooler" host is fine for the serverless runtime.
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 

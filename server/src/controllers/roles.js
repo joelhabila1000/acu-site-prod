@@ -1,5 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../lib/prisma");
 
 // Read-only list. Roles are seeded and referenced by name in the auth layer,
 // so the admin picks from them rather than creating new ones.
