@@ -51,10 +51,9 @@
 
 .navbar-inner {
   display: grid;
-  /* Brand left, menu centred, actions right. The columns are slightly
-     asymmetric so the menu sits a little left of true centre, while the brand
-     stays anchored to the left edge. */
-  grid-template-columns: 0.9fr auto 1.1fr;
+  /* Brand left, menu centred, actions right. Symmetric columns keep the menu
+     clear of the brand on the left. */
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 28px;
   /* Full width so the crest sits at the window edge, not the content column. */
@@ -112,7 +111,7 @@
 .primary-nav ul {
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: 26px;
 }
 .primary-nav li {
   position: relative;
@@ -405,7 +404,7 @@
     gap: 14px;
   }
   .primary-nav ul {
-    gap: 18px;
+    gap: 20px;
   }
   .primary-nav a,
   .primary-nav button {
@@ -424,6 +423,8 @@
   }
   .primary-nav {
     justify-self: start;
+    /* Keep the menu clear of the brand now that it sits beside the logo. */
+    margin-left: 28px;
   }
 }
 
