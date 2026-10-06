@@ -63,6 +63,59 @@ function DesktopChildren({ items, onNavigate }) {
   );
 }
 
+// A single mobile drawer entry: off-site links open in a new tab, everything
+// else routes and closes the drawer on tap.
+function MobileNavLink({ item, onNavigate }) {
+  if (isExternal(item.path)) {
+    return (
+      <a
+        href={item.path}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={onNavigate}
+      >
+        {item.label}
+      </a>
+    );
+  }
+  return (
+    <NavLink
+      to={item.path}
+      className={({ isActive }) => (isActive ? "active" : "")}
+      onClick={onNavigate}
+      end={item.path === "/"}
+    >
+      {item.label}
+    </NavLink>
+  );
+}
+
+// A stacked list of items for the mobile drawer. Recurses into nested children
+// so every level the desktop menu shows is also reachable on a phone.
+function MobileChildren({ items, onNavigate }) {
+  return (
+    <div className="mobile-submenu">
+      {items.map((item) => {
+        if (!hasChildren(item)) {
+          return (
+            <MobileNavLink
+              key={item.path || item.label}
+              item={item}
+              onNavigate={onNavigate}
+            />
+          );
+        }
+        return (
+          <div key={item.path || item.label}>
+            <span className="mobile-group-label">{item.label}</span>
+            <MobileChildren items={item.children} onNavigate={onNavigate} />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function Navbar() {
   const { site, nav, portals } = useSite();
   const [open, setOpen] = useState(false);
@@ -236,65 +289,52 @@ export default function Navbar() {
       <div id="mobile-menu" className={`mobile-menu ${open ? "is-open" : ""}`}>
         <ul>
           {nav.map((link) => {
-            if (hasChildren(link)) {
-              const isGroupLabel = !link.path;
+            const children = hasChildren(link);
+            const megaMenu =
+              Array.isArray(link.megaMenu) && link.megaMenu.length > 0;
+
+            if (!children && !megaMenu) {
               return (
                 <li key={link.path || link.label}>
-                  <div className="mobile-dropdown-group">
-                    {isGroupLabel ? (
-                      <span className="mobile-group-label">{link.label}</span>
-                    ) : (
-                      <NavLink
-                        to={link.path}
-                        className={({ isActive }) =>
-                          isActive ? "active" : ""
-                        }
-                        onClick={() => setOpen(false)}
-                      >
-                        {link.label}
-                      </NavLink>
-                    )}
-                    <div className="mobile-submenu">
-                      {link.children.map((child) =>
-                        isExternal(child.path) ? (
-                          <a
-                            key={`${child.label}-${child.path}`}
-                            href={child.path}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => setOpen(false)}
-                          >
-                            {child.label}
-                          </a>
-                        ) : (
-                          <NavLink
-                            key={`${child.label}-${child.path}`}
-                            to={child.path}
-                            className={({ isActive }) =>
-                              isActive ? "active" : ""
-                            }
-                            onClick={() => setOpen(false)}
-                          >
-                            {child.label}
-                          </NavLink>
-                        ),
-                      )}
-                    </div>
-                  </div>
+                  <MobileNavLink
+                    item={link}
+                    onNavigate={() => setOpen(false)}
+                  />
                 </li>
               );
             }
 
             return (
-              <li key={link.path}>
-                <NavLink
-                  to={link.path}
-                  className={({ isActive }) => (isActive ? "active" : "")}
-                  onClick={() => setOpen(false)}
-                  end={link.path === "/"}
-                >
-                  {link.label}
-                </NavLink>
+              <li
+                key={link.path || link.label}
+                className="mobile-dropdown-group"
+              >
+                {link.path ? (
+                  <MobileNavLink
+                    item={link}
+                    onNavigate={() => setOpen(false)}
+                  />
+                ) : (
+                  <span className="mobile-group-label">{link.label}</span>
+                )}
+                {megaMenu ? (
+                  link.megaMenu.map((column) => (
+                    <div key={column.heading}>
+                      <span className="mobile-group-label">
+                        {column.heading}
+                      </span>
+                      <MobileChildren
+                        items={column.items}
+                        onNavigate={() => setOpen(false)}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <MobileChildren
+                    items={link.children}
+                    onNavigate={() => setOpen(false)}
+                  />
+                )}
               </li>
             );
           })}

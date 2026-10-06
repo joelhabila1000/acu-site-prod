@@ -457,7 +457,8 @@
     transition: max-height 260ms ease;
   }
   .mobile-menu.is-open {
-    max-height: 640px;
+    max-height: calc(100svh - 96px);
+    overflow-y: auto;
   }
   .mobile-menu ul {
     padding: 10px 24px 0;
