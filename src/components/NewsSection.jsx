@@ -1,10 +1,24 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { useNews } from "../data/cms.js";
+import { useNewsEvents } from "../data/cms.js";
 import "./NewsSection.css";
 
+function formatDate(iso) {
+  if (!iso) return "";
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return String(iso);
+  return date.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
 export default function NewsSection() {
-  const news = useNews();
+  // Pull from the same source as the News & Events page so the home highlights
+  // and that page never drift apart.
+  const items = useNewsEvents();
+  const news = [...items].sort((a, b) => new Date(b.date) - new Date(a.date));
   const carouselRef = useRef(null);
 
   const scrollCarousel = (direction) => {
@@ -22,7 +36,7 @@ export default function NewsSection() {
 
   useEffect(() => {
     const container = carouselRef.current;
-    if (!container || news.length === 0) return undefined;
+    if (!container || items.length === 0) return undefined;
 
     // An earlier version cloned the cards to fake a seamless loop, which made
     // every story appear twice when there were only a few. Clear any left over.
@@ -48,7 +62,7 @@ export default function NewsSection() {
     }, 2500);
 
     return () => window.clearInterval(timer);
-  }, [news]);
+  }, [items]);
 
   return (
     <section className="section" aria-labelledby="news-heading">
@@ -56,7 +70,7 @@ export default function NewsSection() {
         <div className="news-head">
           <div>
             <p className="eyebrow">Highlights</p>
-            <h2 id="news-heading">Latest News from Campus</h2>
+            <h2 id="news-heading">Latest News &amp; Events</h2>
           </div>
           <div className="news-controls">
             <button
@@ -82,18 +96,32 @@ export default function NewsSection() {
         </div>
 
         <div className="news-carousel" ref={carouselRef}>
-          {news.map((n) => (
+          {news.map((item) => (
             <Link
-              key={`${n.title}-${n.date}`}
-              to={n.url}
+              key={item.slug || item.id}
+              to={`/news/${item.slug || item.id}`}
               className="news-card"
             >
-              <div className="news-image">
-                <img src={n.image} alt={n.title} loading="lazy" />
+              <div
+                className={`news-image ${item.image ? "" : "news-image--empty"}`}
+              >
+                {item.image ? (
+                  <img src={item.image} alt={item.title} loading="lazy" />
+                ) : (
+                  <span className="news-image-fallback">
+                    {item.type === "event" ? "Event" : "News"}
+                  </span>
+                )}
               </div>
               <div className="news-body">
-                <time>{n.date}</time>
-                <h3>{n.title}</h3>
+                <div className="news-meta">
+                  <span className={`news-tag news-tag--${item.type}`}>
+                    {item.type === "event" ? "Event" : "News"}
+                  </span>
+                  <time>{formatDate(item.date)}</time>
+                </div>
+                <h3>{item.title}</h3>
+                {item.excerpt && <p className="news-excerpt">{item.excerpt}</p>}
                 <span className="news-link">Read more →</span>
               </div>
             </Link>
