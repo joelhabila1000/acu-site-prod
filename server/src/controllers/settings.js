@@ -34,4 +34,11 @@ async function put(req, res) {
   res.json({ key: row.key, value: row.value });
 }
 
-module.exports = { getAll, put };
+function handle(fn) {
+  return (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
+}
+
+module.exports = {
+  getAll: handle(getAll),
+  put: handle(put),
+};

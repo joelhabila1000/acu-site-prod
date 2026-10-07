@@ -99,4 +99,14 @@ async function remove(req, res) {
   res.json({ success: true });
 }
 
-module.exports = { list, get, create, update, remove };
+function handle(fn) {
+  return (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
+}
+
+module.exports = {
+  list: handle(list),
+  get: handle(get),
+  create: handle(create),
+  update: handle(update),
+  remove: handle(remove),
+};
