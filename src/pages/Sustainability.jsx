@@ -371,19 +371,19 @@ export default function Sustainability() {
         </div>
       </section>
 
-      {documents.length > 0 && (
-        <section
-          className="section section-cream"
-          id="documents"
-          aria-labelledby="documents-heading"
-        >
-          <div className="container">
-            <div className="section-head center">
-              <p className="eyebrow">Downloads</p>
-              <h2 id="documents-heading">{s.documentsTitle}</h2>
-              {s.documentsIntro && <p>{s.documentsIntro}</p>}
-            </div>
+      <section
+        className="section section-cream"
+        id="documents"
+        aria-labelledby="documents-heading"
+      >
+        <div className="container">
+          <div className="section-head center">
+            <p className="eyebrow">Downloads</p>
+            <h2 id="documents-heading">{s.documentsTitle}</h2>
+            {s.documentsIntro && <p>{s.documentsIntro}</p>}
+          </div>
 
+          {documents.length > 0 ? (
             <div className="sustainability-documents">
               {documents.map((doc, index) => (
                 <Reveal key={doc.id} delay={(index % 3) * 80}>
@@ -416,9 +416,24 @@ export default function Sustainability() {
                 </Reveal>
               ))}
             </div>
-          </div>
-        </section>
-      )}
+          ) : (
+            <Reveal className="document-empty-state" delay={120}>
+              <div className="document-empty-box">
+                <span className="document-empty-icon" aria-hidden="true">
+                  PDF
+                </span>
+                <div>
+                  <h3>No sustainability reports uploaded yet</h3>
+                  <p>
+                    Reports, policies and annual documents will appear here once they
+                    are uploaded from the admin dashboard.
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+          )}
+        </div>
+      </section>
 
       <section className="section" aria-labelledby="involved-heading">
         <div className="container">
