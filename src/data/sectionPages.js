@@ -247,6 +247,53 @@ export const SECTION_PAGES = {
     ],
   },
 
+  "/admissions/part-time": {
+    crumb: "Admissions",
+    title: "Part-Time & Conversion Programmes",
+    lede: "Flexible study for working professionals, and conversion routes that open a degree to holders of HND and other qualifications.",
+    sections: [
+      {
+        heading: "Part-time study",
+        paragraphs: [
+          "ACU runs part-time degree programmes for working professionals and others who cannot study full-time. Lectures are scheduled for weekends and evenings so you can keep working while you earn your degree.",
+        ],
+        list: [
+          "Weekend and evening lectures",
+          "The same curriculum and standards as the full-time programme",
+          "Study across our campuses and study centres",
+          "Suited to teachers, civil servants and other professionals",
+        ],
+      },
+      {
+        heading: "Conversion programmes",
+        paragraphs: [
+          "A conversion programme admits holders of Higher National Diploma (HND) and other relevant qualifications into a degree programme, usually at an advanced level. It is the recognised route for HND holders to convert to a bachelor's degree, while graduates changing discipline can do so through a Postgraduate Diploma.",
+        ],
+        list: [
+          "HND to degree (top-up) conversion",
+          "Postgraduate Diploma (PGD) as a conversion route",
+          "Credit transfer assessed on a case-by-case basis",
+        ],
+      },
+      {
+        heading: "How to apply",
+        paragraphs: [
+          "Apply online through the University admission portal. Have your certificates, transcripts and NYSC documents ready, and contact the Admissions Office if you are unsure whether your qualification is eligible for conversion.",
+        ],
+      },
+    ],
+    facts: [
+      ["Mode", "Weekend & evening / part-time"],
+      ["Conversion", "HND holders and graduates changing discipline"],
+      ["Award", "Bachelor's degree / Postgraduate Diploma"],
+    ],
+    cta: {
+      label: "Apply Now",
+      href: "https://apply.acu.edu.ng/",
+      external: true,
+    },
+  },
+
   "/admissions/international-students": {
     crumb: "Admissions",
     title: "International Students",

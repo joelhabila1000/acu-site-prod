@@ -90,7 +90,7 @@ const NAV_LINKS = [
     children: [
       { label: "Postgraduate School", path: "/portal/postgraduate" },
       { label: "Undergraduate Study", path: "https://apply.acu.edu.ng/" },
-      { label: "Part-Time Study", path: "/admissions" },
+      { label: "Part-Time Study", path: "/admissions/part-time" },
       { label: "Foundation Programme", path: "https://cpfpapply.acu.edu.ng" },
     ],
   },
@@ -109,7 +109,7 @@ const NAV_LINKS = [
 const PORTALS = [
   { label: "Postgraduate", url: "/portal/postgraduate" },
   { label: "Undergraduate", url: "https://apply.acu.edu.ng/" },
-  { label: "Part-Time", url: "/admissions" },
+  { label: "Part-Time", url: "/admissions/part-time" },
   { label: "Foundation", url: "https://cpfpapply.acu.edu.ng" },
 ];
 
