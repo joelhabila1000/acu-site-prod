@@ -354,3 +354,125 @@ model Publication {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
+
+// ------------------------------------------------------------- Hostel portal
+
+model Hostel {
+  id           Int      @id @default(autoincrement())
+  name         String
+  slug         String   @unique
+  // male | female | mixed — used to filter what a student may apply for.
+  gender       String   @default("mixed")
+  description  String?  @db.Text
+  image        String?
+  location     String?
+  status       String   @default("active")
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  rooms        Room[]
+  applications HostelApplication[]
+}
+
+model Room {
+  id           Int      @id @default(autoincrement())
+  hostelId     Int
+  hostel       Hostel   @relation(fields: [hostelId], references: [id], onDelete: Cascade)
+  name         String
+  capacity     Int      @default(0)
+  status       String   @default("active")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  beds         Bed[]
+  applications HostelApplication[]
+  maintenance  MaintenanceRequest[]
+}
+
+model Bed {
+  id           Int      @id @default(autoincrement())
+  roomId       Int
+  room         Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  label        String
+  // available | occupied | maintenance
+  status       String   @default("available")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  applications HostelApplication[]
+  maintenance  MaintenanceRequest[]
+}
+
+model StudentAccount {
+  id           Int       @id @default(autoincrement())
+  name         String
+  matricNumber String    @unique
+  email        String    @unique
+  passwordHash String
+  phone        String?
+  gender       String?
+  level        String?
+  department   String?
+  status       String    @default("active")
+  lastLogin    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  applications HostelApplication[]
+  payments     HostelPayment[]
+  maintenance  MaintenanceRequest[]
+}
+
+model HostelApplication {
+  id              Int             @id @default(autoincrement())
+  studentId       Int
+  student         StudentAccount  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  hostelId        Int?
+  hostel          Hostel?         @relation(fields: [hostelId], references: [id])
+  roomId          Int?
+  room            Room?           @relation(fields: [roomId], references: [id])
+  bedId           Int?
+  bed             Bed?            @relation(fields: [bedId], references: [id])
+  session         String
+  // pending | approved | rejected | allocated | checked_in | checked_out
+  status          String          @default("pending")
+  preferredGender String?
+  notes           String?         @db.Text
+  adminNote       String?         @db.Text
+  checkedInAt     DateTime?
+  checkedOutAt    DateTime?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  payments        HostelPayment[]
+}
+
+model HostelPayment {
+  id            Int               @id @default(autoincrement())
+  studentId     Int
+  student       StudentAccount    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  applicationId Int?
+  application   HostelApplication? @relation(fields: [applicationId], references: [id])
+  // Whole naira; the portal tracks status rather than processing card payments.
+  amount        Int               @default(0)
+  reference     String?
+  method        String?
+  // pending | paid | failed
+  status        String            @default("pending")
+  paidAt        DateTime?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+}
+
+model MaintenanceRequest {
+  id          Int             @id @default(autoincrement())
+  studentId   Int?
+  student     StudentAccount? @relation(fields: [studentId], references: [id])
+  roomId      Int?
+  room        Room?           @relation(fields: [roomId], references: [id])
+  bedId       Int?
+  bed         Bed?            @relation(fields: [bedId], references: [id])
+  category    String          @default("general")
+  description String          @db.Text
+  priority    String          @default("normal")
+  // open | in_progress | resolved
+  status      String          @default("open")
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}

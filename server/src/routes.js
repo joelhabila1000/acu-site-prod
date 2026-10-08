@@ -18,6 +18,11 @@ const lectures = require("./controllers/lectures");
 const messages = require("./controllers/messages");
 const programmes = require("./controllers/programmes");
 const publications = require("./controllers/publications");
+const studentAuth = require("./controllers/studentAuth");
+const hostel = require("./controllers/hostel");
+const hostelApplications = require("./controllers/hostelApplications");
+const hostelPayments = require("./controllers/hostelPayments");
+const maintenance = require("./controllers/maintenance");
 
 // Auth
 router.post("/auth/login", auth.loginLimiter, auth.login);
@@ -136,5 +141,84 @@ router.get("/users/:id", auth.requireAdmin, users.get);
 router.post("/users", auth.requireAdmin, users.create);
 router.put("/users/:id", auth.requireAdmin, users.update);
 router.delete("/users/:id", auth.requireAdmin, users.remove);
+
+// --------------------------------------------------------- Hostel portal
+// Student accounts
+router.post(
+  "/hostel/auth/register",
+  studentAuth.loginLimiter,
+  studentAuth.register,
+);
+router.post("/hostel/auth/login", studentAuth.loginLimiter, studentAuth.login);
+router.get("/hostel/auth/me", studentAuth.requireStudent, studentAuth.me);
+
+// Public hostel catalogue
+router.get("/hostels", hostel.listHostels);
+
+// Student self-service
+router.get(
+  "/hostel/applications/mine",
+  studentAuth.requireStudent,
+  hostelApplications.listMine,
+);
+router.post(
+  "/hostel/applications",
+  studentAuth.requireStudent,
+  hostelApplications.createMine,
+);
+router.get(
+  "/hostel/payments/mine",
+  studentAuth.requireStudent,
+  hostelPayments.listMine,
+);
+router.post(
+  "/hostel/payments",
+  studentAuth.requireStudent,
+  hostelPayments.createMine,
+);
+router.get(
+  "/hostel/maintenance/mine",
+  studentAuth.requireStudent,
+  maintenance.listMine,
+);
+router.post(
+  "/hostel/maintenance",
+  studentAuth.requireStudent,
+  maintenance.createMine,
+);
+
+// Staff — hostels, rooms and beds
+router.get("/hostels/:id", auth.requireEditor, hostel.getHostel);
+router.post("/hostels", auth.requireEditor, hostel.createHostel);
+router.put("/hostels/:id", auth.requireEditor, hostel.updateHostel);
+router.delete("/hostels/:id", auth.requireEditor, hostel.removeHostel);
+
+router.get("/rooms", auth.requireEditor, hostel.listRooms);
+router.post("/rooms", auth.requireEditor, hostel.createRoom);
+router.put("/rooms/:id", auth.requireEditor, hostel.updateRoom);
+router.delete("/rooms/:id", auth.requireEditor, hostel.removeRoom);
+
+router.get("/beds", auth.requireEditor, hostel.listBeds);
+router.post("/beds", auth.requireEditor, hostel.createBed);
+router.put("/beds/:id", auth.requireEditor, hostel.updateBed);
+router.delete("/beds/:id", auth.requireEditor, hostel.removeBed);
+
+// Staff — applications, payments, maintenance
+router.get("/hostel-applications", auth.requireEditor, hostelApplications.list);
+router.get("/hostel-applications/:id", auth.requireEditor, hostelApplications.get);
+router.put("/hostel-applications/:id", auth.requireEditor, hostelApplications.update);
+router.delete(
+  "/hostel-applications/:id",
+  auth.requireEditor,
+  hostelApplications.remove,
+);
+
+router.get("/hostel-payments", auth.requireEditor, hostelPayments.list);
+router.put("/hostel-payments/:id", auth.requireEditor, hostelPayments.update);
+router.delete("/hostel-payments/:id", auth.requireEditor, hostelPayments.remove);
+
+router.get("/maintenance", auth.requireEditor, maintenance.list);
+router.put("/maintenance/:id", auth.requireEditor, maintenance.update);
+router.delete("/maintenance/:id", auth.requireEditor, maintenance.remove);
 
 module.exports = router;
