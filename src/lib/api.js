@@ -4,6 +4,8 @@
 // - Split hosting (static site on Hostinger, API on Vercel): set
 //   VITE_API_BASE=https://your-api.vercel.app at build time.
 
+import { upload as putToBlob } from "@vercel/blob/client";
+
 export const API_BASE = (import.meta.env.VITE_API_BASE || "").replace(/\/+$/, "");
 
 // Uploaded assets are stored as paths (`/uploads/<file>`), but older rows may
@@ -75,4 +77,21 @@ export async function apiUpload(path, file, { token } = {}) {
     throw new Error((payload && payload.error) || `Upload failed (${res.status})`);
   }
   return parse(res);
+}
+
+// Uploads a file straight from the browser to Vercel Blob. The bytes never pass
+// through the API, so they are not subject to the serverless request-body limit
+// that rejects large uploads with a bare 413. The API route only issues the
+// short-lived token. Throws if the host has no Blob store configured, which
+// lets the caller fall back to apiUpload().
+export async function apiClientUpload(path, file, { token, kind = "image" } = {}) {
+  const safe = String(file.name || "file").replace(/[^\w.-]+/g, "_");
+  const blob = await putToBlob(`acu/${Date.now()}-${safe}`, file, {
+    access: "public",
+    contentType: file.type || undefined,
+    handleUploadUrl: `${API_BASE}${path}`,
+    clientPayload: JSON.stringify({ kind }),
+    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+  });
+  return { url: blob.url, name: file.name, size: file.size, type: file.type };
 }

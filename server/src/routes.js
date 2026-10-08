@@ -128,6 +128,9 @@ router.delete("/publications/:id", auth.requireEditor, publications.remove);
 
 // Uploads
 router.post("/uploads", auth.requireEditor, uploads.parseUpload, uploads.put);
+// Grants the browser a token to upload straight to Vercel Blob, sidestepping
+// the serverless request-body limit. Falls back to /uploads when unavailable.
+router.post("/uploads/client", auth.requireEditor, uploads.clientUploadToken);
 router.post(
   "/uploads/document",
   auth.requireEditor,

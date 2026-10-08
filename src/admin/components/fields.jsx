@@ -9,6 +9,23 @@ function toDateInput(value) {
   return date.toISOString().slice(0, 10);
 }
 
+// Prefers a direct browser→Vercel Blob upload so large files are not stopped by
+// the serverless request-body limit, then falls back to the multipart endpoint
+// on hosts without a Blob store (e.g. local dev writing to disk).
+async function uploadWithFallback({
+  authClientUpload,
+  authUpload,
+  kind,
+  serverPath,
+  file,
+}) {
+  try {
+    return await authClientUpload("/api/uploads/client", file, kind);
+  } catch {
+    return await authUpload(serverPath, file);
+  }
+}
+
 function TagsField({ field, value, onChange }) {
   const text = Array.isArray(value) ? value.join("\n") : value || "";
   return (
@@ -33,7 +50,7 @@ function TagsField({ field, value, onChange }) {
 }
 
 function ImageField({ field, value, onChange }) {
-  const { authUpload } = useAuth();
+  const { authUpload, authClientUpload } = useAuth();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -43,7 +60,13 @@ function ImageField({ field, value, onChange }) {
     setBusy(true);
     setError("");
     try {
-      const res = await authUpload("/api/uploads", file);
+      const res = await uploadWithFallback({
+        authClientUpload,
+        authUpload,
+        kind: "image",
+        serverPath: "/api/uploads",
+        file,
+      });
       onChange(res.url);
     } catch (err) {
       setError(err.message || "Upload failed");
@@ -85,7 +108,7 @@ function ImageField({ field, value, onChange }) {
 // the Document model stores. ResourcePage expands the object onto the mapped
 // fields on save, and rebuilds it when opening a row for edit.
 function FileField({ field, value, onChange }) {
-  const { authUpload } = useAuth();
+  const { authUpload, authClientUpload } = useAuth();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -97,7 +120,13 @@ function FileField({ field, value, onChange }) {
     setBusy(true);
     setError("");
     try {
-      const res = await authUpload("/api/uploads/document", file);
+      const res = await uploadWithFallback({
+        authClientUpload,
+        authUpload,
+        kind: "document",
+        serverPath: "/api/uploads/document",
+        file,
+      });
       onChange({ url: res.url, name: res.name, size: res.size, type: res.type });
     } catch (err) {
       setError(err.message || "Upload failed");

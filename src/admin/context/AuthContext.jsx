@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
-import { apiGet, apiSend, apiUpload } from "../../lib/api.js";
+import { apiGet, apiSend, apiUpload, apiClientUpload } from "../../lib/api.js";
 import { clearSession, getToken, getUser, setSession } from "../lib/auth.js";
 
 const AuthContext = createContext(null);
@@ -67,6 +67,14 @@ export function AuthProvider({ children }) {
     [runAuthed],
   );
 
+  // Direct-to-Blob upload; the file bypasses the API entirely. Used in
+  // preference to authUpload so large files clear the serverless body limit.
+  const authClientUpload = useCallback(
+    (path, file, kind) =>
+      runAuthed((active) => apiClientUpload(path, file, { token: active, kind })),
+    [runAuthed],
+  );
+
   const value = useMemo(
     () => ({
       token,
@@ -78,8 +86,19 @@ export function AuthProvider({ children }) {
       authGet,
       authSend,
       authUpload,
+      authClientUpload,
     }),
-    [token, user, sessionExpired, login, logout, authGet, authSend, authUpload],
+    [
+      token,
+      user,
+      sessionExpired,
+      login,
+      logout,
+      authGet,
+      authSend,
+      authUpload,
+      authClientUpload,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,9 +1,10 @@
 const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
+const { handleUpload } = require("@vercel/blob/client");
 
 const IMAGE_MAX_MB =
-  Number(process.env.UPLOAD_MAX_MB) > 0 ? Number(process.env.UPLOAD_MAX_MB) : 4;
+  Number(process.env.UPLOAD_MAX_MB) > 0 ? Number(process.env.UPLOAD_MAX_MB) : 10;
 
 // Reports and other documents are allowed to be larger than images.
 const DOCUMENT_MAX_MB =
@@ -47,6 +48,42 @@ function parseWith(instance, maxMb) {
 
 const parseUpload = parseWith(imageUpload, IMAGE_MAX_MB);
 const parseDocumentUpload = parseWith(documentUpload, DOCUMENT_MAX_MB);
+
+// Direct (client-side) uploads. Serverless hosts — Vercel in particular — cap a
+// request body at 4.5 MB, so a file sent through the API is rejected before it
+// reaches us. Instead the browser asks this route for a short-lived token and
+// then PUTs the file straight to Vercel Blob, bypassing the function entirely.
+// The size limit is enforced by the token. Returns 501 when Blob is not
+// configured so the client can fall back to the multipart routes above.
+async function clientUploadToken(req, res) {
+  const token = process.env.BLOB_READ_WRITE_TOKEN;
+  if (!token) {
+    return res
+      .status(501)
+      .json({ error: "Direct uploads are not configured on this host" });
+  }
+
+  try {
+    const result = await handleUpload({
+      token,
+      request: req,
+      body: req.body,
+      onBeforeGenerateToken: async (_pathname, clientPayload) => {
+        let kind = "image";
+        try {
+          kind = JSON.parse(clientPayload || "{}").kind || "image";
+        } catch {
+          kind = "image";
+        }
+        const maxMb = kind === "document" ? DOCUMENT_MAX_MB : IMAGE_MAX_MB;
+        return { maximumSizeInBytes: maxMb * 1024 * 1024, addRandomSuffix: true };
+      },
+    });
+    res.json(result);
+  } catch (error) {
+    res.status(400).json({ error: error.message || "Upload failed" });
+  }
+}
 
 // Writes the buffer to Vercel Blob when configured, otherwise to local disk,
 // and returns the URL of the stored file. Local uploads come back as a path
@@ -108,4 +145,10 @@ async function putDocument(req, res) {
   }
 }
 
-module.exports = { parseUpload, put, parseDocumentUpload, putDocument };
+module.exports = {
+  parseUpload,
+  put,
+  parseDocumentUpload,
+  putDocument,
+  clientUploadToken,
+};
