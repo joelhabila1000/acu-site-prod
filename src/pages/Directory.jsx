@@ -12,6 +12,11 @@ const AREAS = [
     desc: "Find academic and administrative staff by name, faculty or department, with contact details for each member of staff.",
   },
   {
+    label: "Library",
+    path: "/directory/library",
+    desc: "Explore the library's collections, reading rooms, services and study resources for students and staff.",
+  },
+  {
     label: "Gallery",
     path: "/gallery",
     desc: "Photographs from around the Ajayi Crowther University campuses — academic life, ceremonies and everyday campus scenes.",

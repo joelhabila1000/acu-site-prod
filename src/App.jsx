@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import AnnouncementBar from "./components/AnnouncementBar.jsx";
 import Footer from "./components/Footer.jsx";
+import Preloader from "./components/Preloader.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
@@ -28,6 +29,7 @@ import PrincipalOfficerDetail from "./pages/PrincipalOfficerDetail.jsx";
 import InauguralLectures from "./pages/InauguralLectures.jsx";
 import SectionPage from "./pages/SectionPage.jsx";
 import Publications from "./pages/Publications.jsx";
+import Library from "./pages/Library.jsx";
 import { useRefreshContent } from "./data/cms.js";
 
 export default function App() {
@@ -35,6 +37,25 @@ export default function App() {
   const isAdminRoute = location.pathname.startsWith("/admin");
   const refreshContent = useRefreshContent();
   const wasAdminRoute = useRef(isAdminRoute);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    const finishLoading = () => {
+      if (!isMounted) return;
+      setIsLoading(false);
+      document.body.style.overflow = "";
+    };
+
+    document.body.style.overflow = "hidden";
+    const timer = window.setTimeout(finishLoading, 1400);
+
+    return () => {
+      isMounted = false;
+      document.body.style.overflow = "";
+      window.clearTimeout(timer);
+    };
+  }, []);
 
   // CMS content is pulled once per page load, so edits made in the admin would
   // otherwise not show until a hard refresh. Re-pull when the editor leaves the
@@ -50,6 +71,7 @@ export default function App() {
 
   return (
     <>
+      <Preloader active={isLoading} />
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
@@ -81,6 +103,8 @@ export default function App() {
           {/* Section pages must precede /news/:slug or they'd be read as articles */}
           <Route path="/admissions/:page" element={<SectionPage />} />
           <Route path="/resources" element={<SectionPage />} />
+          <Route path="/resources/library" element={<Library />} />
+          <Route path="/directory/library" element={<Library />} />
           <Route path="/resources/:page" element={<SectionPage />} />
           <Route path="/student-life" element={<SectionPage />} />
           <Route path="/student-life/:page" element={<SectionPage />} />

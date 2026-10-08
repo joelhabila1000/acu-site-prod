@@ -102,6 +102,7 @@ export const NAV_LINKS = [
     path: "/directory",
     children: [
       { label: "Staff Directory", path: "/directory/staff" },
+      { label: "Library", path: "/directory/library" },
       { label: "Gallery", path: "/gallery" },
     ],
   },
