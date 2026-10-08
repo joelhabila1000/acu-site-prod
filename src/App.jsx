@@ -14,6 +14,7 @@ import Contact from "./pages/Contact.jsx";
 import PrincipalOfficers from "./pages/PrincipalOfficers.jsx";
 import AboutDetail from "./pages/AboutDetail.jsx";
 import PostgraduatePortal from "./pages/PostgraduatePortal.jsx";
+import HostelPortal from "./pages/HostelPortal.jsx";
 import Admin from "./admin/AdminApp.jsx";
 import Maintenance from "./pages/Maintenance.jsx";
 import NotFound from "./pages/NotFound.jsx";
@@ -37,9 +38,14 @@ export default function App() {
   const isAdminRoute = location.pathname.startsWith("/admin");
   const refreshContent = useRefreshContent();
   const wasAdminRoute = useRef(isAdminRoute);
-  const [isLoading, setIsLoading] = useState(true);
+
+  // The splash is for a cold load of the homepage only — never for another
+  // route, and never again when navigating back to home later in the session.
+  const splashOnLoad = useRef(location.pathname === "/").current;
+  const [isLoading, setIsLoading] = useState(splashOnLoad);
 
   useEffect(() => {
+    if (!splashOnLoad) return;
     let isMounted = true;
     const finishLoading = () => {
       if (!isMounted) return;
@@ -55,7 +61,7 @@ export default function App() {
       document.body.style.overflow = "";
       window.clearTimeout(timer);
     };
-  }, []);
+  }, [splashOnLoad]);
 
   // CMS content is pulled once per page load, so edits made in the admin would
   // otherwise not show until a hard refresh. Re-pull when the editor leaves the
@@ -98,6 +104,7 @@ export default function App() {
             path="/portal/postgraduate/*"
             element={<PostgraduatePortal />}
           />
+          <Route path="/portal/hostel/*" element={<HostelPortal />} />
           <Route path="/portal/:portal" element={<Maintenance />} />
           <Route path="/news" element={<NewsEventsPage />} />
           {/* Section pages must precede /news/:slug or they'd be read as articles */}
