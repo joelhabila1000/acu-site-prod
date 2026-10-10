@@ -107,6 +107,7 @@ export const NAV_LINKS = [
       { label: "Gallery", path: "/gallery" },
     ],
   },
+  { label: "CDEL", path: "https://cdel.acu.edu.ng" },
   { label: "Contact", path: "/contact" },
 ];
 

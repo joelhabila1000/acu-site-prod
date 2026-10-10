@@ -200,13 +200,23 @@ export default function Navbar() {
               if (!children) {
                 return (
                   <li key={link.path || link.label}>
-                    <NavLink
-                      to={link.path}
-                      className={({ isActive }) => (isActive ? "active" : "")}
-                      end={link.path === "/"}
-                    >
-                      {link.label}
-                    </NavLink>
+                    {isExternal(link.path) ? (
+                      <a
+                        href={link.path}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <NavLink
+                        to={link.path}
+                        className={({ isActive }) => (isActive ? "active" : "")}
+                        end={link.path === "/"}
+                      >
+                        {link.label}
+                      </NavLink>
+                    )}
                   </li>
                 );
               }
