@@ -32,6 +32,7 @@ import InauguralLectures, { LectureDetail } from "./pages/InauguralLectures.jsx"
 import SectionPage from "./pages/SectionPage.jsx";
 import Publications from "./pages/Publications.jsx";
 import Library from "./pages/Library.jsx";
+import Repository from "./pages/Repository.jsx";
 import { useRefreshContent } from "./data/cms.js";
 
 export default function App() {
@@ -118,6 +119,14 @@ export default function App() {
           <Route path="/resources" element={<SectionPage />} />
           <Route path="/resources/library" element={<Library />} />
           <Route path="/directory/library" element={<Library />} />
+          <Route
+            path="/directory/library/repository"
+            element={<Repository />}
+          />
+          <Route
+            path="/resources/library/repository"
+            element={<Repository />}
+          />
           <Route path="/resources/:page" element={<SectionPage />} />
           <Route path="/student-life" element={<SectionPage />} />
           <Route path="/student-life/:page" element={<SectionPage />} />

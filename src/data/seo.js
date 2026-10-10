@@ -71,6 +71,16 @@ export const ROUTE_META = {
     description:
       "The library's collections, reading rooms, services and study resources for students and staff of Ajayi Crowther University, Oyo.",
   },
+  "/directory/library/repository": {
+    title: "Institutional Repository | Ajayi Crowther University, Oyo",
+    description:
+      "The ACU Institutional Repository — open-access theses, dissertations, journal articles and research outputs from Ajayi Crowther University, Oyo.",
+  },
+  "/resources/library/repository": {
+    title: "Institutional Repository | Ajayi Crowther University, Oyo",
+    description:
+      "The ACU Institutional Repository — open-access theses, dissertations, journal articles and research outputs from Ajayi Crowther University, Oyo.",
+  },
   "/resources": {
     title: "Resources | Ajayi Crowther University, Oyo",
     description:

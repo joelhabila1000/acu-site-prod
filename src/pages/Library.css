@@ -220,3 +220,38 @@
     display: grid;
   }
 }
+
+/* ---------- Institutional repository ---------- */
+.library-repo-inner {
+  display: grid;
+  grid-template-columns: 1.4fr 0.6fr;
+  gap: 28px;
+  align-items: center;
+}
+
+.library-repo-inner h2 {
+  margin: 0 0 10px;
+}
+
+.library-repo-inner p {
+  margin: 0;
+  color: var(--ink-500);
+  line-height: 1.7;
+}
+
+.library-repo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: flex-end;
+}
+
+@media (max-width: 900px) {
+  .library-repo-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .library-repo-actions {
+    justify-content: flex-start;
+  }
+}

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./Library.css";
 
 const serviceCards = [
@@ -114,6 +115,24 @@ export default function Library() {
                 <p>{card.text}</p>
               </article>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section library-repo">
+        <div className="container library-repo-inner">
+          <div>
+            <p className="eyebrow">Open access</p>
+            <h2>ACU Institutional Repository</h2>
+            <p>
+              Theses, dissertations, journal articles and other research outputs
+              from ACU staff and students — preserved and free to search and read.
+            </p>
+          </div>
+          <div className="library-repo-actions">
+            <Link className="btn btn-navy" to="/directory/library/repository">
+              Explore the Repository
+            </Link>
           </div>
         </div>
       </section>

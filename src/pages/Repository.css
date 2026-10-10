@@ -1,0 +1,288 @@
+/* =========================================================
+   Institutional Repository page
+   Reuses the shared tokens and .section rhythm from index.css.
+   ========================================================= */
+
+.repository-page {
+  background: #f6f4ef;
+}
+
+.repository-page .section-navy .eyebrow {
+  color: var(--gold-400);
+}
+
+.repository-page .section-navy .section-head p {
+  color: rgba(248, 244, 233, 0.82);
+}
+
+/* ---------- Hero ---------- */
+.repository-hero {
+  position: relative;
+  overflow: hidden;
+  color: var(--white);
+  padding: 64px 0 56px;
+  background: linear-gradient(120deg, #0b2038 0%, #123a5e 55%, #0b2038 100%);
+}
+
+.repository-hero-inner {
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.repository-tag {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.repository-hero-copy h1 {
+  margin: 0;
+  color: var(--white);
+  font-size: clamp(2.4rem, 5.5vw, 4rem);
+  line-height: 1.03;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+}
+
+.repository-hero-copy p {
+  max-width: 60ch;
+  margin: 18px 0 0;
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.repository-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.repository-hero-visual {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+}
+
+.repository-shelf {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.repository-shelf span {
+  display: block;
+  height: 44px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(237, 201, 137, 0.28);
+}
+
+/* ---------- About ---------- */
+.repository-about-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.repository-about-copy h2 {
+  margin: 0 0 14px;
+  font-size: clamp(1.9rem, 2.8vw, 2.6rem);
+}
+
+.repository-about-copy p {
+  margin: 0 0 14px;
+  color: var(--ink-500);
+  line-height: 1.8;
+}
+
+.repository-about-card {
+  padding: 26px 24px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+.repository-about-card h3 {
+  margin: 0 0 16px;
+  font-size: 1.05rem;
+  color: var(--navy-900);
+}
+
+.repository-about-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  display: grid;
+  gap: 10px;
+}
+
+.repository-about-card li {
+  position: relative;
+  padding-left: 24px;
+  color: var(--ink-500);
+  line-height: 1.6;
+}
+
+.repository-about-card li::before {
+  content: "\2713";
+  position: absolute;
+  left: 0;
+  color: var(--gold-500);
+  font-weight: 800;
+}
+
+/* ---------- Collections ---------- */
+.repository-collections {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.repository-collections > .reveal {
+  display: flex;
+}
+
+.repository-card {
+  flex: 1;
+  padding: 26px 24px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--gold-500);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.repository-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.repository-card h3 {
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+  color: var(--navy-900);
+}
+
+.repository-card p {
+  margin: 0;
+  color: var(--ink-500);
+  line-height: 1.7;
+}
+
+/* ---------- Deposit steps ---------- */
+.repository-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.repository-steps > .reveal {
+  display: flex;
+}
+
+.repository-step {
+  flex: 1;
+  padding: 26px 22px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-md);
+}
+
+.repository-step-num {
+  display: block;
+  margin-bottom: 14px;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--gold-400);
+}
+
+.repository-step h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  color: var(--white);
+}
+
+.repository-step p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(248, 244, 233, 0.82);
+}
+
+/* ---------- Call to action ---------- */
+.repository-cta-inner {
+  display: grid;
+  grid-template-columns: 1.4fr 0.6fr;
+  gap: 28px;
+  align-items: center;
+}
+
+.repository-cta-inner h2 {
+  margin: 0 0 10px;
+}
+
+.repository-cta-inner p {
+  margin: 0;
+  color: var(--ink-500);
+  line-height: 1.7;
+}
+
+.repository-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: flex-end;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1020px) {
+  .repository-collections,
+  .repository-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .repository-hero-inner,
+  .repository-about-grid,
+  .repository-cta-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .repository-hero-visual {
+    display: none;
+  }
+
+  .repository-cta-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 620px) {
+  .repository-collections,
+  .repository-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .repository-hero {
+    padding: 48px 0 40px;
+  }
+
+  .repository-hero-actions .btn {
+    width: 100%;
+  }
+}
