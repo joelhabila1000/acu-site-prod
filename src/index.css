@@ -58,7 +58,7 @@ body {
   inset: 0;
   display: grid;
   place-items: center;
-  background: radial-gradient(circle at top, #6f2142 0%, #0c2340 45%, #081326 100%);
+  background: radial-gradient(circle at top, #c9a227 0%, #0c2340 48%, #081326 100%);
   z-index: 9999;
   animation: fadeOutPreloader 0.45s ease 1.05s forwards;
 }

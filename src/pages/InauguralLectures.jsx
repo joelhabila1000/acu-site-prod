@@ -1,6 +1,9 @@
+import { Link, useParams } from "react-router-dom";
 import PageHeader from "../components/PageHeader.jsx";
 import { useLectures } from "../data/cms.js";
 import "./InauguralLectures.css";
+
+const LIST_PATH = "/academics/inaugural-lectures";
 
 function formatDate(value) {
   if (!value) return "";
@@ -25,11 +28,25 @@ function ordinalSuffix(n) {
   return suffixes[(remainder - 20) % 10] || suffixes[remainder] || suffixes[0];
 }
 
-export default function InauguralLectures() {
-  const lectures = useLectures() || [];
-  const ordered = [...lectures]
+function lecturePath(lecture) {
+  return `${LIST_PATH}/${lecture.number}`;
+}
+
+function visibleLectures(lectures) {
+  return [...(lectures || [])]
     .filter((lecture) => lecture.status !== "hidden")
     .sort((a, b) => (b.number ?? 0) - (a.number ?? 0));
+}
+
+function writeUpFor(lecture, ordinal) {
+  if (lecture.summary) return lecture.summary;
+  const who = lecture.lecturer || "the inaugural lecturer";
+  const where = lecture.venue ? ` at ${lecture.venue}` : "";
+  return `The ${ordinal} Professorial Inaugural Lecture of Ajayi Crowther University was delivered by ${who}${where}. A full write-up of the lecture, together with the paper itself, is published here for students, staff and the general public.`;
+}
+
+export default function InauguralLectures() {
+  const lectures = visibleLectures(useLectures());
 
   return (
     <>
@@ -52,16 +69,7 @@ export default function InauguralLectures() {
             otherwise announced.
           </p>
           <p className="lectures-note">
-            Full texts and downloadable proceedings are published by the
-            university as they become available.{" "}
-            <a
-              href="https://acu.edu.ng/inaugural-lectures/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Visit the official archive
-            </a>
-            .
+            Open any lecture to read a short write-up and the full paper.
           </p>
         </div>
       </section>
@@ -71,18 +79,19 @@ export default function InauguralLectures() {
           <div className="lectures-head">
             <h2>Upcoming and Recent Lectures</h2>
             <span className="lectures-count">
-              {ordered.length} {ordered.length === 1 ? "entry" : "entries"}
+              {lectures.length} {lectures.length === 1 ? "entry" : "entries"}
             </span>
           </div>
 
-          {ordered.length === 0 ? (
+          {lectures.length === 0 ? (
             <p className="lectures-empty">
               No inaugural lectures have been published yet.
             </p>
           ) : (
             <ol className="lectures-list">
-              {ordered.map((lecture) => {
+              {lectures.map((lecture) => {
                 const upcoming = isUpcoming(lecture.date);
+                const path = lecturePath(lecture);
                 return (
                   <li className="lecture-card" key={lecture.id ?? lecture.number}>
                     <div className="lecture-number" aria-hidden="true">
@@ -102,7 +111,9 @@ export default function InauguralLectures() {
                       </div>
 
                       <h3 className="lecture-title">
-                        {lecture.title || "Title to be confirmed"}
+                        <Link to={path}>
+                          {lecture.title || "Title to be confirmed"}
+                        </Link>
                       </h3>
 
                       {lecture.lecturer && (
@@ -121,22 +132,143 @@ export default function InauguralLectures() {
                         <p className="lecture-venue">{lecture.venue}</p>
                       )}
 
-                      {lecture.fileUrl && (
-                        <a
-                          className="btn btn-navy btn-sm lecture-download"
-                          href={lecture.fileUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Download proceedings
-                        </a>
-                      )}
+                      <div className="lecture-actions">
+                        <Link className="btn btn-navy btn-sm" to={path}>
+                          Read lecture
+                        </Link>
+                        {lecture.fileUrl && (
+                          <a
+                            className="btn btn-outline btn-sm"
+                            href={lecture.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            download
+                          >
+                            Download PDF
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </li>
                 );
               })}
             </ol>
           )}
+        </div>
+      </section>
+    </>
+  );
+}
+
+export function LectureDetail() {
+  const { number } = useParams();
+  const lecture = visibleLectures(useLectures()).find(
+    (item) => String(item.number) === String(number),
+  );
+
+  if (!lecture) {
+    return (
+      <>
+        <PageHeader
+          crumb="Academics"
+          title="Lecture not found"
+          lede="We couldn't find that inaugural lecture. It may have been removed or is not published yet."
+        />
+        <section className="section">
+          <div className="container">
+            <Link className="btn btn-navy" to={LIST_PATH}>
+              Back to Inaugural Lectures
+            </Link>
+          </div>
+        </section>
+      </>
+    );
+  }
+
+  const ordinal = `${lecture.number}${ordinalSuffix(lecture.number)}`;
+
+  return (
+    <>
+      <PageHeader
+        crumb="Inaugural Lectures"
+        title={lecture.title || `${ordinal} Inaugural Lecture`}
+        lede={
+          lecture.lecturer
+            ? `Delivered by ${lecture.lecturer}${
+                lecture.lecturerRole ? ` — ${lecture.lecturerRole}` : ""
+              }`
+            : undefined
+        }
+      />
+
+      <section className="section">
+        <div className="container lecture-detail">
+          <div className="lecture-detail-meta">
+            <span className="lecture-detail-chip">
+              {ordinal} Inaugural Lecture
+            </span>
+            {formatDate(lecture.date) && (
+              <span className="lecture-detail-chip">
+                {formatDate(lecture.date)}
+              </span>
+            )}
+            {lecture.venue && (
+              <span className="lecture-detail-chip">{lecture.venue}</span>
+            )}
+          </div>
+
+          <div className="lecture-detail-grid">
+            <article className="lecture-detail-writing">
+              <p className="eyebrow">About this lecture</p>
+              <h2>Lecture overview</h2>
+              <p>{writeUpFor(lecture, ordinal)}</p>
+            </article>
+
+            <aside className="lecture-detail-doc">
+              <p className="eyebrow">Lecture document</p>
+              <h2>Read the paper</h2>
+
+              {lecture.fileUrl ? (
+                <>
+                  <div className="lecture-pdf">
+                    <iframe
+                      src={lecture.fileUrl}
+                      title={`${lecture.title || `${ordinal} lecture`} — document`}
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="lecture-doc-actions">
+                    <a
+                      className="btn btn-navy btn-sm"
+                      href={lecture.fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download
+                    >
+                      Download PDF
+                    </a>
+                    <a
+                      className="btn btn-outline btn-sm"
+                      href={lecture.fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Open in new tab
+                    </a>
+                  </div>
+                </>
+              ) : (
+                <p className="lecture-doc-empty">
+                  The paper for this lecture has not been published yet. Check
+                  back soon — it will appear here to read and download.
+                </p>
+              )}
+            </aside>
+          </div>
+
+          <Link className="lecture-back" to={LIST_PATH}>
+            ← Back to all inaugural lectures
+          </Link>
         </div>
       </section>
     </>

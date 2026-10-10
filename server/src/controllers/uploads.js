@@ -12,14 +12,122 @@ const DOCUMENT_MAX_MB =
     ? Number(process.env.UPLOAD_DOC_MAX_MB)
     : 20;
 
+// Uploaded files are served back to browsers, so only content types that cannot
+// execute script when opened are accepted. SVG and HTML are deliberately left
+// out: both can carry script and would be served from the storage host.
+const IMAGE_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "image/avif",
+];
+
+const DOCUMENT_TYPES = [
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "text/plain",
+  "text/csv",
+];
+
+function typeFilter(allowed) {
+  return (_req, file, cb) => {
+    if (allowed.includes(file.mimetype)) return cb(null, true);
+    cb(new Error(`Unsupported file type: ${file.mimetype || "unknown"}`));
+  };
+}
+
+// multer's fileFilter only sees the client-declared MIME type, which is trivial
+// to spoof. These signatures let us confirm the actual bytes match a type we
+// accept, so a renamed script is rejected before it is ever stored.
+const OLE = Buffer.from([0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1]);
+const ZIP = Buffer.from([0x50, 0x4b, 0x03, 0x04]);
+const SIGNATURES = {
+  "image/jpeg": [Buffer.from([0xff, 0xd8, 0xff])],
+  "image/png": [Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])],
+  "image/gif": [Buffer.from("GIF87a"), Buffer.from("GIF89a")],
+  "application/pdf": [Buffer.from("%PDF-")],
+  "application/msword": [OLE],
+  "application/vnd.ms-excel": [OLE],
+  "application/vnd.ms-powerpoint": [OLE],
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [ZIP],
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [ZIP],
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation": [ZIP],
+};
+
+function contentMatches(buffer, mimetype) {
+  if (!buffer || buffer.length === 0) return false;
+
+  const signatures = SIGNATURES[mimetype];
+  if (signatures) {
+    return signatures.some(
+      (sig) =>
+        buffer.length >= sig.length && buffer.subarray(0, sig.length).equals(sig),
+    );
+  }
+
+  if (mimetype === "image/webp") {
+    return (
+      buffer.length >= 12 &&
+      buffer.subarray(0, 4).toString("ascii") === "RIFF" &&
+      buffer.subarray(8, 12).toString("ascii") === "WEBP"
+    );
+  }
+
+  if (mimetype === "image/avif") {
+    return (
+      buffer.length >= 12 &&
+      buffer.subarray(4, 8).toString("ascii") === "ftyp" &&
+      ["avif", "avis", "mif1", "msf1"].includes(
+        buffer.subarray(8, 12).toString("ascii"),
+      )
+    );
+  }
+
+  // Plain text has no signature; a NUL byte in the header means the file is
+  // binary (a renamed executable, say), not text.
+  if (mimetype === "text/plain" || mimetype === "text/csv") {
+    return !buffer.subarray(0, 1024).includes(0);
+  }
+
+  return false;
+}
+
+// The stored extension comes from the validated MIME type, never from the name
+// the client sent — so a mislabelled upload can never land on disk as `.html`
+// and be served as a web page by express.static.
+const EXTENSIONS = {
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/gif": "gif",
+  "image/webp": "webp",
+  "image/avif": "avif",
+  "application/pdf": "pdf",
+  "application/msword": "doc",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
+  "application/vnd.ms-excel": "xls",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
+  "application/vnd.ms-powerpoint": "ppt",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation": "pptx",
+  "text/plain": "txt",
+  "text/csv": "csv",
+};
+
 const imageUpload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: IMAGE_MAX_MB * 1024 * 1024 },
+  fileFilter: typeFilter(IMAGE_TYPES),
 });
 
 const documentUpload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: DOCUMENT_MAX_MB * 1024 * 1024 },
+  fileFilter: typeFilter(DOCUMENT_TYPES),
 });
 
 // Overridable so a host with a persistent disk (not a serverless bundle) can
@@ -27,21 +135,34 @@ const documentUpload = multer({
 const LOCAL_DIR =
   process.env.UPLOAD_DIR || path.join(__dirname, "..", "..", "..", "uploads");
 
-function safeName(original) {
-  return `${Date.now()}-${String(original).replace(/[^\w.-]+/g, "_")}`;
+function safeName(file) {
+  const extension = EXTENSIONS[file.mimetype] || "bin";
+  const base =
+    String(file.originalname || "file")
+      .replace(/\.[^./\\]*$/, "")
+      .replace(/[^\w-]+/g, "_")
+      .slice(0, 80) || "file";
+  return `${Date.now()}-${base}.${extension}`;
 }
 
 // Wraps multer so size/field errors return JSON instead of a generic 500.
 function parseWith(instance, maxMb) {
   return (req, res, next) => {
     instance.single("file")(req, res, (err) => {
-      if (!err) return next();
-      if (err.code === "LIMIT_FILE_SIZE") {
-        return res
-          .status(413)
-          .json({ error: `File is too large. Maximum size is ${maxMb} MB.` });
+      if (err) {
+        if (err.code === "LIMIT_FILE_SIZE") {
+          return res
+            .status(413)
+            .json({ error: `File is too large. Maximum size is ${maxMb} MB.` });
+        }
+        return res.status(400).json({ error: err.message || "Upload failed" });
       }
-      return res.status(400).json({ error: err.message || "Upload failed" });
+      if (req.file && !contentMatches(req.file.buffer, req.file.mimetype)) {
+        return res
+          .status(400)
+          .json({ error: "The file contents do not match its declared type." });
+      }
+      return next();
     });
   };
 }
@@ -75,8 +196,13 @@ async function clientUploadToken(req, res) {
         } catch {
           kind = "image";
         }
-        const maxMb = kind === "document" ? DOCUMENT_MAX_MB : IMAGE_MAX_MB;
-        return { maximumSizeInBytes: maxMb * 1024 * 1024, addRandomSuffix: true };
+        const isDocument = kind === "document";
+        const maxMb = isDocument ? DOCUMENT_MAX_MB : IMAGE_MAX_MB;
+        return {
+          allowedContentTypes: isDocument ? DOCUMENT_TYPES : IMAGE_TYPES,
+          maximumSizeInBytes: maxMb * 1024 * 1024,
+          addRandomSuffix: true,
+        };
       },
     });
     res.json(result);
@@ -96,7 +222,7 @@ async function storeFile(file) {
   if (token) {
     const { put: blobPut } = require("@vercel/blob");
     const blob = await blobPut(
-      `acu/${safeName(file.originalname)}`,
+      `acu/${safeName(file)}`,
       file.buffer,
       { access: "public", token, contentType: file.mimetype },
     );
@@ -104,7 +230,7 @@ async function storeFile(file) {
   }
 
   fs.mkdirSync(LOCAL_DIR, { recursive: true });
-  const name = safeName(file.originalname);
+  const name = safeName(file);
   fs.writeFileSync(path.join(LOCAL_DIR, name), file.buffer);
   return `/uploads/${name}`;
 }

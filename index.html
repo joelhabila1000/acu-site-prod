@@ -13,7 +13,7 @@
     <!-- Basic hardening: restrict what the page is allowed to load/execute -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self'; connect-src 'self' https:; frame-src https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+      content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self'; connect-src 'self' https:; frame-src 'self' https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com https://*.public.blob.vercel-storage.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
     />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
@@ -23,6 +23,53 @@
       name="description"
       content="Ajayi Crowther University (ACU), Oyo — a faith-based Anglican university in Oyo State, Nigeria. Explore admissions, faculties, and campus life."
     />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://ajayi-crowther-university.vercel.app/" />
+
+    <!-- Social sharing -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Ajayi Crowther University, Oyo" />
+    <meta property="og:title" content="Ajayi Crowther University, Oyo | Raising Godly Intellectuals" />
+    <meta
+      property="og:description"
+      content="A faith-based Anglican university in Oyo State, Nigeria. Explore admissions, faculties, and campus life."
+    />
+    <meta property="og:url" content="https://ajayi-crowther-university.vercel.app/" />
+    <meta property="og:image" content="https://ajayi-crowther-university.vercel.app/og-image.jpg" />
+    <meta property="og:image:width" content="1920" />
+    <meta property="og:image:height" content="1280" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Ajayi Crowther University, Oyo | Raising Godly Intellectuals" />
+    <meta
+      name="twitter:description"
+      content="A faith-based Anglican university in Oyo State, Nigeria. Explore admissions, faculties, and campus life."
+    />
+    <meta name="twitter:image" content="https://ajayi-crowther-university.vercel.app/og-image.jpg" />
+
+    <!-- Structured data for search engines -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "CollegeOrUniversity",
+        "name": "Ajayi Crowther University, Oyo",
+        "alternateName": "ACU Oyo",
+        "url": "https://ajayi-crowther-university.vercel.app/",
+        "logo": "https://ajayi-crowther-university.vercel.app/og-image.jpg",
+        "motto": "Scientia Probitas",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "PMB 1066, Oyo Town",
+          "addressRegion": "Oyo State",
+          "addressCountry": "NG"
+        },
+        "sameAs": [
+          "https://x.com/ACUOyo",
+          "https://www.facebook.com/ACU.Oyo/",
+          "https://www.youtube.com/channel/UC7pciK9IUlqgP3VziMDmvPA",
+          "https://www.instagram.com/acuoyo/"
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

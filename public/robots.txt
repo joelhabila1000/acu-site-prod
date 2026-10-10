@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Private areas — nothing here should be indexed.
+Disallow: /admin
+Disallow: /portal/hostel/dashboard
+Disallow: /portal/hostel/apply
+
+Sitemap: https://ajayi-crowther-university.vercel.app/sitemap.xml

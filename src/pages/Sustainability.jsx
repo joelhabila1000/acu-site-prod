@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Counter from "../components/Counter.jsx";
 import Reveal from "../components/Reveal.jsx";
@@ -9,7 +8,35 @@ import "./Sustainability.css";
 
 const SDG_SITE = "https://www.un.org/sustainabledevelopment";
 const goalUrl = (number) => `https://sdgs.un.org/goals/goal${number}`;
-const HERO_INTERVAL = 6000;
+
+// Official UN SDG colours (goal 1 → 17). Rendered as the hero's colour ribbon,
+// so the hero speaks the goals' own visual language instead of repeating the
+// campus photography used elsewhere on the page.
+const SDG_COLORS = [
+  "#E5243B",
+  "#DDA63A",
+  "#4C9F38",
+  "#C5192D",
+  "#FF3A21",
+  "#26BDE2",
+  "#FCC30B",
+  "#A21942",
+  "#FD6925",
+  "#DD1367",
+  "#FD9D24",
+  "#BF8B2E",
+  "#3F7E44",
+  "#0A97D9",
+  "#56C02B",
+  "#00689D",
+  "#19486A",
+];
+
+// Official goal icon artwork, keyed by SDG number, from the bundled goal list.
+const GOAL_IMAGES = Object.fromEntries(
+  SDG_GOALS.map((goal) => [goal.number, goal.image]),
+);
+const goalImage = (number) => GOAL_IMAGES[Number(number)] || "";
 
 // Short badge for a download card: the file extension if we have one,
 // otherwise the MIME subtype.
@@ -20,79 +47,75 @@ function documentLabel(doc) {
   return (sub || "FILE").toUpperCase().slice(0, 4);
 }
 
+// Turns any YouTube link (watch, share, embed, shorts) into the embed player
+// URL. A start time in the link (e.g. `&t=31s`) is carried over. A bare id is
+// accepted too.
+function youtubeEmbedUrl(url) {
+  if (!url) return "";
+  const text = String(url);
+  const match = text.match(
+    /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/,
+  );
+  const id = match ? match[1] : /^[A-Za-z0-9_-]{6,}$/.test(text) ? text : "";
+  if (!id) return "";
+  const start = youtubeStartSeconds(text);
+  return `https://www.youtube.com/embed/${id}${start ? `?start=${start}` : ""}`;
+}
+
+// Reads the `t` (start time) parameter, which YouTube writes as plain seconds
+// (`t=31`) or as `h`/`m`/`s` parts (`t=1m30s`).
+function youtubeStartSeconds(url) {
+  const match = url.match(/[?&]t=([0-9hms]+)/i);
+  if (!match) return 0;
+  const value = match[1].toLowerCase();
+  if (/^\d+$/.test(value)) return Number(value);
+  const parts = value.match(/\d+[hms]/g) || [];
+  return parts.reduce((total, part) => {
+    const n = parseInt(part, 10);
+    if (part.endsWith("h")) return total + n * 3600;
+    if (part.endsWith("m")) return total + n * 60;
+    return total + n;
+  }, 0);
+}
+
 export default function Sustainability() {
   const s = useSustainability();
   const documents = useDocuments();
-  const slides = s.heroSlides;
-  const [active, setActive] = useState(0);
-
-  useEffect(() => {
-    if (slides.length < 2) return undefined;
-    const timer = window.setInterval(() => {
-      setActive((current) => (current + 1) % slides.length);
-    }, HERO_INTERVAL);
-    return () => window.clearInterval(timer);
-  }, [slides.length]);
-
-  const slide = slides[active % (slides.length || 1)] || {
-    eyebrow: "",
-    title: "",
-    lede: "",
-    image: "",
-    imageKey: "",
-  };
+  // One static composition: the first hero entry supplies the copy, and the SDG
+  // colour ribbon carries the theme instead of a rotating photo carousel.
+  const hero = (s.heroSlides && s.heroSlides[0]) || {};
+  const videoSrc = youtubeEmbedUrl(s.videoUrl);
 
   return (
     <div className="sustainability">
       <section className="sustainability-hero" aria-labelledby="hero-heading">
-        <div className="sustainability-hero-media" aria-hidden="true">
-          {slides.map((item, index) => {
-            const src = item.image || IMAGES[item.imageKey];
-            if (!src) return null;
-            return (
-              <img
-                key={item.imageKey || item.title || index}
-                src={src}
-                alt=""
-                className={index === active ? "is-active" : ""}
-                loading={index === 0 ? "eager" : "lazy"}
-                fetchPriority={index === 0 ? "high" : "low"}
-              />
-            );
-          })}
-          <div className="sustainability-hero-overlay" />
-        </div>
+        <div className="sustainability-hero-pattern" aria-hidden="true" />
 
         <div className="container sustainability-hero-content">
-          <div className="sustainability-hero-text" key={active}>
-            <p className="eyebrow sustainability-hero-eyebrow">{slide.eyebrow}</p>
-            <h1 id="hero-heading">{slide.title}</h1>
-            <p className="sustainability-hero-lede">{slide.lede}</p>
-          </div>
+          <div className="sustainability-hero-text">
+            {hero.eyebrow && (
+              <p className="eyebrow sustainability-hero-eyebrow">
+                {hero.eyebrow}
+              </p>
+            )}
+            <h1 id="hero-heading">{hero.title}</h1>
+            {hero.lede && <p className="sustainability-hero-lede">{hero.lede}</p>}
 
-          <div className="sustainability-hero-actions">
-            <a className="btn btn-gold" href="#the-goals">
-              Explore the Goals
-            </a>
-            <Link className="btn btn-outline" to="/contact">
-              Get Involved
-            </Link>
-          </div>
-
-          {slides.length > 1 && (
-            <div className="sustainability-hero-dots" aria-label="Highlights">
-              {slides.map((item, index) => (
-                <button
-                  key={item.imageKey || item.title || index}
-                  type="button"
-                  aria-label={`Show highlight ${index + 1}`}
-                  aria-current={index === active}
-                  className={index === active ? "is-active" : ""}
-                  onClick={() => setActive(index)}
-                />
-              ))}
+            <div className="sustainability-hero-actions">
+              <a className="btn btn-gold" href="#the-goals">
+                Explore the Goals
+              </a>
+              <Link className="btn btn-outline" to="/contact">
+                Get Involved
+              </Link>
             </div>
-          )}
+          </div>
+        </div>
+
+        <div className="sustainability-hero-ribbon" aria-hidden="true">
+          {SDG_COLORS.map((color) => (
+            <span key={color} style={{ background: color }} />
+          ))}
         </div>
 
         <span className="sustainability-scroll-cue" aria-hidden="true" />
@@ -125,13 +148,40 @@ export default function Sustainability() {
             delay={140}
           >
             <img
-              src={s.introImage || IMAGES.campusWide}
-              alt="Green spaces and campus buildings at Ajayi Crowther University"
+              src={s.introImage || IMAGES.sdgWheel}
+              alt="United Nations Sustainable Development Goals wheel"
               loading="lazy"
             />
           </Reveal>
         </div>
       </section>
+
+      {videoSrc && (
+        <section
+          className="section section-navy"
+          aria-labelledby="video-heading"
+        >
+          <div className="container">
+            <div className="section-head center">
+              <p className="eyebrow">Watch</p>
+              <h2 id="video-heading">{s.videoTitle}</h2>
+              {s.videoIntro && <p>{s.videoIntro}</p>}
+            </div>
+
+            <Reveal variant="scale" delay={140}>
+              <div className="sustainability-video">
+                <iframe
+                  src={videoSrc}
+                  title={s.videoTitle || "Sustainability video"}
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      )}
 
       <section
         className="section section-cream"
@@ -191,24 +241,39 @@ export default function Sustainability() {
           </div>
 
           <div className="sustainability-priorities">
-            {s.priorities.map((priority, index) => (
-              <Reveal key={priority.title} delay={(index % 3) * 80}>
-                <article className="priority-card">
-                  {priority.goal && (
-                    <a
-                      className="sdg-chip"
-                      href={goalUrl(priority.goal)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      SDG {priority.goal}
-                    </a>
-                  )}
-                  <h3>{priority.title}</h3>
-                  <p>{priority.desc}</p>
-                </article>
-              </Reveal>
-            ))}
+            {s.priorities.map((priority, index) => {
+              const icon = goalImage(priority.goal);
+              return (
+                <Reveal key={priority.title} delay={(index % 3) * 80}>
+                  <article className="priority-card">
+                    {priority.goal && (
+                      <a
+                        className="priority-card-goal"
+                        href={goalUrl(priority.goal)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`SDG ${priority.goal}`}
+                      >
+                        {icon ? (
+                          <img
+                            className="sdg-icon"
+                            src={icon}
+                            alt=""
+                            width="64"
+                            height="64"
+                            loading="lazy"
+                          />
+                        ) : (
+                          `SDG ${priority.goal}`
+                        )}
+                      </a>
+                    )}
+                    <h3>{priority.title}</h3>
+                    <p>{priority.desc}</p>
+                  </article>
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </section>

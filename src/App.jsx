@@ -5,6 +5,7 @@ import AnnouncementBar from "./components/AnnouncementBar.jsx";
 import Footer from "./components/Footer.jsx";
 import Preloader from "./components/Preloader.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
+import RouteMeta from "./components/RouteMeta.jsx";
 import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
 import Academics from "./pages/Academics.jsx";
@@ -27,7 +28,7 @@ import Sustainability from "./pages/Sustainability.jsx";
 import Directory from "./pages/Directory.jsx";
 import StaffDirectory from "./pages/StaffDirectory.jsx";
 import PrincipalOfficerDetail from "./pages/PrincipalOfficerDetail.jsx";
-import InauguralLectures from "./pages/InauguralLectures.jsx";
+import InauguralLectures, { LectureDetail } from "./pages/InauguralLectures.jsx";
 import SectionPage from "./pages/SectionPage.jsx";
 import Publications from "./pages/Publications.jsx";
 import Library from "./pages/Library.jsx";
@@ -82,6 +83,7 @@ export default function App() {
         Skip to main content
       </a>
       <ScrollToTop />
+      <RouteMeta />
       <Navbar />
       <AnnouncementBar />
       <main id="main-content">
@@ -94,6 +96,10 @@ export default function App() {
           <Route
             path="/academics/inaugural-lectures"
             element={<InauguralLectures />}
+          />
+          <Route
+            path="/academics/inaugural-lectures/:number"
+            element={<LectureDetail />}
           />
           <Route path="/faculties/:slug" element={<FacultyPage />} />
           <Route path="/admissions" element={<Admissions />} />

@@ -12,6 +12,7 @@ import heroCampusFour from "../assets/IMG_3318.JPG";
 import heroCampusSix from "../assets/IMG_3405.JPG";
 import heroCampusFive from "../assets/IMG_3413.JPG";
 import studentsImage from "../assets/students.jpg";
+import sdgWheelImage from "../assets/sdg/United Nations SDG Wheel Infographic.png";
 
 export const SITE = {
   name: "Ajayi Crowther University",
@@ -115,6 +116,7 @@ export const PORTALS = [
   { label: "Undergraduate", url: "https://apply.acu.edu.ng/" },
   { label: "Part-Time", url: "/admissions/part-time" },
   { label: "Foundation", url: "https://cpfpapply.acu.edu.ng" },
+  { label: "CDEL", url: "https://cdel.acu.edu.ng" },
 ];
 
 export const STATS = [
@@ -821,6 +823,10 @@ export const SUSTAINABILITY = {
     "This page sets out the goals we have chosen to prioritise, how we are responding to them, and how students, staff, alumni and partners can take part.",
   ],
   introImage: "",
+  videoTitle: "Sustainability in Focus",
+  videoIntro:
+    "A short film on how Ajayi Crowther University is turning the Sustainable Development Goals into action across our campuses and communities.",
+  videoUrl: "https://www.youtube.com/watch?v=0XTBYMfZyrM&t=31s",
   stats: [
     { value: 17, label: "Goals adopted by all UN Member States" },
     { value: 6, label: "Goals identified as ACU priorities" },
@@ -1201,4 +1207,5 @@ export const IMAGES = {
   vc: vchanImage,
   aboutSecondary: campusWideImage,
   campusWide: campusWideImage,
+  sdgWheel: sdgWheelImage,
 };

@@ -108,9 +108,11 @@ const NAV_LINKS = [
 
 const PORTALS = [
   { label: "Postgraduate", url: "/portal/postgraduate" },
+  { label: "Hostel", url: "/portal/hostel" },
   { label: "Undergraduate", url: "https://apply.acu.edu.ng/" },
   { label: "Part-Time", url: "/admissions/part-time" },
   { label: "Foundation", url: "https://cpfpapply.acu.edu.ng" },
+  { label: "CDEL", url: "https://cdel.acu.edu.ng" },
 ];
 
 const STATS = [
@@ -200,6 +202,10 @@ const SUSTAINABILITY = {
     "This page sets out the goals we have chosen to prioritise, how we are responding to them, and how students, staff, alumni and partners can take part.",
   ],
   introImage: "",
+  videoTitle: "Sustainability in Focus",
+  videoIntro:
+    "A short film on how Ajayi Crowther University is turning the Sustainable Development Goals into action across our campuses and communities.",
+  videoUrl: "https://www.youtube.com/watch?v=0XTBYMfZyrM&t=31s",
   stats: [
     { value: 17, label: "Goals adopted by all UN Member States" },
     { value: 6, label: "Goals identified as ACU priorities" },

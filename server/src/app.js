@@ -1,11 +1,55 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
 const fs = require("fs");
 const path = require("path");
 const routes = require("./routes");
 
 const app = express();
+
+// Baseline security headers on every response. On Vercel the static site also
+// gets these from vercel.json; on any other host (a VM running this server
+// directly) helmet is what protects both the API and the bundled SPA. The CSP
+// mirrors vercel.json — keep the two in step.
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        imgSrc: ["'self'", "https:", "data:"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        fontSrc: ["'self'", "data:"],
+        scriptSrc: ["'self'"],
+        connectSrc: ["'self'", "https:"],
+        frameSrc: [
+          "'self'",
+          "https://www.google.com",
+          "https://www.youtube.com",
+          "https://www.youtube-nocookie.com",
+          "https://*.public.blob.vercel-storage.com",
+        ],
+        objectSrc: ["'none'"],
+        baseUri: ["'self'"],
+        formAction: ["'self'"],
+        frameAncestors: ["'self'"],
+      },
+    },
+    // Uploads are served from the API origin and embedded by the site even when
+    // the two are hosted separately, so they must stay cross-origin readable.
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    referrerPolicy: { policy: "strict-origin-when-cross-origin" },
+  }),
+);
+
+// helmet ships no Permissions-Policy; send the same one vercel.json uses.
+app.use((req, res, next) => {
+  res.setHeader(
+    "Permissions-Policy",
+    "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+  );
+  next();
+});
 
 // Behind a reverse proxy (Hostinger, nginx, …) Express must trust the
 // X-Forwarded-* headers, or every request appears to come from the proxy — the

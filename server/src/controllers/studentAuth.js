@@ -1,9 +1,9 @@
 const prisma = require("../lib/prisma");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const rateLimit = require("express-rate-limit");
 
-const SECRET = process.env.AUTH_SECRET || "dev-secret";
+const SECRET = require("../lib/authSecret");
 
 // Only failed attempts count, so a correct password never locks the account out.
 const loginLimiter = rateLimit({

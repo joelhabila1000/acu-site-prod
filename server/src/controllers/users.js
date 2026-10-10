@@ -1,5 +1,5 @@
 const prisma = require('../lib/prisma')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 
 async function list(req,res){
   const { q, page = 1, per = 20 } = req.query

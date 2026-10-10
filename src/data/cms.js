@@ -484,9 +484,11 @@ export function ContentProvider({ children }) {
           lecturer: row.lecturer || "",
           lecturerRole: row.lecturerRole || "",
           title: row.title || "",
+          summary: row.summary || "",
           date: row.lectureDate || "",
           venue: row.venue || "",
           fileUrl: row.fileUrl || "",
+          status: row.status || "published",
         }));
       }
 

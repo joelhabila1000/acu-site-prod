@@ -149,6 +149,14 @@ const SECTIONS = [
         help: "One paragraph per line.",
       },
       { name: "introImage", label: "Intro section — image", type: "image" },
+      { name: "videoTitle", label: "Video — heading", type: "text" },
+      { name: "videoIntro", label: "Video — intro", type: "textarea" },
+      {
+        name: "videoUrl",
+        label: "Video — YouTube link",
+        type: "text",
+        help: "Paste a YouTube link (watch, share or embed). Leave blank to hide the video.",
+      },
       {
         name: "stats",
         label: "Statistics",

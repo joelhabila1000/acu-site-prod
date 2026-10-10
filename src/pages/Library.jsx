@@ -1,5 +1,3 @@
-import { useDocuments } from "../data/cms.js";
-import { formatFileSize } from "../lib/format.js";
 import "./Library.css";
 
 const serviceCards = [
@@ -27,20 +25,7 @@ const libraryHours = [
   ["Sunday", "Closed"],
 ];
 
-function documentLabel(doc) {
-  const ext = (doc.fileName || "").split(".").pop();
-  if (ext && ext !== doc.fileName && ext.length <= 5) return ext.toUpperCase();
-  const sub = (doc.fileType || "").split("/").pop();
-  return (sub || "FILE").toUpperCase().slice(0, 4);
-}
-
 export default function Library() {
-  const documents = useDocuments() || [];
-  const libraryDocs = documents.filter((doc) => {
-    const haystack = `${doc.title} ${doc.description || ""} ${doc.category || ""}`.toLowerCase();
-    return /library|catalog|resource|guide|reading|manual|report|research/i.test(haystack);
-  });
-
   return (
     <div className="library-page">
       <section className="library-hero">
@@ -56,9 +41,6 @@ export default function Library() {
               reading, innovation, research and lifelong learning in every faculty.
             </p>
             <div className="library-cta-row">
-              <a className="btn btn-gold" href="#library-resources">
-                Explore resources
-              </a>
               <a className="btn btn-outline-light" href="/contact">
                 Contact library
               </a>
@@ -128,66 +110,6 @@ export default function Library() {
               </article>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="section" id="library-resources">
-        <div className="container">
-          <div className="section-head center">
-            <p className="eyebrow">Resources</p>
-            <h2>Library documents and reading materials</h2>
-          </div>
-
-          {libraryDocs.length > 0 ? (
-            <div className="library-documents">
-              {libraryDocs.map((doc, index) => (
-                <a
-                  key={doc.id || `${doc.title}-${index}`}
-                  className="library-document-card"
-                  href={doc.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  download={doc.fileName || undefined}
-                >
-                  <span className="library-document-badge" aria-hidden="true">
-                    {documentLabel(doc)}
-                  </span>
-
-                  <div className="library-document-body">
-                    {doc.category && (
-                      <span className="library-document-tag">{doc.category}</span>
-                    )}
-                    <h3>{doc.title}</h3>
-                    {doc.description && <p>{doc.description}</p>}
-                    <span className="library-document-meta">
-                      {[doc.date, formatFileSize(doc.fileSize)]
-                        .filter(Boolean)
-                        .join(" · ")}
-                    </span>
-                  </div>
-
-                  <span className="library-document-arrow" aria-hidden="true">
-                    ↓
-                  </span>
-                </a>
-              ))}
-            </div>
-          ) : (
-            <div className="library-empty-state">
-              <div className="library-empty-box">
-                <span className="library-empty-icon" aria-hidden="true">
-                  LIB
-                </span>
-                <div>
-                  <h3>No library materials uploaded yet</h3>
-                  <p>
-                    Library guides, catalogues and related resources will appear here
-                    once they are added from the admin dashboard.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </section>
     </div>

@@ -1,9 +1,9 @@
 const prisma = require("../lib/prisma");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const rateLimit = require("express-rate-limit");
 
-const SECRET = process.env.AUTH_SECRET || "dev-secret";
+const SECRET = require("../lib/authSecret");
 
 // Roles that may manage content, and the one that may also manage users and
 // site settings. Roles live in the database, so register any new privileged

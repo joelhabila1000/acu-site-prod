@@ -94,7 +94,12 @@ function ImageField({ field, value, onChange }) {
           />
           <label className="btn secondary upload-btn">
             {busy ? "Uploading…" : "Upload"}
-            <input type="file" accept="image/*" onChange={handleFile} hidden />
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
+              onChange={handleFile}
+              hidden
+            />
           </label>
         </div>
       </div>
@@ -162,7 +167,12 @@ function FileField({ field, value, onChange }) {
           />
           <label className="btn secondary upload-btn">
             {busy ? "Uploading…" : "Upload file"}
-            <input type="file" onChange={handleFile} hidden />
+            <input
+              type="file"
+              accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv"
+              onChange={handleFile}
+              hidden
+            />
           </label>
         </div>
 

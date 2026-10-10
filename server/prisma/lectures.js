@@ -49,11 +49,10 @@ module.exports.INAUGURAL_LECTURES = [
   {
     number: 25,
     lecturer: "Prof. Joseph Afolabi Ibikunle",
-    lecturerRole: "",
-    title: null,
-    lectureDate: null,
-    venue: "",
-    status: "hidden",
+    lecturerRole: "Professor of Health Economics",
+    title: "All for Life: The Calling of a Health Economist",
+    lectureDate: "2025-08-25",
+    venue: "Modupe and Folorunso Alakija Faculty of Law Auditorium",
   },
   {
     number: 24,
