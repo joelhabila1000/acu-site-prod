@@ -82,6 +82,16 @@ const NAV_LINKS = [
       { label: "Inaugural Lectures", path: "/academics/inaugural-lectures" },
     ],
   },
+  {
+    // Placeholder menu — the items are stubs (`#`) to be filled in later.
+    label: "Programmes",
+    children: [
+      { label: "Undergraduate Programme", path: "#" },
+      { label: "Postgraduate Programme", path: "#" },
+      { label: "Centre for Continuing Education (CCED)", path: "#" },
+      { label: "Open Distance Learning Centre", path: "#" },
+    ],
+  },
   { label: "Admissions", path: "/admissions" },
   {
     // A grouping label rather than a destination — no `path`, so the navbar
