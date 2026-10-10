@@ -82,26 +82,17 @@ const NAV_LINKS = [
       { label: "Inaugural Lectures", path: "/academics/inaugural-lectures" },
     ],
   },
+  { label: "Admissions", path: "/admissions" },
   {
-    // Placeholder menu — the items are stubs (`#`) to be filled in later.
-    label: "Programmes",
+    // A grouping label rather than a destination — no `path`, so the navbar
+    // renders it as a non-clickable heading that reveals the menu on hover.
+    // The items are placeholder stubs (`#`) to be filled in later.
+    label: "Student Services",
     children: [
       { label: "Undergraduate Programme", path: "#" },
       { label: "Postgraduate Programme", path: "#" },
       { label: "Centre for Continuing Education (CCED)", path: "#" },
       { label: "Open Distance Learning Centre", path: "#" },
-    ],
-  },
-  { label: "Admissions", path: "/admissions" },
-  {
-    // A grouping label rather than a destination — no `path`, so the navbar
-    // renders it as a non-clickable heading that reveals the menu on hover.
-    label: "Student Services",
-    children: [
-      { label: "Postgraduate School", path: "/portal/postgraduate" },
-      { label: "Undergraduate Study", path: "https://apply.acu.edu.ng/" },
-      { label: "Part-Time Study", path: "/admissions/part-time" },
-      { label: "Foundation Programme", path: "https://cpfpapply.acu.edu.ng" },
     ],
   },
   { label: "Sustainability", path: "/sustainability" },
