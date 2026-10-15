@@ -92,7 +92,7 @@ const NAV_LINKS = [
       { label: "Undergraduate Programme", path: "#" },
       { label: "Postgraduate Programme", path: "#" },
       { label: "Centre for Continuing Education (CCED)", path: "#" },
-      { label: "Open Distance Learning Centre", path: "#" },
+      { label: "CDEL", path: "https://cdel.acu.edu.ng" },
     ],
   },
   { label: "Sustainability", path: "/sustainability" },
@@ -104,7 +104,6 @@ const NAV_LINKS = [
       { label: "Gallery", path: "/gallery" },
     ],
   },
-  { label: "CDEL", path: "https://cdel.acu.edu.ng" },
   { label: "Contact", path: "/contact" },
 ];
 

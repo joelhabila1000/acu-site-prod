@@ -6,6 +6,7 @@ const content = require("./seedContent");
 const { INAUGURAL_LECTURES } = require("./lectures");
 const { POSTGRADUATE_PROGRAMMES } = require("./programmes");
 const { PUBLICATIONS } = require("./publications");
+const { seedLibrary } = require("./seedLibrary");
 
 function slug(value) {
   return slugify(value, { lower: true, strict: true });
@@ -271,6 +272,7 @@ async function main() {
   await seedAnnouncements();
   await seedPostgraduateProgrammes();
   await seedPublications();
+  await seedLibrary(prisma);
   console.log("Seeding completed");
 }
 

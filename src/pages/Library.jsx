@@ -42,14 +42,12 @@ export default function Library() {
               reading, innovation, research and lifelong learning in every faculty.
             </p>
             <div className="library-cta-row">
-              <a
+              <Link
                 className="btn btn-outline-light"
-                href="https://repository.acu.edu.ng"
-                target="_blank"
-                rel="noopener noreferrer"
+                to="/directory/library/repository"
               >
                 View Repository
-              </a>
+              </Link>
             </div>
           </div>
 

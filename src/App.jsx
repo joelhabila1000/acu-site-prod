@@ -33,11 +33,15 @@ import SectionPage from "./pages/SectionPage.jsx";
 import Publications from "./pages/Publications.jsx";
 import Library from "./pages/Library.jsx";
 import Repository from "./pages/Repository.jsx";
+import RepositoryItem from "./pages/RepositoryItem.jsx";
+import LibraryApp from "./library/LibraryApp.jsx";
 import { useRefreshContent } from "./data/cms.js";
 
 export default function App() {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
+  const isLibraryRoute =
+    location.pathname === "/library" || location.pathname.startsWith("/library/");
   const refreshContent = useRefreshContent();
   const wasAdminRoute = useRef(isAdminRoute);
 
@@ -75,6 +79,17 @@ export default function App() {
 
   if (isAdminRoute) {
     return <Admin />;
+  }
+
+  // The library renders its own shell (its header, footer and type) so the
+  // university chrome does not wrap around it. It is nested under "/library/*"
+  // so LibraryApp's relative routes resolve correctly.
+  if (isLibraryRoute) {
+    return (
+      <Routes>
+        <Route path="/library/*" element={<LibraryApp base="/library" />} />
+      </Routes>
+    );
   }
 
   return (
@@ -124,8 +139,16 @@ export default function App() {
             element={<Repository />}
           />
           <Route
+            path="/directory/library/repository/:slug"
+            element={<RepositoryItem />}
+          />
+          <Route
             path="/resources/library/repository"
             element={<Repository />}
+          />
+          <Route
+            path="/resources/library/repository/:slug"
+            element={<RepositoryItem />}
           />
           <Route path="/resources/:page" element={<SectionPage />} />
           <Route path="/student-life" element={<SectionPage />} />

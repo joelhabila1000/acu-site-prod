@@ -30,6 +30,8 @@ import {
 import { NEWS_ITEMS } from "./News.js";
 import { PRINCIPAL_OFFICERS } from "./principalOfficers.js";
 import { INAUGURAL_LECTURES } from "./lectures.js";
+import { collectionForType } from "./repository.js";
+import { LIBRARY_FALLBACKS } from "./library.js";
 
 const OFFICER_IMAGES = Object.fromEntries(
   PRINCIPAL_OFFICERS.map((officer) => [officer.slug, officer.image]),
@@ -280,6 +282,12 @@ const DEFAULT_CONTENT = {
   announcements: [],
   pgProgrammes: PG_PROGRAMMES.map((programme) => ({ ...programme })),
   publications: [],
+  repository: [],
+  library: LIBRARY_FALLBACKS.settings,
+  libraryBooks: LIBRARY_FALLBACKS.books,
+  libraryEResources: LIBRARY_FALLBACKS.eResources,
+  libraryBranches: LIBRARY_FALLBACKS.branches,
+  libraryServices: LIBRARY_FALLBACKS.services,
   ready: false,
 };
 
@@ -336,6 +344,11 @@ export function ContentProvider({ children }) {
         announcementsR,
         programmesR,
         publicationsR,
+        repositoryR,
+        libraryBooksR,
+        libraryEResourcesR,
+        libraryBranchesR,
+        libraryServicesR,
       ] = await Promise.allSettled([
         apiGet("/api/settings"),
         apiGet("/api/faculties"),
@@ -349,6 +362,11 @@ export function ContentProvider({ children }) {
         apiGet("/api/announcements?status=published"),
         apiGet("/api/programmes?status=published"),
         apiGet("/api/publications?status=published"),
+        apiGet("/api/repository?status=published"),
+        apiGet("/api/library/books?status=published"),
+        apiGet("/api/library/e-resources?status=published"),
+        apiGet("/api/library/branches?status=active"),
+        apiGet("/api/library/services?status=published"),
       ]);
 
       if (cancelled) return;
@@ -396,6 +414,9 @@ export function ContentProvider({ children }) {
         if (asArray(slides).length) next.slides = slides.map(resolveSlide);
         if (settings.sustainability) {
           next.sustainability = mapSustainability(settings.sustainability);
+        }
+        if (settings.library) {
+          next.library = { ...LIBRARY_FALLBACKS.settings, ...settings.library };
         }
       }
 
@@ -543,6 +564,129 @@ export function ContentProvider({ children }) {
           faculty: row.faculty || "",
           fileUrl: row.fileUrl || "",
           featured: !!row.featured,
+        }));
+      }
+
+      const repositoryRows =
+        repositoryR.status === "fulfilled"
+          ? asArray(repositoryR.value && repositoryR.value.data)
+          : [];
+
+      if (repositoryRows.length) {
+        next.repository = repositoryRows.map((row) => ({
+          id: row.id,
+          title: row.title,
+          slug: row.slug,
+          itemType: row.itemType || "",
+          collection: collectionForType(row.itemType),
+          authors: row.authors || "",
+          abstract: row.abstract || "",
+          keywords: row.keywords || "",
+          faculty: row.faculty || "",
+          department: row.department || "",
+          year: row.year || null,
+          degree: row.degree || "",
+          supervisor: row.supervisor || "",
+          publisher: row.publisher || "",
+          doi: row.doi || "",
+          language: row.language || "",
+          fileUrl: row.fileUrl || "",
+          fileName: row.fileName || "",
+          fileType: row.fileType || "",
+          fileSize: row.fileSize || 0,
+          featured: !!row.featured,
+          date: formatDate(row.publishedAt || row.createdAt),
+        }));
+      }
+
+      const libraryBookRows =
+        libraryBooksR.status === "fulfilled"
+          ? asArray(libraryBooksR.value && libraryBooksR.value.data)
+          : [];
+
+      if (libraryBookRows.length) {
+        next.libraryBooks = libraryBookRows.map((row) => ({
+          id: row.id,
+          title: row.title,
+          slug: row.slug,
+          authors: row.authors || "",
+          isbn: row.isbn || "",
+          publisher: row.publisher || "",
+          publishedYear: row.publishedYear || null,
+          edition: row.edition || "",
+          resourceType: row.resourceType || "Book",
+          subject: row.subject || "",
+          callNumber: row.callNumber || "",
+          description: row.description || "",
+          coverImage: row.coverImage || "",
+          language: row.language || "",
+          branchId: row.branchId || null,
+          branchName: (row.branch && row.branch.name) || "",
+          availability: row.availability || "available",
+          copies: row.copies || 0,
+          availableCopies: row.availableCopies || 0,
+          fileUrl: row.fileUrl || "",
+          fileName: row.fileName || "",
+          fileType: row.fileType || "",
+          fileSize: row.fileSize || 0,
+          externalUrl: row.externalUrl || "",
+          featured: !!row.featured,
+          date: formatDate(row.publishedAt || row.createdAt),
+        }));
+      }
+
+      const libraryEResourceRows =
+        libraryEResourcesR.status === "fulfilled"
+          ? asArray(libraryEResourcesR.value && libraryEResourcesR.value.data)
+          : [];
+
+      if (libraryEResourceRows.length) {
+        next.libraryEResources = libraryEResourceRows.map((row) => ({
+          id: row.id,
+          name: row.name,
+          slug: row.slug,
+          provider: row.provider || "",
+          category: row.category || "Database",
+          description: row.description || "",
+          accessUrl: row.accessUrl || "",
+          accessNote: row.accessNote || "",
+          logo: row.logo || "",
+        }));
+      }
+
+      const libraryBranchRows =
+        libraryBranchesR.status === "fulfilled"
+          ? asArray(libraryBranchesR.value && libraryBranchesR.value.data)
+          : [];
+
+      if (libraryBranchRows.length) {
+        next.libraryBranches = libraryBranchRows.map((row) => ({
+          id: row.id,
+          name: row.name,
+          slug: row.slug,
+          campus: row.campus || "",
+          address: row.address || "",
+          phone: row.phone || "",
+          email: row.email || "",
+          mapEmbed: row.mapEmbed || "",
+          image: row.image || "",
+          hours: asArray(row.hours),
+        }));
+      }
+
+      const libraryServiceRows =
+        libraryServicesR.status === "fulfilled"
+          ? asArray(libraryServicesR.value && libraryServicesR.value.data)
+          : [];
+
+      if (libraryServiceRows.length) {
+        next.libraryServices = libraryServiceRows.map((row) => ({
+          id: row.id,
+          title: row.title,
+          slug: row.slug,
+          summary: row.summary || "",
+          description: row.description || "",
+          icon: row.icon || "",
         }));
       }
 
@@ -712,4 +856,34 @@ export function usePostgraduateProgrammes() {
 
 export function usePublications() {
   return useContent().publications;
+}
+
+export function useRepository() {
+  return useContent().repository;
+}
+
+export function useLibraryBooks() {
+  return useContent().libraryBooks;
+}
+
+export function useLibraryEResources() {
+  return useContent().libraryEResources;
+}
+
+export function useLibraryBranches() {
+  return useContent().libraryBranches;
+}
+
+export function useLibraryServices() {
+  return useContent().libraryServices;
+}
+
+export function useLibrarySettings() {
+  return useContent().library;
+}
+
+// True once the first API load has finished, so detail pages can tell an empty
+// result apart from "still loading" and avoid a false not-found flash.
+export function useContentReady() {
+  return useContent().ready;
 }

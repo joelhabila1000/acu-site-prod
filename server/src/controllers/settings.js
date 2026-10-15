@@ -10,6 +10,7 @@ const ALLOWED = [
   "programmes",
   "homepage",
   "sustainability",
+  "library",
 ];
 
 async function getAll(req, res) {

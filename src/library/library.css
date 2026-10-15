@@ -1,0 +1,908 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap");
+
+/* =========================================================
+   ACU LIBRARY — its own identity on library.acu.edu.ng
+   Palette: Sapphire Twilight Whisper — dark-knight, magic-night,
+   blue-odyssey, wild-phlox, barely-pear. Scoped to .library-app so
+   nothing here leaks into the university site.
+   ========================================================= */
+
+.library-app {
+  --lib-ink: #1b1d36; /* dark-knight — darkest surface & text */
+  --lib-deep: #3a3a59; /* magic-night — deep surfaces, gradients */
+  --lib-deep-2: #4d6995; /* blue-odyssey — raised deep / hover */
+  --lib-brass: #4d6995; /* blue-odyssey — accent */
+  --lib-brass-light: #9da7c4; /* wild-phlox — accent on dark */
+  --lib-paper: #edebdc; /* barely-pear — canvas */
+  --lib-card: #f7f5ec; /* raised neutral card */
+  --lib-slate: #3a3a59; /* magic-night — secondary text */
+  --lib-muted: #5f6480; /* twilight grey — muted text */
+  --lib-line: rgba(27, 29, 54, 0.14);
+  --lib-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --lib-shadow: 0 18px 44px -22px rgba(27, 29, 54, 0.5);
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-body, "Poppins", "Segoe UI", sans-serif);
+  color: var(--lib-ink);
+  background: var(--lib-paper);
+}
+
+.library-app * {
+  box-sizing: border-box;
+}
+
+.library-app a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.library-app h1,
+.library-app h2,
+.library-app h3 {
+  font-family: var(--lib-serif);
+  line-height: 1.15;
+  color: var(--lib-ink);
+}
+
+.library-app .lib-container {
+  width: min(1180px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+.library-app main {
+  flex: 1;
+}
+
+.lib-skip {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--lib-brass);
+  color: #f7f5ec;
+  padding: 10px 16px;
+  z-index: 100;
+}
+.lib-skip:focus {
+  left: 8px;
+  top: 8px;
+}
+
+/* ---------------------------------------------------------- top bar */
+.lib-topbar {
+  background: var(--lib-ink);
+  color: rgba(237, 235, 220, 0.85);
+  font-size: 0.78rem;
+}
+.lib-topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 40px;
+  flex-wrap: wrap;
+}
+.lib-topbar a {
+  color: inherit;
+}
+.lib-topbar a:hover {
+  color: var(--lib-brass-light);
+}
+.lib-topbar-links {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ---------------------------------------------------------- header */
+.lib-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--lib-card);
+  border-bottom: 1px solid var(--lib-line);
+}
+.lib-header-inner {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  min-height: 76px;
+}
+.lib-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.lib-brand-crest {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+}
+.lib-brand-text strong {
+  display: block;
+  font-family: var(--lib-serif);
+  font-size: 1.15rem;
+  letter-spacing: 0.01em;
+}
+.lib-brand-text em {
+  display: block;
+  font-style: normal;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--lib-brass);
+  font-weight: 600;
+}
+
+.lib-nav {
+  margin-left: auto;
+}
+.lib-nav-list {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.lib-nav-link {
+  display: inline-block;
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--lib-slate);
+  white-space: nowrap;
+}
+.lib-nav-link:hover {
+  background: rgba(77, 105, 149, 0.12);
+  color: var(--lib-ink);
+}
+.lib-nav-link.is-active {
+  color: var(--lib-ink);
+  box-shadow: inset 0 -2px 0 var(--lib-brass);
+  border-radius: 6px 6px 0 0;
+}
+
+.lib-nav-toggle {
+  display: none;
+  margin-left: auto;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--lib-line);
+  border-radius: 10px;
+  background: var(--lib-card);
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}
+.lib-nav-toggle span {
+  display: block;
+  height: 2px;
+  margin: 0 9px;
+  background: var(--lib-ink);
+}
+
+/* ---------------------------------------------------------- search */
+.lib-search {
+  display: flex;
+  gap: 8px;
+}
+.lib-search input {
+  font: inherit;
+  padding: 11px 14px;
+  border: 1px solid var(--lib-line);
+  border-radius: 10px;
+  background: var(--lib-paper);
+  color: var(--lib-ink);
+  min-width: 210px;
+}
+.lib-search input:focus {
+  outline: 2px solid var(--lib-brass);
+  outline-offset: 1px;
+}
+.lib-search button {
+  font: inherit;
+  font-weight: 600;
+  padding: 11px 18px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--lib-deep);
+  color: #f7f5ec;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.lib-search button:hover {
+  background: var(--lib-deep-2);
+}
+
+/* ---------------------------------------------------------- hero */
+.lib-hero {
+  background:
+    radial-gradient(1100px 380px at 82% -10%, rgba(157, 167, 196, 0.3), transparent 60%),
+    linear-gradient(160deg, var(--lib-deep) 0%, var(--lib-ink) 100%);
+  color: #f4f2e8;
+  padding: 72px 0 66px;
+}
+.lib-hero-inner {
+  max-width: 780px;
+}
+.lib-eyebrow {
+  display: inline-block;
+  font-size: 0.74rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--lib-brass-light);
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.lib-hero h1 {
+  color: #f8f6ec;
+  font-size: clamp(2rem, 4.6vw, 3.1rem);
+  margin: 0 0 16px;
+}
+.lib-hero p {
+  color: rgba(237, 235, 220, 0.85);
+  font-size: 1.06rem;
+  max-width: 640px;
+}
+.lib-hero-search {
+  margin-top: 26px;
+  max-width: 640px;
+}
+.lib-hero-search .lib-search input {
+  flex: 1;
+  min-width: 0;
+  background: #f7f5ec;
+}
+
+/* ---------------------------------------------------------- sections */
+.lib-section {
+  padding: 56px 0;
+}
+.lib-section--tight {
+  padding: 40px 0;
+}
+.lib-section--cream {
+  background: #e4e1d0;
+}
+.lib-section-head {
+  margin-bottom: 28px;
+}
+.lib-section-head h2 {
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+  margin: 0 0 6px;
+}
+.lib-section-head p {
+  color: var(--lib-muted);
+  margin: 0;
+}
+.lib-section-head--row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.lib-link-more {
+  font-weight: 600;
+  color: var(--lib-deep);
+  border-bottom: 2px solid var(--lib-brass);
+  padding-bottom: 2px;
+}
+
+/* ---------------------------------------------------------- hours strip */
+.lib-hours-strip {
+  background: var(--lib-card);
+  border: 1px solid var(--lib-line);
+  border-radius: var(--lib-radius);
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  flex-wrap: wrap;
+  box-shadow: var(--lib-shadow);
+  margin-top: -44px;
+  position: relative;
+  z-index: 2;
+}
+.lib-hours-strip .lib-hours-badge {
+  font-weight: 700;
+  color: var(--lib-deep);
+}
+.lib-hours-strip .lib-hours-open {
+  color: #1c6b45;
+  font-weight: 700;
+}
+.lib-hours-strip .lib-hours-closed {
+  color: var(--lib-slate);
+  font-weight: 700;
+}
+.lib-hours-strip .lib-hours-note {
+  color: var(--lib-muted);
+  font-size: 0.88rem;
+  margin-left: auto;
+}
+
+/* ---------------------------------------------------------- grids */
+.lib-grid {
+  display: grid;
+  gap: 20px;
+}
+.lib-grid--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.lib-grid--4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.lib-grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* ---------------------------------------------------------- book card */
+.lib-book-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--lib-card);
+  border: 1px solid var(--lib-line);
+  border-radius: var(--lib-radius);
+  overflow: hidden;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+.lib-book-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--lib-shadow);
+}
+.lib-book-cover {
+  aspect-ratio: 3 / 4;
+  background: linear-gradient(150deg, var(--lib-deep) 0%, var(--lib-ink) 100%);
+  color: var(--lib-brass-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  text-align: center;
+  overflow: hidden;
+}
+.lib-book-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.lib-book-cover span {
+  font-family: var(--lib-serif);
+  font-size: 1.05rem;
+  line-height: 1.25;
+}
+.lib-book-body {
+  padding: 16px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+.lib-book-type {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lib-brass);
+  font-weight: 700;
+}
+.lib-book-title {
+  font-family: var(--lib-serif);
+  font-size: 1.05rem;
+  margin: 0;
+}
+.lib-book-author {
+  color: var(--lib-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+.lib-book-foot {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 10px;
+}
+
+/* ---------------------------------------------------------- badges */
+.lib-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--lib-line);
+  color: var(--lib-slate);
+  background: #f0eee2;
+  white-space: nowrap;
+}
+.lib-badge--available {
+  color: #1c6b45;
+  border-color: rgba(31, 122, 77, 0.35);
+  background: rgba(31, 122, 77, 0.1);
+}
+.lib-badge--reference {
+  color: #8a5a12;
+  border-color: rgba(138, 90, 18, 0.35);
+  background: rgba(138, 90, 18, 0.12);
+}
+.lib-badge--on-loan,
+.lib-badge--withdrawn {
+  color: #8a2a2a;
+  border-color: rgba(160, 45, 45, 0.3);
+  background: rgba(160, 45, 45, 0.08);
+}
+
+/* ---------------------------------------------------------- filters */
+.lib-filters {
+  background: var(--lib-card);
+  border: 1px solid var(--lib-line);
+  border-radius: var(--lib-radius);
+  padding: 18px;
+  display: grid;
+  grid-template-columns: 2fr repeat(4, 1fr);
+  gap: 12px;
+  align-items: end;
+  margin-bottom: 24px;
+}
+.lib-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.lib-field label {
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lib-muted);
+  font-weight: 700;
+}
+.lib-field input,
+.lib-field select,
+.lib-field textarea {
+  font: inherit;
+  padding: 10px 12px;
+  border: 1px solid var(--lib-line);
+  border-radius: 9px;
+  background: var(--lib-paper);
+  color: var(--lib-ink);
+  width: 100%;
+}
+.lib-field input:focus,
+.lib-field select:focus,
+.lib-field textarea:focus {
+  outline: 2px solid var(--lib-brass);
+  outline-offset: 1px;
+}
+.lib-filters-reset {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+}
+.lib-btn-link {
+  background: none;
+  border: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--lib-deep);
+  cursor: pointer;
+  border-bottom: 2px solid var(--lib-brass);
+}
+
+.lib-results-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+  color: var(--lib-muted);
+}
+.lib-empty {
+  background: var(--lib-card);
+  border: 1px dashed var(--lib-line);
+  border-radius: var(--lib-radius);
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--lib-muted);
+}
+
+/* ---------------------------------------------------------- e-resources */
+.lib-tile {
+  background: var(--lib-card);
+  border: 1px solid var(--lib-line);
+  border-radius: var(--lib-radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+}
+.lib-tile h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+.lib-tile .lib-tile-provider {
+  font-size: 0.8rem;
+  color: var(--lib-brass);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.lib-tile p {
+  margin: 0;
+  color: var(--lib-muted);
+  font-size: 0.92rem;
+}
+.lib-tile .lib-tile-note {
+  margin-top: auto;
+  padding-top: 10px;
+  font-size: 0.82rem;
+  color: var(--lib-slate);
+}
+.lib-tile a.lib-tile-go {
+  font-weight: 700;
+  color: var(--lib-deep);
+}
+
+/* ---------------------------------------------------------- service card */
+.lib-service-card {
+  background: var(--lib-card);
+  border: 1px solid var(--lib-line);
+  border-left: 4px solid var(--lib-brass);
+  border-radius: var(--lib-radius);
+  padding: 22px;
+}
+.lib-service-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.12rem;
+}
+.lib-service-card p {
+  margin: 0;
+  color: var(--lib-muted);
+}
+
+/* ---------------------------------------------------------- branches & hours */
+.lib-branch-card {
+  background: var(--lib-card);
+  border: 1px solid var(--lib-line);
+  border-radius: var(--lib-radius);
+  padding: 22px;
+}
+.lib-branch-card h3 {
+  margin: 0 0 2px;
+  font-size: 1.15rem;
+}
+.lib-branch-campus {
+  color: var(--lib-brass);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.lib-branch-card p {
+  color: var(--lib-muted);
+  font-size: 0.92rem;
+}
+.lib-branch-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 0.9rem;
+  margin: 12px 0;
+}
+.lib-branch-contact a {
+  color: var(--lib-deep);
+}
+.lib-hours-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+.lib-hours-table th,
+.lib-hours-table td {
+  text-align: left;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--lib-line);
+}
+.lib-hours-table td:last-child {
+  text-align: right;
+  font-weight: 600;
+}
+.lib-branch-map {
+  margin-top: 14px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.lib-branch-map iframe {
+  width: 100%;
+  height: 220px;
+  border: 0;
+  display: block;
+}
+
+/* ---------------------------------------------------------- detail */
+.lib-detail-hero {
+  background: linear-gradient(160deg, var(--lib-deep) 0%, var(--lib-ink) 100%);
+  color: #f4f2e8;
+  padding: 54px 0 46px;
+}
+.lib-detail-hero h1 {
+  color: #f8f6ec;
+  font-size: clamp(1.6rem, 3.4vw, 2.5rem);
+  margin: 12px 0 8px;
+}
+.lib-detail-author {
+  color: rgba(237, 235, 220, 0.85);
+  margin: 0;
+  font-size: 1.02rem;
+}
+.lib-crumb {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  color: rgba(237, 235, 220, 0.72);
+}
+.lib-crumb a:hover {
+  color: var(--lib-brass-light);
+}
+.lib-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 40px;
+  align-items: start;
+}
+.lib-detail-grid h2 {
+  font-size: 1.2rem;
+  margin: 26px 0 8px;
+}
+.lib-detail-grid h2:first-child {
+  margin-top: 0;
+}
+.lib-detail-desc {
+  color: var(--lib-slate);
+  white-space: pre-line;
+}
+.lib-detail-aside {
+  background: var(--lib-card);
+  border: 1px solid var(--lib-line);
+  border-radius: var(--lib-radius);
+  padding: 22px;
+  position: sticky;
+  top: 96px;
+}
+.lib-details-list {
+  margin: 0 0 16px;
+  display: flex;
+  flex-direction: column;
+}
+.lib-details-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--lib-line);
+  font-size: 0.9rem;
+}
+.lib-details-row dt {
+  color: var(--lib-muted);
+}
+.lib-details-row dd {
+  margin: 0;
+  text-align: right;
+  font-weight: 600;
+}
+.lib-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.lib-btn {
+  display: inline-block;
+  font: inherit;
+  font-weight: 600;
+  padding: 11px 18px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  background: var(--lib-deep);
+  color: #f7f5ec;
+  white-space: nowrap;
+  text-align: center;
+}
+.lib-btn:hover {
+  background: var(--lib-deep-2);
+}
+.lib-btn--ghost {
+  background: transparent;
+  color: var(--lib-deep);
+  border-color: var(--lib-line);
+}
+.lib-btn--brass {
+  background: var(--lib-brass);
+  color: #f7f5ec;
+}
+/* .library-app a { color: inherit } outranks the button classes on anchor-based
+   buttons, which left dark text on the dark fill. Restore the button colours. */
+.library-app a.lib-btn,
+.library-app a.lib-btn--brass {
+  color: #f7f5ec;
+}
+.library-app a.lib-btn--ghost {
+  color: var(--lib-deep);
+}
+.lib-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* ---------------------------------------------------------- forms */
+.lib-form {
+  background: var(--lib-card);
+  border: 1px solid var(--lib-line);
+  border-radius: var(--lib-radius);
+  padding: 26px;
+  display: grid;
+  gap: 16px;
+  max-width: 640px;
+}
+.lib-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.lib-form-msg {
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.92rem;
+}
+.lib-form-msg--ok {
+  background: rgba(31, 122, 77, 0.12);
+  color: #175c39;
+  border: 1px solid rgba(31, 122, 77, 0.3);
+}
+.lib-form-msg--err {
+  background: rgba(160, 45, 45, 0.1);
+  color: #7f2626;
+  border: 1px solid rgba(160, 45, 45, 0.3);
+}
+
+/* ---------------------------------------------------------- value props */
+.lib-values {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.lib-value {
+  background: var(--lib-card);
+  border: 1px solid var(--lib-line);
+  border-radius: var(--lib-radius);
+  padding: 20px;
+}
+.lib-value strong {
+  font-family: var(--lib-serif);
+  font-size: 1.1rem;
+}
+
+/* ---------------------------------------------------------- footer */
+.lib-footer {
+  background: var(--lib-ink);
+  color: rgba(237, 235, 220, 0.78);
+  padding: 52px 0 26px;
+  margin-top: 40px;
+}
+.lib-footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 32px;
+}
+.lib-footer h3 {
+  color: #f8f6ec;
+  font-size: 1rem;
+  margin: 0 0 14px;
+}
+.lib-footer a:hover {
+  color: var(--lib-brass-light);
+}
+.lib-footer-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+.lib-footer-bottom {
+  margin-top: 36px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(237, 235, 220, 0.14);
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  color: rgba(237, 235, 220, 0.62);
+}
+
+/* ---------------------------------------------------------- responsive */
+@media (max-width: 960px) {
+  /* Below this width the horizontal nav no longer fits, so it becomes a
+     dropdown drawer opened from the hamburger. */
+  .lib-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--lib-card);
+    border-bottom: 1px solid var(--lib-line);
+    padding: 12px 20px 18px;
+    box-shadow: var(--lib-shadow);
+  }
+  .lib-nav.is-open {
+    display: block;
+  }
+  .lib-nav-list {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+  }
+  .lib-nav-toggle {
+    display: flex;
+  }
+  .lib-header-inner {
+    position: relative;
+  }
+  .lib-filters {
+    grid-template-columns: 1fr 1fr;
+  }
+  .lib-grid--4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .lib-grid--3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .lib-detail-grid {
+    grid-template-columns: 1fr;
+  }
+  .lib-detail-aside {
+    position: static;
+  }
+  .lib-footer-grid {
+    grid-template-columns: 1fr;
+  }
+  .lib-values {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .lib-filters {
+    grid-template-columns: 1fr;
+  }
+  .lib-grid--2,
+  .lib-grid--3,
+  .lib-grid--4 {
+    grid-template-columns: 1fr;
+  }
+  .lib-form-row {
+    grid-template-columns: 1fr;
+  }
+  .lib-hours-strip {
+    margin-top: -30px;
+  }
+  .lib-hours-strip .lib-hours-note {
+    margin-left: 0;
+  }
+}

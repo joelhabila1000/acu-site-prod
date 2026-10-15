@@ -476,3 +476,124 @@ model MaintenanceRequest {
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
 }
+
+// Institutional repository — theses, articles, conference papers, books,
+// reports and datasets deposited by library staff, with an optional full-text
+// file hosted by the site.
+model RepositoryItem {
+  id          Int       @id @default(autoincrement())
+  title       String
+  slug        String    @unique
+  itemType    String
+  authors     String
+  abstract    String?   @db.Text
+  keywords    String?
+  faculty     String?
+  department  String?
+  year        Int?
+  degree      String?
+  supervisor  String?
+  publisher   String?
+  doi         String?
+  language    String?   @default("English")
+  fileUrl     String?
+  fileName    String?
+  fileType    String?
+  fileSize    Int?
+  featured    Boolean   @default(false)
+  // published | hidden
+  status      String    @default("published")
+  publishedAt DateTime?
+  uploadedBy  Int?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// -------------------------------------------------------------- University Library
+// The library runs on its own subdomain (library.acu.edu.ng) but shares this
+// API and database with the main site.
+
+model LibraryBranch {
+  id        Int      @id @default(autoincrement())
+  name      String
+  slug      String   @unique
+  campus    String?
+  address   String?  @db.Text
+  phone     String?
+  email     String?
+  mapEmbed  String?  @db.Text
+  image     String?
+  // Opening hours: [{ day, opens, closes }]
+  hours     Json?
+  sortOrder Int      @default(0)
+  status    String   @default("active")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  holdings  LibraryBook[]
+}
+
+model LibraryBook {
+  id              Int            @id @default(autoincrement())
+  title           String
+  slug            String         @unique
+  authors         String
+  isbn            String?
+  publisher       String?
+  publishedYear   Int?
+  edition         String?
+  // Book | Journal | Reference | Thesis | Project | E-book
+  resourceType    String         @default("Book")
+  subject         String?
+  callNumber      String?
+  description     String?        @db.Text
+  coverImage      String?
+  language        String?        @default("English")
+  branchId        Int?
+  branch          LibraryBranch? @relation(fields: [branchId], references: [id])
+  // available | reference | on-loan | withdrawn
+  availability    String         @default("available")
+  copies          Int            @default(1)
+  availableCopies Int            @default(1)
+  fileUrl         String?
+  fileName        String?
+  fileType        String?
+  fileSize        Int?
+  externalUrl     String?
+  featured        Boolean        @default(false)
+  sortOrder       Int            @default(0)
+  // published | hidden
+  status          String         @default("published")
+  publishedAt     DateTime?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
+
+model LibraryEResource {
+  id          Int      @id @default(autoincrement())
+  name        String
+  slug        String   @unique
+  provider    String?
+  // Database | E-journal | E-book | Open access | Repository | Other
+  category    String   @default("Database")
+  description String?  @db.Text
+  accessUrl   String
+  accessNote  String?
+  logo        String?
+  status      String   @default("published")
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model LibraryService {
+  id          Int      @id @default(autoincrement())
+  title       String
+  slug        String   @unique
+  summary     String?
+  description String?  @db.Text
+  icon        String?
+  sortOrder   Int      @default(0)
+  status      String   @default("published")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

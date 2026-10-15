@@ -72,7 +72,7 @@ export default function Footer() {
               <Link to="/news">News &amp; Events</Link>
               <Link to="/gallery">Gallery</Link>
               <Link to="/">Staff Directory</Link>
-              <Link to="/">Library</Link>
+              <Link to="/library">Library</Link>
       
             </div>
             <div className="footer-links-col">

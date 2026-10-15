@@ -295,6 +295,30 @@ const SECTIONS = [
       },
     ],
   },
+  {
+    key: "library",
+    label: "Library",
+    kind: "object",
+    fields: [
+      { name: "eyebrow", label: "Eyebrow", type: "text" },
+      { name: "title", label: "Home heading", type: "text" },
+      { name: "intro", label: "Home intro", type: "textarea", rows: 4 },
+      { name: "searchPlaceholder", label: "Search placeholder", type: "text" },
+      { name: "hoursNote", label: "Opening hours note", type: "textarea", rows: 2 },
+      { name: "enquiryEmail", label: "Enquiry email", type: "text" },
+      { name: "requestIntro", label: "Request form intro", type: "textarea", rows: 3 },
+      {
+        name: "quickLinks",
+        label: "Quick links",
+        type: "list",
+        itemLabel: "link",
+        itemFields: [
+          { name: "label", label: "Label", type: "text" },
+          { name: "path", label: "Path", type: "text", help: "e.g. /catalogue" },
+        ],
+      },
+    ],
+  },
   { key: "nav", label: "Navigation (read-only)", kind: "raw" },
 ];
 

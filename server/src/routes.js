@@ -18,6 +18,11 @@ const lectures = require("./controllers/lectures");
 const messages = require("./controllers/messages");
 const programmes = require("./controllers/programmes");
 const publications = require("./controllers/publications");
+const repository = require("./controllers/repository");
+const libraryBooks = require("./controllers/libraryBooks");
+const libraryEResources = require("./controllers/libraryEResources");
+const libraryBranches = require("./controllers/libraryBranches");
+const libraryServices = require("./controllers/libraryServices");
 const studentAuth = require("./controllers/studentAuth");
 const hostel = require("./controllers/hostel");
 const hostelApplications = require("./controllers/hostelApplications");
@@ -125,6 +130,43 @@ router.get("/publications/:id", publications.get);
 router.post("/publications", auth.requireEditor, publications.create);
 router.put("/publications/:id", auth.requireEditor, publications.update);
 router.delete("/publications/:id", auth.requireEditor, publications.remove);
+
+// Institutional repository
+router.get("/repository", repository.list);
+router.get("/repository/:id", repository.get);
+router.post("/repository", auth.requireEditor, repository.create);
+router.put("/repository/:id", auth.requireEditor, repository.update);
+router.delete("/repository/:id", auth.requireEditor, repository.remove);
+
+// University Library — the catalogue, e-resources, branches and services shown
+// on the library subdomain.
+router.get("/library/books", libraryBooks.list);
+router.get("/library/books/:id", libraryBooks.get);
+router.post("/library/books", auth.requireEditor, libraryBooks.create);
+router.put("/library/books/:id", auth.requireEditor, libraryBooks.update);
+router.delete("/library/books/:id", auth.requireEditor, libraryBooks.remove);
+
+router.get("/library/e-resources", libraryEResources.list);
+router.get("/library/e-resources/:id", libraryEResources.get);
+router.post("/library/e-resources", auth.requireEditor, libraryEResources.create);
+router.put("/library/e-resources/:id", auth.requireEditor, libraryEResources.update);
+router.delete(
+  "/library/e-resources/:id",
+  auth.requireEditor,
+  libraryEResources.remove,
+);
+
+router.get("/library/branches", libraryBranches.list);
+router.get("/library/branches/:id", libraryBranches.get);
+router.post("/library/branches", auth.requireEditor, libraryBranches.create);
+router.put("/library/branches/:id", auth.requireEditor, libraryBranches.update);
+router.delete("/library/branches/:id", auth.requireEditor, libraryBranches.remove);
+
+router.get("/library/services", libraryServices.list);
+router.get("/library/services/:id", libraryServices.get);
+router.post("/library/services", auth.requireEditor, libraryServices.create);
+router.put("/library/services/:id", auth.requireEditor, libraryServices.update);
+router.delete("/library/services/:id", auth.requireEditor, libraryServices.remove);
 
 // Uploads
 router.post("/uploads", auth.requireEditor, uploads.parseUpload, uploads.put);

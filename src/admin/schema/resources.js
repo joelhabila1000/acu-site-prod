@@ -1,5 +1,12 @@
 // Declarative schemas for the schema-driven admin CRUD pages.
 
+import { REPOSITORY_TYPES } from "../../data/repository.js";
+import {
+  RESOURCE_TYPES as LIBRARY_RESOURCE_TYPES,
+  AVAILABILITY as LIBRARY_AVAILABILITY,
+  ERESOURCE_CATEGORIES as LIBRARY_ERESOURCE_CATEGORIES,
+} from "../../data/library.js";
+
 const STATUS_EDITORIAL = ["draft", "published"];
 
 export const RESOURCES = {
@@ -531,6 +538,218 @@ export const RESOURCES = {
     ],
   },
 
+  repository: {
+    title: "Institutional Repository",
+    singular: "repository item",
+    endpoint: "/api/repository",
+    columns: [
+      { key: "title", label: "Title" },
+      { key: "authors", label: "Authors" },
+      { key: "itemType", label: "Type" },
+      { key: "year", label: "Year" },
+      { key: "status", label: "Status" },
+    ],
+    defaults: { status: "published", featured: false },
+    fields: [
+      { name: "title", label: "Title", type: "text", required: true },
+      {
+        name: "slug",
+        label: "Slug",
+        type: "text",
+        help: "Leave blank to generate from the title.",
+      },
+      {
+        name: "itemType",
+        label: "Type",
+        type: "select",
+        required: true,
+        options: REPOSITORY_TYPES.map((type) => type.value),
+      },
+      {
+        name: "authors",
+        label: "Authors",
+        type: "text",
+        required: true,
+        help: "Comma-separated, in the order they should be displayed.",
+      },
+      { name: "abstract", label: "Abstract", type: "textarea", rows: 5 },
+      {
+        name: "keywords",
+        label: "Keywords",
+        type: "text",
+        help: "Comma-separated, e.g. Malaria, Epidemiology, Public health.",
+      },
+      { name: "faculty", label: "Faculty", type: "text" },
+      { name: "department", label: "Department", type: "text" },
+      { name: "year", label: "Year", type: "number" },
+      {
+        name: "degree",
+        label: "Degree / award",
+        type: "text",
+        help: "For theses and projects, e.g. Ph.D., M.Sc.",
+      },
+      { name: "supervisor", label: "Supervisor", type: "text" },
+      {
+        name: "publisher",
+        label: "Journal / publisher / conference",
+        type: "text",
+      },
+      { name: "doi", label: "DOI", type: "text" },
+      { name: "language", label: "Language", type: "text" },
+      {
+        name: "file",
+        label: "Full text",
+        type: "file",
+        help: "PDF, Word, Excel or PowerPoint — up to 20 MB.",
+        targets: {
+          url: "fileUrl",
+          name: "fileName",
+          size: "fileSize",
+          type: "fileType",
+        },
+      },
+      { name: "featured", label: "Featured", type: "boolean" },
+      {
+        name: "status",
+        label: "Visibility",
+        type: "select",
+        options: ["published", "hidden"],
+      },
+      { name: "publishedAt", label: "Published at", type: "date" },
+    ],
+  },
+
+  libraryBooks: {
+    title: "Library Catalogue",
+    singular: "catalogue record",
+    endpoint: "/api/library/books",
+    columns: [
+      { key: "title", label: "Title" },
+      { key: "authors", label: "Author(s)" },
+      { key: "resourceType", label: "Type" },
+      { key: "availability", label: "Availability" },
+      { key: "status", label: "Status" },
+    ],
+    defaults: { status: "published", resourceType: "Book", availability: "available", copies: 1, availableCopies: 1, featured: false, sortOrder: 0 },
+    fields: [
+      { name: "title", label: "Title", type: "text", required: true },
+      { name: "slug", label: "Slug", type: "text", help: "Leave blank to generate from the title." },
+      { name: "authors", label: "Author(s)", type: "text", required: true, help: "Comma-separated, in display order." },
+      { name: "resourceType", label: "Type", type: "select", required: true, options: LIBRARY_RESOURCE_TYPES },
+      { name: "subject", label: "Subject", type: "text" },
+      { name: "isbn", label: "ISBN", type: "text" },
+      { name: "publisher", label: "Publisher", type: "text" },
+      { name: "publishedYear", label: "Year", type: "number" },
+      { name: "edition", label: "Edition", type: "text" },
+      { name: "callNumber", label: "Call number", type: "text" },
+      { name: "branchId", label: "Branch", type: "reference", endpoint: "/api/library/branches" },
+      {
+        name: "availability",
+        label: "Availability",
+        type: "select",
+        options: LIBRARY_AVAILABILITY.map((item) => item.value),
+      },
+      { name: "copies", label: "Copies held", type: "number" },
+      { name: "availableCopies", label: "Copies available", type: "number" },
+      { name: "description", label: "Description", type: "textarea", rows: 4 },
+      { name: "coverImage", label: "Cover image", type: "image" },
+      { name: "language", label: "Language", type: "text" },
+      {
+        name: "file",
+        label: "E-copy (full text)",
+        type: "file",
+        help: "Optional PDF or e-book file — up to 20 MB.",
+        targets: { url: "fileUrl", name: "fileName", size: "fileSize", type: "fileType" },
+      },
+      { name: "externalUrl", label: "External link", type: "text", help: "For online-only titles." },
+      { name: "featured", label: "Featured", type: "boolean" },
+      { name: "sortOrder", label: "Display order", type: "number" },
+      { name: "status", label: "Visibility", type: "select", options: ["published", "hidden"] },
+      { name: "publishedAt", label: "Published at", type: "date" },
+    ],
+  },
+
+  libraryEResources: {
+    title: "Library E-Resources",
+    singular: "e-resource",
+    endpoint: "/api/library/e-resources",
+    columns: [
+      { key: "name", label: "Name" },
+      { key: "provider", label: "Provider" },
+      { key: "category", label: "Category" },
+      { key: "status", label: "Status" },
+    ],
+    defaults: { status: "published", category: "Database", sortOrder: 0 },
+    fields: [
+      { name: "name", label: "Name", type: "text", required: true },
+      { name: "slug", label: "Slug", type: "text", help: "Leave blank to generate from the name." },
+      { name: "provider", label: "Provider", type: "text" },
+      { name: "category", label: "Category", type: "select", required: true, options: LIBRARY_ERESOURCE_CATEGORIES },
+      { name: "accessUrl", label: "Access URL", type: "text", required: true },
+      { name: "accessNote", label: "Access note", type: "text", help: "e.g. On-campus access, or sign in with your university account." },
+      { name: "description", label: "Description", type: "textarea", rows: 4 },
+      { name: "logo", label: "Logo", type: "image" },
+      { name: "sortOrder", label: "Display order", type: "number" },
+      { name: "status", label: "Visibility", type: "select", options: ["published", "hidden"] },
+    ],
+  },
+
+  libraryBranches: {
+    title: "Library Branches",
+    singular: "branch",
+    endpoint: "/api/library/branches",
+    columns: [
+      { key: "name", label: "Branch" },
+      { key: "campus", label: "Campus" },
+      { key: "status", label: "Status" },
+    ],
+    defaults: { status: "active", sortOrder: 0, hours: [] },
+    fields: [
+      { name: "name", label: "Branch name", type: "text", required: true },
+      { name: "slug", label: "Slug", type: "text", help: "Leave blank to generate from the name." },
+      { name: "campus", label: "Campus", type: "text" },
+      { name: "address", label: "Address", type: "textarea" },
+      { name: "phone", label: "Phone", type: "text" },
+      { name: "email", label: "Email", type: "text" },
+      { name: "image", label: "Image", type: "image" },
+      { name: "mapEmbed", label: "Map embed URL", type: "textarea", help: "Google Maps embed link, if any." },
+      {
+        name: "hours",
+        label: "Opening hours",
+        type: "list",
+        itemLabel: "hours row",
+        help: "Leave the opening time blank for a closed day.",
+        itemFields: [
+          { name: "day", label: "Day(s)", type: "text" },
+          { name: "opens", label: "Opens", type: "text" },
+          { name: "closes", label: "Closes", type: "text" },
+        ],
+      },
+      { name: "sortOrder", label: "Display order", type: "number" },
+      { name: "status", label: "Status", type: "select", options: ["active", "inactive"] },
+    ],
+  },
+
+  libraryServices: {
+    title: "Library Services",
+    singular: "service",
+    endpoint: "/api/library/services",
+    columns: [
+      { key: "title", label: "Service" },
+      { key: "status", label: "Status" },
+    ],
+    defaults: { status: "published", sortOrder: 0 },
+    fields: [
+      { name: "title", label: "Title", type: "text", required: true },
+      { name: "slug", label: "Slug", type: "text", help: "Leave blank to generate from the title." },
+      { name: "summary", label: "Summary", type: "textarea", rows: 2 },
+      { name: "description", label: "Description", type: "textarea", rows: 5 },
+      { name: "icon", label: "Icon", type: "text", help: "Optional — a short label or emoji." },
+      { name: "sortOrder", label: "Display order", type: "number" },
+      { name: "status", label: "Visibility", type: "select", options: ["published", "hidden"] },
+    ],
+  },
+
   messages: {
     title: "Enquiries",
     singular: "enquiry",
@@ -588,6 +807,31 @@ export const ADMIN_NAV = [
     path: "/admin/publications",
     page: "publications",
     label: "Research & Publications",
+  },
+  {
+    path: "/admin/repository",
+    page: "repository",
+    label: "Institutional Repository",
+  },
+  {
+    path: "/admin/library-books",
+    page: "library-books",
+    label: "Library Catalogue",
+  },
+  {
+    path: "/admin/library-e-resources",
+    page: "library-e-resources",
+    label: "Library E-Resources",
+  },
+  {
+    path: "/admin/library-branches",
+    page: "library-branches",
+    label: "Library Branches",
+  },
+  {
+    path: "/admin/library-services",
+    page: "library-services",
+    label: "Library Services",
   },
   { path: "/admin/gallery", page: "gallery", label: "Gallery" },
   { path: "/admin/staff", page: "staff", label: "Staff Directory" },

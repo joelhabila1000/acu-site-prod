@@ -1,7 +1,7 @@
 const rateLimit = require("express-rate-limit");
 const prisma = require("../lib/prisma");
 
-const SOURCES = ["contact", "admissions"];
+const SOURCES = ["contact", "admissions", "library"];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // The submission endpoint is public, so cap it. Without this the inbox (and the

@@ -94,6 +94,38 @@ admin@acu.edu.ng / adminchangeme
 
 Change that password in **Users & Roles** as soon as you can.
 
+## University Library (library.acu.edu.ng)
+
+The University Library is a full library website — a searchable catalogue,
+electronic resources, branches and opening hours, services, and an enquiry /
+book-request form — served on its own subdomain from this same codebase and API.
+
+- **Subdomain:** `library.acu.edu.ng` (add it as a domain on the same host as the
+  site; no second app is needed).
+- **Local preview:** open http://localhost:5173/library — the library shell
+  renders instead of the university site. To emulate the subdomain, add
+  `127.0.0.1 library.localhost` to your hosts file and open
+  http://library.localhost:5173 (Vite already allows that host).
+- **How it works:** `src/main.jsx` renders `src/library/LibraryApp.jsx` when the
+  hostname starts with `library.`, and `/library` on the main domain renders the
+  same app via `src/App.jsx`. It shares the API, database and admin.
+- **Data & admin:** catalogue records, e-resources, branches and services are
+  managed in the admin under **Library Catalogue / E-Resources / Branches /
+  Services**, plus **Settings → Library** for the home copy and enquiry email.
+  Enquiries from the library form appear in **Enquiries** with the `library`
+  source.
+- **API:** `GET /api/library/books|e-resources|branches|services` (public),
+  writes are editor-only. New models: `LibraryBook`, `LibraryEResource`,
+  `LibraryBranch`, `LibraryService`.
+- **Seed the library content** (safe to re-run; touches only library data and the
+  `library` settings key, unlike `npm run seed`):
+
+```bash
+cd server
+npx prisma db push
+node prisma/seedLibrary.js
+```
+
 ## Editing content
 
 There are two content files and it matters which one you edit:

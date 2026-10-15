@@ -229,6 +229,11 @@ persists — GoDaddy says to use the app's **`public/assets`** folder.
   subdomain at the API app.
 - Make sure `CORS_ORIGINS` lists the exact site origin(s), including `www`, and
   use **https**.
+- **Library subdomain:** add `library` (a CNAME/A record pointing at the same
+  site host) and add `https://library.acu.edu.ng` to `CORS_ORIGINS`. The same
+  build serves it — the app renders the library shell automatically when the host
+  starts with `library.`, and the library routes are also reachable at
+  `/library` on the main domain.
 
 ---
 

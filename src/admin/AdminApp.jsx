@@ -41,6 +41,26 @@ function AdminShell() {
     content = (
       <ResourcePage key="publications" resource={RESOURCES.publications} />
     );
+  else if (page === "repository")
+    content = (
+      <ResourcePage key="repository" resource={RESOURCES.repository} />
+    );
+  else if (page === "library-books")
+    content = (
+      <ResourcePage key="libraryBooks" resource={RESOURCES.libraryBooks} />
+    );
+  else if (page === "library-e-resources")
+    content = (
+      <ResourcePage key="libraryEResources" resource={RESOURCES.libraryEResources} />
+    );
+  else if (page === "library-branches")
+    content = (
+      <ResourcePage key="libraryBranches" resource={RESOURCES.libraryBranches} />
+    );
+  else if (page === "library-services")
+    content = (
+      <ResourcePage key="libraryServices" resource={RESOURCES.libraryServices} />
+    );
   else if (page === "announcements")
     content = <ResourcePage key="announcements" resource={RESOURCES.announcements} />;
   else if (page === "messages")
