@@ -1,4 +1,8 @@
 const prisma = require("../lib/prisma");
+const {
+  applyPublicListFilter,
+  isPubliclyVisible,
+} = require("../lib/visibility");
 
 // Free-text columns that should store null rather than an empty string.
 const OPTIONAL_TEXT = [
@@ -52,7 +56,7 @@ function pick(body) {
 async function list(req, res) {
   const { q, status, year, type } = req.query;
   const where = {};
-  if (status) where.status = status;
+  applyPublicListFilter(req, where, status, "published");
   if (type) where.publicationType = type;
   if (year) where.year = Number(year);
   if (q) {
@@ -73,6 +77,8 @@ async function get(req, res) {
   const id = Number(req.params.id);
   const item = await prisma.publication.findUnique({ where: { id } });
   if (!item) return res.status(404).json({ error: "Not found" });
+  if (!isPubliclyVisible(req, item, "published"))
+    return res.status(404).json({ error: "Not found" });
   res.json(item);
 }
 

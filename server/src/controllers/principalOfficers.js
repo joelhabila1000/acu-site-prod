@@ -1,5 +1,9 @@
 const prisma = require("../lib/prisma");
 const slugify = require("slugify");
+const {
+  applyPublicListFilter,
+  isPubliclyVisible,
+} = require("../lib/visibility");
 
 const WRITABLE = [
   "slug",
@@ -26,7 +30,7 @@ function pick(body) {
 async function list(req, res) {
   const { q, status } = req.query;
   const where = {};
-  if (status) where.status = status;
+  applyPublicListFilter(req, where, status, "published");
   if (q) {
     where.OR = [
       { name: { contains: q } },
@@ -44,6 +48,8 @@ async function get(req, res) {
   const id = Number(req.params.id);
   const item = await prisma.principalOfficer.findUnique({ where: { id } });
   if (!item) return res.status(404).json({ error: "Not found" });
+  if (!isPubliclyVisible(req, item, "published"))
+    return res.status(404).json({ error: "Not found" });
   res.json(item);
 }
 

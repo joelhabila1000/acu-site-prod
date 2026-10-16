@@ -5,6 +5,7 @@ const helmet = require("helmet");
 const fs = require("fs");
 const path = require("path");
 const routes = require("./routes");
+const { optionalAuth } = require("./controllers/auth");
 
 const app = express();
 
@@ -77,6 +78,9 @@ const uploadsDir =
   process.env.UPLOAD_DIR || path.join(__dirname, "..", "..", "uploads");
 app.use("/uploads", express.static(uploadsDir));
 
+// Recognise an editor on the shared GET routes without requiring a token, so
+// the admin (which sends one) can read drafts while the public site cannot.
+app.use("/api", optionalAuth);
 app.use("/api", routes);
 
 // Single-app deploys bundle the built SPA next to the API: serve it and fall
@@ -91,13 +95,26 @@ if (fs.existsSync(distDir)) {
 }
 
 // Central error handler so a rejected handler returns a response instead of
-// crashing the process.
+// crashing the process. Prisma's known codes are mapped to sensible statuses so
+// a duplicate unique value is a 409 and a missing row is a 404, not a bare 500.
 app.use((err, req, res, _next) => {
-  console.error(err);
-  const status = err.status || err.statusCode || 500;
-  res.status(status).json({
-    error: status < 500 ? err.message : "Server error",
-  });
+  const status =
+    err.status ||
+    err.statusCode ||
+    (err.code === "P2002" ? 409 : err.code === "P2025" ? 404 : 500);
+
+  if (status >= 500) console.error(err);
+
+  const message =
+    err.code === "P2002"
+      ? "A record with that unique value already exists"
+      : err.code === "P2025"
+        ? "Not found"
+        : status < 500
+          ? err.message
+          : "Server error";
+
+  res.status(status).json({ error: message });
 });
 
 module.exports = app;

@@ -4,17 +4,7 @@ const jwt = require("jsonwebtoken");
 const rateLimit = require("express-rate-limit");
 
 const SECRET = require("../lib/authSecret");
-
-// Roles that may manage content, and the one that may also manage users and
-// site settings. Roles live in the database, so register any new privileged
-// role name here — anything not listed gets no access at all.
-const EDITOR_ROLES = [
-  "Super Admin",
-  "Content Editor",
-  "Academic Editor",
-  "Admissions Editor",
-];
-const ADMIN_ROLES = ["Super Admin"];
+const { EDITOR_ROLES, ADMIN_ROLES } = require("../lib/roles");
 
 async function login(req, res) {
   const { email, password } = req.body;
@@ -57,6 +47,9 @@ async function login(req, res) {
 // a disabled account takes effect immediately rather than when the token
 // expires.
 async function requireAuth(req, res, next) {
+  // optionalAuth has already verified an editor token on this request.
+  if (req.user) return next();
+
   const header = req.headers.authorization || "";
   const token = header.replace("Bearer ", "");
   if (!token) return res.status(401).json({ error: "Not authenticated" });
@@ -67,6 +60,9 @@ async function requireAuth(req, res, next) {
   } catch {
     return res.status(401).json({ error: "Invalid token" });
   }
+  // A student token carries studentId, not userId — reject it here rather than
+  // letting it fall through to a Prisma lookup keyed on undefined (a 500).
+  if (!payload.userId) return res.status(401).json({ error: "Invalid token" });
 
   try {
     const user = await prisma.user.findUnique({
@@ -119,10 +115,47 @@ const loginLimiter = rateLimit({
   message: { error: "Too many failed sign-in attempts. Try again later." },
 });
 
+// Attaches req.user when the request carries a valid, active editor token, and
+// does nothing otherwise. Mounted on /api so the shared GET routes can tell an
+// editor (who may read drafts) from an anonymous visitor (who may not) without
+// requiring a token.
+async function optionalAuth(req, _res, next) {
+  const header = req.headers.authorization || "";
+  const token = header.replace("Bearer ", "");
+  if (!token) return next();
+
+  try {
+    const payload = jwt.verify(token, SECRET);
+    if (!payload.userId) return next();
+    const user = await prisma.user.findUnique({
+      where: { id: payload.userId },
+      include: { role: true },
+    });
+    if (
+      user &&
+      user.status === "active" &&
+      user.role &&
+      EDITOR_ROLES.includes(user.role.name)
+    ) {
+      req.user = {
+        userId: user.id,
+        roleId: user.roleId,
+        roleName: user.role.name,
+        name: user.name,
+        email: user.email,
+      };
+    }
+  } catch {
+    // Invalid or expired token — the request simply stays public.
+  }
+  return next();
+}
+
 module.exports = {
   login,
   requireAuth,
   requireEditor,
   requireAdmin,
   loginLimiter,
+  optionalAuth,
 };

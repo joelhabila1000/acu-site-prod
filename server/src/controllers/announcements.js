@@ -1,4 +1,9 @@
 const prisma = require("../lib/prisma");
+const {
+  applyPublicListFilter,
+  isEditor,
+  isPubliclyVisible,
+} = require("../lib/visibility");
 
 const WRITABLE = [
   "title",
@@ -26,7 +31,7 @@ function pick(body) {
 async function list(req, res) {
   const { q, status } = req.query;
   const where = {};
-  if (status) where.status = status;
+  applyPublicListFilter(req, where, status, "published");
   if (q) {
     where.OR = [{ title: { contains: q } }, { content: { contains: q } }];
   }
@@ -35,11 +40,13 @@ async function list(req, res) {
     orderBy: [{ priority: "desc" }, { createdAt: "desc" }, { id: "desc" }],
   });
 
+  // An anonymous reader only ever sees published, unexpired announcements.
+  // Editors see everything unless they explicitly asked for published ones.
   const now = new Date();
-  const visible =
-    status === "published"
-      ? items.filter((row) => !row.expiresAt || row.expiresAt > now)
-      : items;
+  const onlyLive = !isEditor(req) || status === "published";
+  const visible = onlyLive
+    ? items.filter((row) => !row.expiresAt || row.expiresAt > now)
+    : items;
 
   res.json({ data: visible, total: visible.length });
 }
@@ -48,6 +55,8 @@ async function get(req, res) {
   const id = Number(req.params.id);
   const item = await prisma.announcement.findUnique({ where: { id } });
   if (!item) return res.status(404).json({ error: "Not found" });
+  if (!isPubliclyVisible(req, item, "published"))
+    return res.status(404).json({ error: "Not found" });
   res.json(item);
 }
 

@@ -1,4 +1,8 @@
 const prisma = require("../lib/prisma");
+const {
+  applyPublicListFilter,
+  isPubliclyVisible,
+} = require("../lib/visibility");
 
 const WRITABLE = [
   "title",
@@ -23,7 +27,7 @@ function pick(body) {
 async function list(req, res) {
   const { q, status, category } = req.query;
   const where = {};
-  if (status) where.status = status;
+  applyPublicListFilter(req, where, status, "active");
   if (category) where.category = category;
   if (q) {
     where.OR = [{ title: { contains: q } }, { description: { contains: q } }];
@@ -39,6 +43,8 @@ async function get(req, res) {
   const id = Number(req.params.id);
   const item = await prisma.document.findUnique({ where: { id } });
   if (!item) return res.status(404).json({ error: "Not found" });
+  if (!isPubliclyVisible(req, item, "active"))
+    return res.status(404).json({ error: "Not found" });
   res.json(item);
 }
 

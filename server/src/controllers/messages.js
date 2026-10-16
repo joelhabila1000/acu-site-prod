@@ -78,11 +78,17 @@ async function get(req, res) {
 // Only the triage fields are editable — the sender's original wording is kept.
 const WRITABLE = ["status", "subject", "programme", "phone"];
 
+// Triage statuses an enquiry can move through.
+const STATUSES = ["new", "read", "replied", "archived"];
+
 async function update(req, res) {
   const id = Number(req.params.id);
   const data = {};
   for (const key of WRITABLE) {
     if (req.body[key] !== undefined) data[key] = req.body[key];
+  }
+  if (data.status !== undefined && !STATUSES.includes(data.status)) {
+    return res.status(400).json({ error: "Unknown status" });
   }
   const updated = await prisma.contactMessage.update({ where: { id }, data });
   res.json(updated);

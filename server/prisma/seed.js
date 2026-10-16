@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const slugify = require("slugify");
 const prisma = new PrismaClient();
 const content = require("./seedContent");
+const { EDITOR_ROLES, ROLE_DESCRIPTIONS } = require("../src/lib/roles");
 const { INAUGURAL_LECTURES } = require("./lectures");
 const { POSTGRADUATE_PROGRAMMES } = require("./programmes");
 const { PUBLICATIONS } = require("./publications");
@@ -13,28 +14,15 @@ function slug(value) {
 }
 
 async function seedRolesAndAdmin() {
-  const superRole = await prisma.role.upsert({
+  for (const name of EDITOR_ROLES) {
+    await prisma.role.upsert({
+      where: { name },
+      update: {},
+      create: { name, description: ROLE_DESCRIPTIONS[name] || "" },
+    });
+  }
+  const superRole = await prisma.role.findUnique({
     where: { name: "Super Admin" },
-    update: {},
-    create: { name: "Super Admin", description: "Full access" },
-  });
-  await prisma.role.upsert({
-    where: { name: "Content Editor" },
-    update: {},
-    create: { name: "Content Editor", description: "Manage pages, news, events" },
-  });
-  await prisma.role.upsert({
-    where: { name: "Academic Editor" },
-    update: {},
-    create: {
-      name: "Academic Editor",
-      description: "Manage faculties, departments, programmes, staff",
-    },
-  });
-  await prisma.role.upsert({
-    where: { name: "Admissions Editor" },
-    update: {},
-    create: { name: "Admissions Editor", description: "Manage admissions content" },
   });
 
   const passwordHash = await bcrypt.hash("adminchangeme", 10);

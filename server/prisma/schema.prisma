@@ -35,6 +35,8 @@ model Role {
   rolePermissions RolePermission[]
 }
 
+// Reserved: the API currently authorises by role *name* (see src/lib/roles.js),
+// so these permission tables are not yet wired into any request path.
 model Permission {
   id          Int      @id @default(autoincrement())
   name        String   @unique

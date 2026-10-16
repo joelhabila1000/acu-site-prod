@@ -11,12 +11,12 @@ Everything runs locally: the site, the API and the database.
 | --- | --- | --- |
 | Public site | `src/` (React + Vite, builds to `dist/`) | http://localhost:5173 |
 | API + admin CMS | `server/` (Express + Prisma) | http://localhost:4000 |
-| Database | MySQL / MariaDB | localhost:3380 (XAMPP) |
+| Database | PostgreSQL (Neon) | `DATABASE_URL` in `server/.env` |
 | Image uploads | `uploads/` (served at `/uploads/...`) | local disk |
 
 ## Running locally
 
-You need **Node 20+** and a **local MySQL/MariaDB** running.
+You need **Node 20+** and a **PostgreSQL** database.
 
 ### 1. Install dependencies
 
@@ -28,37 +28,13 @@ cd server && npm install
 > Use `--include=dev`. If `NODE_ENV=production` is set in your shell, npm
 > silently skips dev dependencies and `vite` will be missing.
 
-### 2. Start the database
+### 2. Point at a database
 
-This project is set up against the **XAMPP MariaDB** install on port `3380`:
-
-```bash
-# start
-C:\xampp\mysql\bin\mysqld.exe --defaults-file=C:\xampp\mysql\bin\my.ini --console
-
-# stop (in another terminal)
-C:\xampp\mysql\bin\mysqladmin.exe -u root -h 127.0.0.1 -P 3380 shutdown
-```
-
-The app expects the database and user below (already created):
-
-```
-database: acu_cms
-user:     acu
-password: acu_local_dev
-port:     3380
-```
-
-To recreate them:
-
-```sql
-CREATE DATABASE IF NOT EXISTS acu_cms CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER IF NOT EXISTS 'acu'@'127.0.0.1' IDENTIFIED BY 'acu_local_dev';
-GRANT ALL PRIVILEGES ON acu_cms.* TO 'acu'@'127.0.0.1';
-FLUSH PRIVILEGES;
-```
-
-Connection settings live in [server/.env](server/.env) (see [server/.env.example](server/.env.example)).
+The app runs on **PostgreSQL** — locally any Postgres server, and in production
+the Neon database configured in [server/.env](server/.env). Set `DATABASE_URL`
+there to your connection string; see
+[server/.env.example](server/.env.example) for the expected format (the Neon
+`-pooler` host is fine for the serverless runtime).
 
 ### 3. Create the tables and load the starting content
 

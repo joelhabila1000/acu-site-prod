@@ -1,5 +1,9 @@
 const prisma = require("../lib/prisma");
 const slugify = require("slugify");
+const {
+  applyPublicListFilter,
+  isPubliclyVisible,
+} = require("../lib/visibility");
 
 const WRITABLE = [
   "slug",
@@ -25,7 +29,7 @@ function pick(body) {
 async function list(req, res) {
   const { q, status, facultyId } = req.query;
   const where = {};
-  if (status) where.status = status;
+  applyPublicListFilter(req, where, status, "active");
   if (facultyId) where.facultyId = Number(facultyId);
   if (q) {
     where.OR = [{ name: { contains: q } }, { description: { contains: q } }];
@@ -61,6 +65,8 @@ async function get(req, res) {
     include: { faculty: { select: { id: true, name: true } } },
   });
   if (!item) return res.status(404).json({ error: "Not found" });
+  if (!isPubliclyVisible(req, item, "active"))
+    return res.status(404).json({ error: "Not found" });
   res.json({ ...item, facultyName: item.faculty ? item.faculty.name : "" });
 }
 

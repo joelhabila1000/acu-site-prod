@@ -1,5 +1,9 @@
 const prisma = require("../lib/prisma");
 const slugify = require("slugify");
+const {
+  applyPublicListFilter,
+  isPubliclyVisible,
+} = require("../lib/visibility");
 
 const OPTIONAL_TEXT = [
   "provider",
@@ -44,7 +48,7 @@ async function uniqueSlug(name) {
 async function list(req, res) {
   const { q, category, status, limit } = req.query;
   const where = {};
-  if (status) where.status = status;
+  applyPublicListFilter(req, where, status, "published");
   if (category) where.category = category;
   if (q) {
     where.OR = [
@@ -65,6 +69,8 @@ async function get(req, res) {
   const id = Number(req.params.id);
   const item = await prisma.libraryEResource.findUnique({ where: { id } });
   if (!item) return res.status(404).json({ error: "Not found" });
+  if (!isPubliclyVisible(req, item, "published"))
+    return res.status(404).json({ error: "Not found" });
   res.json(item);
 }
 

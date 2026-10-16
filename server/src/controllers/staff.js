@@ -1,5 +1,9 @@
 const prisma = require("../lib/prisma");
 const slugify = require("slugify");
+const {
+  applyPublicListFilter,
+  isPubliclyVisible,
+} = require("../lib/visibility");
 
 const WRITABLE = [
   "slug",
@@ -46,7 +50,7 @@ function pick(body) {
 async function list(req, res) {
   const { q, status, facultyId, departmentId, staffType } = req.query;
   const where = {};
-  if (status) where.status = status;
+  applyPublicListFilter(req, where, status, "active");
   if (staffType) where.staffType = staffType;
   if (facultyId) where.facultyId = Number(facultyId);
   if (departmentId) where.departmentId = Number(departmentId);
@@ -82,6 +86,8 @@ async function get(req, res) {
   const id = Number(req.params.id);
   const item = await prisma.staff.findUnique({ where: { id } });
   if (!item) return res.status(404).json({ error: "Not found" });
+  if (!isPubliclyVisible(req, item, "active"))
+    return res.status(404).json({ error: "Not found" });
 
   const [faculty, department] = await Promise.all([
     item.facultyId
