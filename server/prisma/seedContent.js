@@ -110,7 +110,6 @@ const NAV_LINKS = [
 
 const PORTALS = [
   { label: "Postgraduate", url: "/portal/postgraduate" },
-  { label: "Hostel", url: "/portal/hostel" },
   { label: "Undergraduate", url: "https://apply.acu.edu.ng/" },
   { label: "Part-Time", url: "/admissions/part-time" },
   { label: "Foundation", url: "https://cpfpapply.acu.edu.ng" },
