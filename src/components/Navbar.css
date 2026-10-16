@@ -51,11 +51,13 @@
 
 .navbar-inner {
   display: grid;
-  /* Brand left, menu centred, actions right. Symmetric columns keep the menu
-     clear of the brand on the left. */
-  grid-template-columns: 1fr auto 1fr;
+  /* Brand left, menu centred, actions right. The side tracks size to their own
+     content and only the centre track flexes, so a wide menu is the only thing
+     that ever gives — it can never squeeze the actions or the brand out of
+     their columns and overlap them. */
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 28px;
+  column-gap: 28px;
   /* Full width so the crest sits at the window edge, not the content column. */
   max-width: none;
   padding: 12px 16px;
@@ -398,37 +400,26 @@
   display: none;
 }
 
-/* Tighten the row before the hamburger takes over, so the items never crowd. */
-@media (max-width: 1300px) and (min-width: 1121px) {
+/* Tighten the row through the width band before the hamburger takes over, so
+   the centre menu never crowds the brand on the left or the actions on the
+   right. Below this band the menu collapses into the drawer. */
+@media (max-width: 1439px) and (min-width: 1200px) {
   .navbar-inner {
-    gap: 14px;
+    column-gap: 18px;
   }
   .primary-nav ul {
-    gap: 20px;
+    gap: 18px;
   }
   .primary-nav a,
   .primary-nav button {
-    font-size: 0.88rem;
+    font-size: 0.9rem;
   }
   .brand-text strong {
     font-size: 0.95rem;
   }
 }
 
-/* Below ~1280px there is not enough room to centre the menu without it
-   colliding with the brand, so let it sit next to the brand instead. */
-@media (max-width: 1279px) and (min-width: 1121px) {
-  .navbar-inner {
-    grid-template-columns: auto minmax(0, 1fr) auto;
-  }
-  .primary-nav {
-    justify-self: start;
-    /* Keep the menu clear of the brand now that it sits beside the logo. */
-    margin-left: 28px;
-  }
-}
-
-@media (max-width: 1120px) {
+@media (max-width: 1199px) {
   /* The menu collapses into the hamburger, so drop the empty centre column. */
   .navbar-inner {
     grid-template-columns: minmax(0, 1fr) auto;
@@ -529,4 +520,24 @@
   .topbar-contact a:last-child {
     display: none;
   }
+}
+
+/* --- Safe areas and touch targets -----------------------------------------
+   index.html opts into viewport-fit=cover, so the sticky header and the mobile
+   drawer can sit under a notch, rounded corners or the home indicator. The
+   env(safe-area-inset-*) values resolve to 0 on screens without them, so this
+   is a no-op elsewhere. */
+.topbar {
+  padding-top: env(safe-area-inset-top);
+}
+.topbar-inner,
+.navbar-inner {
+  padding-inline: max(16px, env(safe-area-inset-left))
+    max(16px, env(safe-area-inset-right));
+}
+.mobile-menu {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.mobile-menu a {
+  min-height: 44px;
 }
