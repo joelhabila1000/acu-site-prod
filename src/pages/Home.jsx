@@ -7,6 +7,8 @@ import FacultiesGrid from "../components/FacultiesGrid.jsx";
 import GallerySection from "../components/GallerySection.jsx";
 import NewsSection from "../components/NewsSection.jsx";
 import AdmissionCTA from "../components/AdmissionCTA.jsx";
+import SustainabilitySection from "../components/SustainabilitySection.jsx";
+import UpcomingEventsSection from "../components/UpcomingEventsSection.jsx";
 import { SITE } from "../data/content.js";
 
 export default function Home() {
@@ -34,8 +36,10 @@ export default function Home() {
         </div>
       </section>
 
+      <SustainabilitySection />
       <GallerySection />
       <NewsSection />
+      <UpcomingEventsSection />
       <AdmissionCTA />
 
       <section className="section" aria-labelledby="map-heading">

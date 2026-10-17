@@ -1,0 +1,79 @@
+.sustain-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: 56px;
+  align-items: center;
+}
+
+.sustain-copy .eyebrow {
+  color: var(--gold-400);
+}
+.sustain-copy h2 {
+  color: var(--white);
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  max-width: 22ch;
+}
+.sustain-lede {
+  color: rgba(248, 244, 233, 0.82);
+  max-width: 58ch;
+}
+
+.sustain-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin: 30px 0 34px;
+}
+.sustain-stat {
+  border-top: 2px solid rgba(224, 191, 79, 0.45);
+  padding-top: 14px;
+}
+.sustain-stat strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 2.2rem);
+  color: var(--gold-400);
+  line-height: 1;
+}
+.sustain-stat span {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: rgba(248, 244, 233, 0.7);
+}
+
+/* The SDG wheel sits on a cream disc so it reads as a deliberate mark whatever
+   the source artwork's own background is. */
+.sustain-media {
+  display: flex;
+  justify-content: center;
+}
+.sustain-wheel {
+  width: min(100%, 420px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+  background: radial-gradient(circle at 32% 22%, #ffffff, var(--cream-100));
+  border-radius: 50%;
+  box-shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.55);
+}
+.sustain-wheel img {
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 900px) {
+  .sustain-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .sustain-copy h2 {
+    max-width: none;
+  }
+}
+@media (max-width: 520px) {
+  .sustain-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
