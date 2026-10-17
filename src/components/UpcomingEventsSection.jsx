@@ -25,50 +25,51 @@ export default function UpcomingEventsSection() {
   const items = useNewsEvents();
   const now = Date.now();
 
-  const events = items
+  // Forthcoming events only, soonest first, so the list re-orders and drops rows
+  // by itself as the calendar moves. Populated from events added in the admin;
+  // until any are scheduled the section shows its "nothing yet" state.
+  const forthcoming = items
     .filter((item) => item.type === "event")
     .map((item) => ({ item, when: dateParts(item.date) }))
-    .filter((row) => row.when);
-
-  // Forthcoming only, soonest first — so the list re-orders itself as the
-  // calendar moves. When nothing is scheduled yet it falls back to the most
-  // recent events and says so, rather than showing an empty homepage section.
-  const forthcoming = events
-    .filter((row) => row.when.time >= now)
-    .sort((a, b) => a.when.time - b.when.time);
-
-  const isForthcoming = forthcoming.length > 0;
-  const shown = (
-    isForthcoming
-      ? forthcoming
-      : [...events].sort((a, b) => b.when.time - a.when.time)
-  ).slice(0, LIMIT);
+    .filter((row) => row.when && row.when.time >= now)
+    .sort((a, b) => a.when.time - b.when.time)
+    .slice(0, LIMIT);
 
   return (
     <section className="section section-cream" aria-labelledby="events-heading">
       <div className="container">
         <div className="events-head">
           <div>
-            <p className="eyebrow">{isForthcoming ? "What's On" : "Recently"}</p>
-            <h2 id="events-heading">
-              {isForthcoming ? "Forthcoming Events" : "Latest Events"}
-            </h2>
+            <p className="eyebrow">What&apos;s On</p>
+            <h2 id="events-heading">Forthcoming Events</h2>
           </div>
           <Link to="/news" className="btn btn-navy btn-sm">
             View All Events
           </Link>
         </div>
 
-        {shown.length === 0 ? (
+        {forthcoming.length === 0 ? (
           <div className="events-empty">
-            <p>No events are listed yet.</p>
-            <Link to="/news" className="btn btn-navy btn-sm">
-              See News &amp; Events
-            </Link>
+            <svg
+              className="events-empty-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              aria-hidden="true"
+            >
+              <rect x="3" y="5" width="18" height="16" rx="2" />
+              <path d="M3 9h18M8 3v4M16 3v4" strokeLinecap="round" />
+            </svg>
+            <h3>Nothing on the calendar yet</h3>
+            <p>
+              New events appear here, soonest first, as soon as they are
+              scheduled. Check back soon, or catch up on recent news and events.
+            </p>
           </div>
         ) : (
           <ul className="events-list">
-            {shown.map(({ item, when }, index) => (
+            {forthcoming.map(({ item, when }, index) => (
               <Reveal
                 as="li"
                 key={item.slug || item.id}

@@ -103,16 +103,28 @@
   white-space: nowrap;
 }
 
+/* Shown while no future-dated events are scheduled. */
 .events-empty {
-  padding: 44px 24px;
+  padding: 48px 24px;
   text-align: center;
   background: var(--white);
   border: 1px dashed var(--line);
   border-radius: var(--radius-md);
 }
+.events-empty-icon {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 16px;
+  color: var(--gold-500);
+}
+.events-empty h3 {
+  font-size: 1.12rem;
+  margin-bottom: 8px;
+}
 .events-empty p {
+  max-width: 46ch;
+  margin: 0 auto;
   color: var(--ink-500);
-  margin-bottom: 16px;
 }
 
 @media (max-width: 720px) {
