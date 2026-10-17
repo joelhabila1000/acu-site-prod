@@ -3,8 +3,8 @@ import { useNewsEvents } from "../data/cms.js";
 import Reveal from "./Reveal.jsx";
 import "./UpcomingEventsSection.css";
 
-// Reads dates in the same tolerant way the rest of the site does: real ISO
-// values from the API, or the human-readable strings in the bundled fallback.
+// Dates arrive either as real ISO values from the API or as the human-readable
+// strings in the bundled fallback, so parse tolerantly.
 function dateParts(value) {
   if (!value) return null;
   const date = new Date(value);
@@ -18,6 +18,9 @@ function dateParts(value) {
   };
 }
 
+// How many rows the list shows at most.
+const LIMIT = 6;
+
 export default function UpcomingEventsSection() {
   const items = useNewsEvents();
   const now = Date.now();
@@ -27,25 +30,28 @@ export default function UpcomingEventsSection() {
     .map((item) => ({ item, when: dateParts(item.date) }))
     .filter((row) => row.when);
 
-  const upcoming = events
+  // Forthcoming only, soonest first — so the list re-orders itself as the
+  // calendar moves. When nothing is scheduled yet it falls back to the most
+  // recent events and says so, rather than showing an empty homepage section.
+  const forthcoming = events
     .filter((row) => row.when.time >= now)
     .sort((a, b) => a.when.time - b.when.time);
 
-  // When the calendar has no future dates, fall back to the most recent events
-  // and say so ("Latest Events") rather than leaving an empty section.
-  const isUpcoming = upcoming.length > 0;
+  const isForthcoming = forthcoming.length > 0;
   const shown = (
-    isUpcoming ? upcoming : [...events].sort((a, b) => b.when.time - a.when.time)
-  ).slice(0, 3);
+    isForthcoming
+      ? forthcoming
+      : [...events].sort((a, b) => b.when.time - a.when.time)
+  ).slice(0, LIMIT);
 
   return (
     <section className="section section-cream" aria-labelledby="events-heading">
       <div className="container">
         <div className="events-head">
           <div>
-            <p className="eyebrow">{isUpcoming ? "What's On" : "Recently"}</p>
+            <p className="eyebrow">{isForthcoming ? "What's On" : "Recently"}</p>
             <h2 id="events-heading">
-              {isUpcoming ? "Upcoming Events" : "Latest Events"}
+              {isForthcoming ? "Forthcoming Events" : "Latest Events"}
             </h2>
           </div>
           <Link to="/news" className="btn btn-navy btn-sm">
@@ -61,28 +67,37 @@ export default function UpcomingEventsSection() {
             </Link>
           </div>
         ) : (
-          <ul className="events-grid">
+          <ul className="events-list">
             {shown.map(({ item, when }, index) => (
               <Reveal
                 as="li"
                 key={item.slug || item.id}
-                className="event-card"
-                delay={index * 80}
+                className="event-row"
+                delay={index * 60}
               >
                 <Link
                   to={`/news/${item.slug || item.id}`}
-                  className="event-card-link"
+                  className="event-row-link"
                 >
                   <time className="event-date" dateTime={when.iso}>
                     <strong>{when.day}</strong>
                     <span>{when.month}</span>
                     <em>{when.year}</em>
                   </time>
+
                   <div className="event-body">
                     <h3>{item.title}</h3>
-                    {item.excerpt && <p>{item.excerpt}</p>}
-                    <span className="event-more">Event details →</span>
+                    {item.category && (
+                      <p className="event-venue">{item.category}</p>
+                    )}
+                    {item.excerpt && (
+                      <p className="event-excerpt">{item.excerpt}</p>
+                    )}
                   </div>
+
+                  <span className="event-more" aria-hidden="true">
+                    Details →
+                  </span>
                 </Link>
               </Reveal>
             ))}
