@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import PageHeader from "../components/PageHeader.jsx";
 import { useNewsEvents } from "../data/cms.js";
 import "./NewsEvensPage.css";
@@ -17,7 +17,12 @@ function formatDate(iso) {
 
 export default function NewsEventsPage() {
   const items = useNewsEvents();
-  const [filter, setFilter] = useState("all");
+  const [searchParams] = useSearchParams();
+  // "View all news / events" deep-links land on the matching tab.
+  const requestedTab = searchParams.get("type");
+  const [filter, setFilter] = useState(
+    requestedTab === "news" || requestedTab === "event" ? requestedTab : "all",
+  );
   const [searchTerm, setSearchTerm] = useState("");
 
   const filtered = useMemo(() => {

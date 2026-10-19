@@ -84,7 +84,16 @@ export default function NewsArticle() {
           <h1>{item.title}</h1>
           <div className="article-meta">
             <time>{formatDate(item.date)}</time>
-            {item.category && <span>{item.category}</span>}
+            {item.type === "event" && item.startTime && (
+              <span>
+                {item.endTime
+                  ? `${item.startTime} – ${item.endTime}`
+                  : item.startTime}
+              </span>
+            )}
+            {(item.venue || item.category) && (
+              <span>{item.venue || item.category}</span>
+            )}
           </div>
         </header>
 

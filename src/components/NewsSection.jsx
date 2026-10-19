@@ -15,10 +15,14 @@ function formatDate(iso) {
 }
 
 export default function NewsSection() {
-  // Pull from the same source as the News & Events page so the home highlights
-  // and that page never drift apart.
+  // The homepage strip is news only — events have their own calendar section
+  // further down the page. Pulled from the same source as the News & Events
+  // page so the two never drift apart.
   const items = useNewsEvents();
-  const news = [...items].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const news = items
+    .filter((item) => item.type === "news")
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+  const newsCount = news.length;
   const carouselRef = useRef(null);
 
   const scrollCarousel = (direction) => {
@@ -36,7 +40,7 @@ export default function NewsSection() {
 
   useEffect(() => {
     const container = carouselRef.current;
-    if (!container || items.length === 0) return undefined;
+    if (!container || newsCount === 0) return undefined;
 
     // An earlier version cloned the cards to fake a seamless loop, which made
     // every story appear twice when there were only a few. Clear any left over.
@@ -62,15 +66,15 @@ export default function NewsSection() {
     }, 2500);
 
     return () => window.clearInterval(timer);
-  }, [items]);
+  }, [newsCount]);
 
   return (
     <section className="section" aria-labelledby="news-heading">
       <div className="container">
         <div className="news-head">
           <div>
-            <p className="eyebrow">Highlights</p>
-            <h2 id="news-heading">Latest News &amp; Events</h2>
+            <p className="eyebrow">Newsroom</p>
+            <h2 id="news-heading">Latest News</h2>
           </div>
           <div className="news-controls">
             <button
@@ -108,16 +112,12 @@ export default function NewsSection() {
                 {item.image ? (
                   <img src={item.image} alt={item.title} loading="lazy" />
                 ) : (
-                  <span className="news-image-fallback">
-                    {item.type === "event" ? "Event" : "News"}
-                  </span>
+                  <span className="news-image-fallback">News</span>
                 )}
               </div>
               <div className="news-body">
                 <div className="news-meta">
-                  <span className={`news-tag news-tag--${item.type}`}>
-                    {item.type === "event" ? "Event" : "News"}
-                  </span>
+                  <span className="news-tag news-tag--news">News</span>
                   <time>{formatDate(item.date)}</time>
                 </div>
                 <h3>{item.title}</h3>

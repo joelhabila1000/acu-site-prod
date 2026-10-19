@@ -204,7 +204,48 @@ const STATIC_NEWS_EVENTS = NEWS_ITEMS.map((item) => ({
   body: asArray(item.body).join("\n\n"),
   image: item.image || null,
   category: item.tag,
+  venue: item.venue || null,
+  startTime: item.startTime || "",
+  endTime: item.endTime || "",
 }));
+
+// A news row from the API, shaped for the shared news/events list.
+function mapNews(row) {
+  const photos = mapImages(row.images);
+  return {
+    id: `news-${row.id}`,
+    type: "news",
+    title: row.title,
+    date: row.publishedAt || row.createdAt,
+    excerpt: row.excerpt || stripHtml(row.content),
+    body: htmlToParagraphs(row.content),
+    image: row.featuredImage || firstImage(photos),
+    images: photos,
+    category: row.category,
+    slug: row.slug || slugify(row.title),
+    link: null,
+  };
+}
+
+// An event row from the API, shaped for the shared news/events list and the
+// calendar-driven events section (which reads the time and venue).
+function mapEvent(row) {
+  const photos = mapImages(row.images);
+  return {
+    id: `event-${row.id}`,
+    slug: slugify(row.title),
+    type: "event",
+    title: row.title,
+    date: row.eventDate,
+    excerpt: row.description,
+    body: row.description,
+    image: row.image || firstImage(photos),
+    images: photos,
+    venue: row.venue || null,
+    startTime: row.startTime || "",
+    endTime: row.endTime || "",
+  };
+}
 
 const DEFAULT_GALLERY = [
   {
@@ -709,55 +750,9 @@ export function ContentProvider({ children }) {
             url: `/news/${row.slug || slugify(row.title)}`,
           };
         });
-        next.newsEvents = [
-          ...newsRows.map((row) => {
-            const photos = mapImages(row.images);
-            return {
-              id: `news-${row.id}`,
-              type: "news",
-              title: row.title,
-              date: row.publishedAt || row.createdAt,
-              excerpt: row.excerpt || stripHtml(row.content),
-              body: htmlToParagraphs(row.content),
-              image: row.featuredImage || firstImage(photos),
-              images: photos,
-              category: row.category,
-              slug: row.slug || slugify(row.title),
-              link: null,
-            };
-          }),
-          ...eventRows.map((row) => {
-            const photos = mapImages(row.images);
-            return {
-              id: `event-${row.id}`,
-              slug: slugify(row.title),
-              type: "event",
-              title: row.title,
-              date: row.eventDate,
-              excerpt: row.description,
-              body: row.description,
-              image: row.image || firstImage(photos),
-              images: photos,
-              category: row.venue || null,
-            };
-          }),
-        ];
+        next.newsEvents = [...newsRows.map(mapNews), ...eventRows.map(mapEvent)];
       } else if (eventRows.length) {
-        next.newsEvents = eventRows.map((row) => {
-          const photos = mapImages(row.images);
-          return {
-            id: `event-${row.id}`,
-            slug: slugify(row.title),
-            type: "event",
-            title: row.title,
-            date: row.eventDate,
-            excerpt: row.description,
-            body: row.description,
-            image: row.image || firstImage(photos),
-            images: photos,
-            category: row.venue || null,
-          };
-        });
+        next.newsEvents = eventRows.map(mapEvent);
       }
 
       next.ready = true;

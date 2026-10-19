@@ -7,6 +7,31 @@
   margin-bottom: 32px;
 }
 
+/* Month-by-month grouping, the way an events calendar presents "what's next". */
+.events-calendar {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.events-month-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 6px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--navy-900);
+}
+.events-month-label::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  background: var(--gold-500);
+}
+
 .events-list {
   display: flex;
   flex-direction: column;
@@ -77,8 +102,19 @@
   line-height: 1.3;
   margin: 0;
 }
+.event-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  margin: 6px 0 0;
+}
+.event-time {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--navy-900);
+}
 .event-venue {
-  margin: 4px 0 0;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.04em;

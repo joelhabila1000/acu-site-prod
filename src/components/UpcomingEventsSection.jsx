@@ -15,7 +15,20 @@ function dateParts(value) {
     day: date.toLocaleDateString("en-GB", { day: "numeric" }),
     month: date.toLocaleDateString("en-GB", { month: "short" }),
     year: date.toLocaleDateString("en-GB", { year: "numeric" }),
+    monthKey: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`,
+    monthLabel: date.toLocaleDateString("en-GB", {
+      month: "long",
+      year: "numeric",
+    }),
   };
+}
+
+// "09:00 – 14:00", "09:00", or "" when the event has no time set.
+function timeRange(item) {
+  const start = (item.startTime || "").trim();
+  const end = (item.endTime || "").trim();
+  if (start && end) return `${start} – ${end}`;
+  return start || end;
 }
 
 // How many rows the list shows at most.
@@ -35,20 +48,32 @@ export default function UpcomingEventsSection() {
     .sort((a, b) => a.when.time - b.when.time)
     .slice(0, LIMIT);
 
+  // Group the list by calendar month, the way an events calendar does, so the
+  // section reads as "what comes next on the school calendar".
+  const months = [];
+  forthcoming.forEach((row, index) => {
+    let group = months.find((entry) => entry.key === row.when.monthKey);
+    if (!group) {
+      group = { key: row.when.monthKey, label: row.when.monthLabel, rows: [] };
+      months.push(group);
+    }
+    group.rows.push({ ...row, index });
+  });
+
   return (
     <section className="section section-cream" aria-labelledby="events-heading">
       <div className="container">
         <div className="events-head">
           <div>
             <p className="eyebrow">What&apos;s On</p>
-            <h2 id="events-heading">Forthcoming Events</h2>
+            <h2 id="events-heading">Upcoming Events</h2>
           </div>
-          <Link to="/news" className="btn btn-navy btn-sm">
+          <Link to="/news?type=event" className="btn btn-navy btn-sm">
             View All Events
           </Link>
         </div>
 
-        {forthcoming.length === 0 ? (
+        {months.length === 0 ? (
           <div className="events-empty">
             <svg
               className="events-empty-icon"
@@ -68,41 +93,57 @@ export default function UpcomingEventsSection() {
             </p>
           </div>
         ) : (
-          <ul className="events-list">
-            {forthcoming.map(({ item, when }, index) => (
-              <Reveal
-                as="li"
-                key={item.slug || item.id}
-                className="event-row"
-                delay={index * 60}
-              >
-                <Link
-                  to={`/news/${item.slug || item.id}`}
-                  className="event-row-link"
-                >
-                  <time className="event-date" dateTime={when.iso}>
-                    <strong>{when.day}</strong>
-                    <span>{when.month}</span>
-                    <em>{when.year}</em>
-                  </time>
+          <div className="events-calendar">
+            {months.map((month) => (
+              <div className="events-month" key={month.key}>
+                <h3 className="events-month-label">{month.label}</h3>
+                <ul className="events-list">
+                  {month.rows.map(({ item, when, index }) => (
+                    <Reveal
+                      as="li"
+                      key={item.slug || item.id}
+                      className="event-row"
+                      delay={index * 60}
+                    >
+                      <Link
+                        to={`/news/${item.slug || item.id}`}
+                        className="event-row-link"
+                      >
+                        <time className="event-date" dateTime={when.iso}>
+                          <strong>{when.day}</strong>
+                          <span>{when.month}</span>
+                          <em>{when.year}</em>
+                        </time>
 
-                  <div className="event-body">
-                    <h3>{item.title}</h3>
-                    {item.category && (
-                      <p className="event-venue">{item.category}</p>
-                    )}
-                    {item.excerpt && (
-                      <p className="event-excerpt">{item.excerpt}</p>
-                    )}
-                  </div>
+                        <div className="event-body">
+                          <h3>{item.title}</h3>
+                          {(timeRange(item) || item.venue) && (
+                            <p className="event-meta">
+                              {timeRange(item) && (
+                                <span className="event-time">
+                                  {timeRange(item)}
+                                </span>
+                              )}
+                              {item.venue && (
+                                <span className="event-venue">{item.venue}</span>
+                              )}
+                            </p>
+                          )}
+                          {item.excerpt && (
+                            <p className="event-excerpt">{item.excerpt}</p>
+                          )}
+                        </div>
 
-                  <span className="event-more" aria-hidden="true">
-                    Details →
-                  </span>
-                </Link>
-              </Reveal>
+                        <span className="event-more" aria-hidden="true">
+                          Details →
+                        </span>
+                      </Link>
+                    </Reveal>
+                  ))}
+                </ul>
+              </div>
             ))}
-          </ul>
+          </div>
         )}
       </div>
     </section>
