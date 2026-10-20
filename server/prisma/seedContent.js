@@ -90,7 +90,7 @@ const NAV_LINKS = [
     label: "Student Services",
     children: [
       { label: "Undergraduate Programme", path: "https://apply.acu.edu.ng/" },
-      { label: "Postgraduate Programme", path: "https://pgs.acu.edu.ng/" },
+      { label: "Postgraduate Programme", path: "https://pgsportal.acu.edu.ng/" },
       { label: "Centre for Continuing Education (CCED)", path: "#" },
       { label: "CDEL", path: "https://cdel.acu.edu.ng" },
     ],
