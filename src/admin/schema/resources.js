@@ -207,6 +207,7 @@ export const RESOURCES = {
     singular: "staff member",
     endpoint: "/api/staff",
     columns: [
+      { key: "title", label: "Title" },
       { key: "name", label: "Name" },
       { key: "position", label: "Position" },
       { key: "staffType", label: "Type" },
@@ -216,6 +217,7 @@ export const RESOURCES = {
     defaults: { status: "active", staffType: "academic" },
     import: {
       endpoint: "/api/staff/import",
+      templateName: "staff-directory-template.csv",
       columns: [
         "title",
         "name",
@@ -240,15 +242,14 @@ export const RESOURCES = {
       sample: {
         title: "Prof.",
         name: "Jane Doe",
-        position: "Professor of Physics",
+        position: "Professor of Software Engineering",
         staffType: "academic",
-        faculty: "Faculty of Science",
-        department: "Physics",
+        faculty: "Computing",
         email: "jane.doe@acu.edu.ng",
         phone: "+2348000000000",
         status: "active",
       },
-      help: "Faculty and Department are matched by name against existing records — an unrecognised name leaves that field blank and is reported as a warning.",
+      help: "Faculty and Department are matched by name against existing records — an unrecognised name leaves that field blank and is reported as a warning. Departments must be added under Departments first.",
     },
     fields: [
       {

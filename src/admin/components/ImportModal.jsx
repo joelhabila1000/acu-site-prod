@@ -12,6 +12,23 @@ function templateCsv({ columns, sample }) {
   return `${header}\n${example}`;
 }
 
+// Offers the same CSV as a file to open in a spreadsheet. The leading BOM keeps
+// Excel from mangling accented names on open; our own parser strips it again on
+// the way back in.
+function downloadTemplate(config) {
+  const blob = new Blob([`\uFEFF${templateCsv(config)}\n`], {
+    type: "text/csv;charset=utf-8",
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = config.templateName || "template.csv";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
 function ImportSummary({ result }) {
   return (
     <div className="import-summary">
@@ -114,13 +131,20 @@ export default function ImportModal({ config, onClose, onDone }) {
             <button
               type="button"
               className="btn secondary"
+              onClick={() => downloadTemplate(config)}
+            >
+              Download template
+            </button>
+            <button
+              type="button"
+              className="btn secondary"
               onClick={() => {
                 setCsv(templateCsv(config));
                 setResult(null);
                 setError("");
               }}
             >
-              Use template
+              Fill from template
             </button>
           </div>
         </div>
