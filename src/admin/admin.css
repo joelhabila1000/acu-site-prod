@@ -879,6 +879,32 @@ body .admin-shell {
   background: #f8fbff;
 }
 
+/* --- Bulk import --- */
+.import-file {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.import-summary {
+  border: 1px solid rgba(17, 48, 79, 0.1);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: #f5f9ff;
+  font-size: 0.9rem;
+}
+
+.import-list {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  color: var(--muted);
+}
+
+.import-list-error {
+  color: #b3261e;
+}
+
 @media (max-width: 900px) {
   .settings-layout {
     grid-template-columns: 1fr;

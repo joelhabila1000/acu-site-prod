@@ -75,6 +75,7 @@ router.put("/settings/:key", auth.requireEditor, settings.put);
 router.get("/staff", staff.list);
 router.get("/staff/:id", staff.get);
 router.post("/staff", auth.requireEditor, staff.create);
+router.post("/staff/import", auth.requireEditor, staff.importMany);
 router.put("/staff/:id", auth.requireEditor, staff.update);
 router.delete("/staff/:id", auth.requireEditor, staff.remove);
 

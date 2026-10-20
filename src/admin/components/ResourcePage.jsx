@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Card from "./Card";
 import Modal from "./Modal";
+import ImportModal from "./ImportModal";
 import { Field } from "./fields.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 
@@ -29,6 +30,12 @@ export default function ResourcePage({ resource }) {
   const [editing, setEditing] = useState(null);
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState("");
+  const [importing, setImporting] = useState(false);
+
+  const fetchItems = useCallback(async () => {
+    const res = await authGet(resource.endpoint);
+    return Array.isArray(res && res.data) ? res.data : [];
+  }, [resource.endpoint, authGet]);
 
   useEffect(() => {
     let cancelled = false;
@@ -36,8 +43,8 @@ export default function ResourcePage({ resource }) {
       setLoading(true);
       setError("");
       try {
-        const res = await authGet(resource.endpoint);
-        if (!cancelled) setItems(Array.isArray(res && res.data) ? res.data : []);
+        const data = await fetchItems();
+        if (!cancelled) setItems(data);
       } catch (err) {
         if (!cancelled) {
           setError(err.message);
@@ -51,7 +58,7 @@ export default function ResourcePage({ resource }) {
     return () => {
       cancelled = true;
     };
-  }, [resource.endpoint, authGet]);
+  }, [fetchItems]);
 
   const filtered = useMemo(() => {
     const query = q.trim().toLowerCase();
@@ -134,8 +141,7 @@ export default function ResourcePage({ resource }) {
         await authSend(resource.endpoint, "POST", payload);
       }
       setEditing(null);
-      const res = await authGet(resource.endpoint);
-      setItems(Array.isArray(res && res.data) ? res.data : []);
+      setItems(await fetchItems());
     } catch (err) {
       setFormError(err.message);
     } finally {
@@ -168,6 +174,11 @@ export default function ResourcePage({ resource }) {
           <button className="btn" onClick={openCreate} hidden={resource.noCreate}>
             Add {resource.singular}
           </button>
+          {resource.import && (
+            <button className="btn secondary" onClick={() => setImporting(true)}>
+              Bulk import
+            </button>
+          )}
         </div>
       </div>
 
@@ -244,6 +255,14 @@ export default function ResourcePage({ resource }) {
             </div>
           </form>
         </Modal>
+      )}
+
+      {importing && (
+        <ImportModal
+          config={resource.import}
+          onClose={() => setImporting(false)}
+          onDone={async () => setItems(await fetchItems())}
+        />
       )}
     </div>
   );
