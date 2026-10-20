@@ -217,7 +217,7 @@ export const RESOURCES = {
     defaults: { status: "active", staffType: "academic" },
     import: {
       endpoint: "/api/staff/import",
-      templateName: "staff-directory-template.csv",
+      templateName: "staff-directory-template.xlsx",
       columns: [
         "title",
         "name",

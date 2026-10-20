@@ -2,31 +2,52 @@ import { useState } from "react";
 import Modal from "./Modal";
 import { useAuth } from "../context/AuthContext.jsx";
 
-// Builds a ready-to-edit CSV from the resource's column list: the header row
-// plus one example record, so the expected shape is obvious.
-function templateCsv({ columns, sample }) {
-  const header = columns.join(",");
-  const example = columns
-    .map((column) => (sample && sample[column]) || "")
-    .join(",");
-  return `${header}\n${example}`;
+// The template as rows: the header row plus one worked example, so the expected
+// shape is obvious. Used for both the CSV textarea and the Excel download.
+function templateRows({ columns, sample }) {
+  return [
+    columns,
+    columns.map((column) => (sample && sample[column]) || ""),
+  ];
 }
 
-// Offers the same CSV as a file to open in a spreadsheet. The leading BOM keeps
-// Excel from mangling accented names on open; our own parser strips it again on
-// the way back in.
-function downloadTemplate(config) {
-  const blob = new Blob([`\uFEFF${templateCsv(config)}\n`], {
-    type: "text/csv;charset=utf-8",
-  });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = config.templateName || "template.csv";
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
+function templateCsv(config) {
+  return rowsToCsv(templateRows(config));
+}
+
+// Quotes any cell containing a comma, quote or newline so the result is valid
+// CSV whatever the user typed.
+function rowsToCsv(rows) {
+  return rows
+    .filter((row) => row.some((cell) => String(cell ?? "").trim() !== ""))
+    .map((row) =>
+      row
+        .map((cell) => {
+          const value = cell == null ? "" : String(cell);
+          return /[",\r\n]/.test(value)
+            ? `"${value.replace(/"/g, '""')}"`
+            : value;
+        })
+        .join(","),
+    )
+    .join("\n");
+}
+
+// Builds a real .xlsx so it can be filled in Excel and uploaded again. The
+// libraries are imported on demand, keeping them out of the site's main bundle.
+async function downloadTemplate(config) {
+  const { default: writeXlsxFile } = await import("write-excel-file/browser");
+  await writeXlsxFile(templateRows(config), { sheet: "Staff" }).toFile(
+    config.templateName || "template.xlsx",
+  );
+}
+
+// Reads an .xlsx into the same CSV the textarea holds, so the rest of the
+// dialog (preview, import) works unchanged whichever way the data arrived.
+async function xlsxToCsv(file) {
+  const { readSheet } = await import("read-excel-file/browser");
+  const rows = await readSheet(file);
+  return rowsToCsv(rows);
 }
 
 function ImportSummary({ result }) {
@@ -96,9 +117,18 @@ export default function ImportModal({ config, onClose, onDone }) {
     setResult(null);
     setError("");
     try {
-      setCsv(await file.text());
-    } catch {
-      setError("That file could not be read.");
+      if (/\.xlsx$/i.test(file.name)) {
+        setCsv(await xlsxToCsv(file));
+      } else if (/\.xls$/i.test(file.name)) {
+        setCsv("");
+        setError(
+          "Legacy .xls files are not supported — re-save the sheet as .xlsx and try again.",
+        );
+      } else {
+        setCsv(await file.text());
+      }
+    } catch (err) {
+      setError(err.message || "That file could not be read.");
     }
     // Allow re-picking the same file after a fix.
     event.target.value = "";
@@ -111,18 +141,19 @@ export default function ImportModal({ config, onClose, onDone }) {
 
       <div className="modal-scroll">
         <p className="field-help">
-          Upload a CSV with a header row — only <strong>name</strong> is required.
+          Download the Excel template, fill it in, and upload it back — or paste
+          CSV rows. Only <strong>name</strong> is required.
           {config.help ? ` ${config.help}` : ""}
         </p>
 
         <div className="form-row">
-          <label>CSV file</label>
+          <label>Spreadsheet (.xlsx) or CSV</label>
           <div className="import-file">
             <label className="btn secondary upload-btn">
               Choose file
               <input
                 type="file"
-                accept=".csv,text/csv"
+                accept=".xlsx,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 onChange={handleFile}
                 hidden
               />
@@ -133,7 +164,7 @@ export default function ImportModal({ config, onClose, onDone }) {
               className="btn secondary"
               onClick={() => downloadTemplate(config)}
             >
-              Download template
+              Download Excel template
             </button>
             <button
               type="button"
@@ -150,7 +181,7 @@ export default function ImportModal({ config, onClose, onDone }) {
         </div>
 
         <div className="form-row">
-          <label>CSV contents</label>
+          <label>Rows</label>
           <textarea
             rows={10}
             value={csv}
@@ -162,7 +193,8 @@ export default function ImportModal({ config, onClose, onDone }) {
             }}
           />
           <span className="field-help">
-            You can paste rows here instead of choosing a file.
+            An uploaded .xlsx is converted here so you can check it before
+            importing. You can also paste rows directly.
           </span>
         </div>
 
