@@ -92,8 +92,8 @@ export const NAV_LINKS = [
     // The items are placeholder stubs (`#`) to be filled in later.
     label: "Student Services",
     children: [
-      { label: "Undergraduate Programme", path: "https://acuoyo.net/acuonline/" },
-      { label: "Postgraduate Programme", path: "https://acuoyo.net/index_pgs.php" },
+      { label: "Undergraduate Programme", path: "https://apply.acu.edu.ng/" },
+      { label: "Postgraduate Programme", path: "https://pgs.acu.edu.ng/" },
       { label: "Centre for Continuing Education (CCED)", path: "#" },
       { label: "CDEL", path: "https://cdel.acu.edu.ng" },
     ],
