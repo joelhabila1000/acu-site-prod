@@ -141,7 +141,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Site by:J-Technologies
+              Site by:ACU-ICT
             </a>
           </div>
           <p>
