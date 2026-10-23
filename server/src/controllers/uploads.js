@@ -12,6 +12,20 @@ const DOCUMENT_MAX_MB =
     ? Number(process.env.UPLOAD_DOC_MAX_MB)
     : 20;
 
+// Absolute ceiling for any single upload. A field may ask for more than the
+// defaults above (lecture proceedings run long), but never beyond this — the
+// request can only lower the limit, it can never raise the ceiling.
+const HARD_MAX_MB =
+  Number(process.env.UPLOAD_HARD_MAX_MB) > 0
+    ? Number(process.env.UPLOAD_HARD_MAX_MB)
+    : 100;
+
+function clampMaxMb(requested, fallbackMb) {
+  const value = Number(requested);
+  if (!Number.isFinite(value) || value <= 0) return fallbackMb;
+  return Math.min(value, HARD_MAX_MB);
+}
+
 // Uploaded files are served back to browsers, so only content types that cannot
 // execute script when opened are accepted. SVG and HTML are deliberately left
 // out: both can carry script and would be served from the storage host.
@@ -124,11 +138,21 @@ const imageUpload = multer({
   fileFilter: typeFilter(IMAGE_TYPES),
 });
 
-const documentUpload = multer({
-  storage: multer.memoryStorage(),
-  limits: { fileSize: DOCUMENT_MAX_MB * 1024 * 1024 },
-  fileFilter: typeFilter(DOCUMENT_TYPES),
-});
+// The document limit is chosen per request (see parseDocumentUpload), so cache
+// one multer per distinct size instead of rebuilding one on every upload.
+const documentUploads = new Map();
+function documentUploadFor(maxMb) {
+  let instance = documentUploads.get(maxMb);
+  if (!instance) {
+    instance = multer({
+      storage: multer.memoryStorage(),
+      limits: { fileSize: maxMb * 1024 * 1024 },
+      fileFilter: typeFilter(DOCUMENT_TYPES),
+    });
+    documentUploads.set(maxMb, instance);
+  }
+  return instance;
+}
 
 // Overridable so a host with a persistent disk (not a serverless bundle) can
 // point uploads somewhere that survives deployments.
@@ -168,7 +192,14 @@ function parseWith(instance, maxMb) {
 }
 
 const parseUpload = parseWith(imageUpload, IMAGE_MAX_MB);
-const parseDocumentUpload = parseWith(documentUpload, DOCUMENT_MAX_MB);
+
+// An uploader may ask for a bigger limit than the document default via
+// ?maxMb= (a lecture PDF, say). It is clamped to HARD_MAX_MB, so a request can
+// raise the limit up to the ceiling but never past it.
+function parseDocumentUpload(req, res, next) {
+  const maxMb = clampMaxMb(req.query.maxMb, DOCUMENT_MAX_MB);
+  return parseWith(documentUploadFor(maxMb), maxMb)(req, res, next);
+}
 
 // Direct (client-side) uploads. Serverless hosts — Vercel in particular — cap a
 // request body at 4.5 MB, so a file sent through the API is rejected before it
@@ -191,13 +222,20 @@ async function clientUploadToken(req, res) {
       body: req.body,
       onBeforeGenerateToken: async (_pathname, clientPayload) => {
         let kind = "image";
+        let requestedMb;
         try {
-          kind = JSON.parse(clientPayload || "{}").kind || "image";
+          const payload = JSON.parse(clientPayload || "{}");
+          kind = payload.kind || "image";
+          requestedMb = payload.maxMb;
         } catch {
           kind = "image";
         }
         const isDocument = kind === "document";
-        const maxMb = isDocument ? DOCUMENT_MAX_MB : IMAGE_MAX_MB;
+        // Only documents may raise their own limit; images stay at the
+        // configured cap whatever the request asks for.
+        const maxMb = isDocument
+          ? clampMaxMb(requestedMb, DOCUMENT_MAX_MB)
+          : IMAGE_MAX_MB;
         return {
           allowedContentTypes: isDocument ? DOCUMENT_TYPES : IMAGE_TYPES,
           maximumSizeInBytes: maxMb * 1024 * 1024,

@@ -84,13 +84,17 @@ export async function apiUpload(path, file, { token } = {}) {
 // that rejects large uploads with a bare 413. The API route only issues the
 // short-lived token. Throws if the host has no Blob store configured, which
 // lets the caller fall back to apiUpload().
-export async function apiClientUpload(path, file, { token, kind = "image" } = {}) {
+export async function apiClientUpload(
+  path,
+  file,
+  { token, kind = "image", maxMb } = {},
+) {
   const safe = String(file.name || "file").replace(/[^\w.-]+/g, "_");
   const blob = await putToBlob(`acu/${Date.now()}-${safe}`, file, {
     access: "public",
     contentType: file.type || undefined,
     handleUploadUrl: `${API_BASE}${path}`,
-    clientPayload: JSON.stringify({ kind }),
+    clientPayload: JSON.stringify({ kind, maxMb }),
     headers: token ? { Authorization: `Bearer ${token}` } : undefined,
   });
   return { url: blob.url, name: file.name, size: file.size, type: file.type };

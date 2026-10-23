@@ -16,13 +16,19 @@ async function uploadWithFallback({
   authClientUpload,
   authUpload,
   kind,
+  maxMb,
   serverPath,
   file,
 }) {
   try {
-    return await authClientUpload("/api/uploads/client", file, kind);
+    return await authClientUpload("/api/uploads/client", file, { kind, maxMb });
   } catch {
-    return await authUpload(serverPath, file);
+    // The multipart fallback honours the same limit, so a field that allows
+    // larger files (e.g. lecture proceedings) is not capped at the default.
+    const path = maxMb
+      ? `${serverPath}?maxMb=${encodeURIComponent(maxMb)}`
+      : serverPath;
+    return await authUpload(path, file);
   }
 }
 
@@ -129,6 +135,7 @@ function FileField({ field, value, onChange }) {
         authClientUpload,
         authUpload,
         kind: "document",
+        maxMb: field.maxMb,
         serverPath: "/api/uploads/document",
         file,
       });

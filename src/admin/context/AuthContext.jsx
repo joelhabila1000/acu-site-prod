@@ -70,8 +70,10 @@ export function AuthProvider({ children }) {
   // Direct-to-Blob upload; the file bypasses the API entirely. Used in
   // preference to authUpload so large files clear the serverless body limit.
   const authClientUpload = useCallback(
-    (path, file, kind) =>
-      runAuthed((active) => apiClientUpload(path, file, { token: active, kind })),
+    (path, file, options) =>
+      runAuthed((active) =>
+        apiClientUpload(path, file, { token: active, ...options }),
+      ),
     [runAuthed],
   );
 
