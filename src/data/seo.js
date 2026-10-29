@@ -31,6 +31,11 @@ export const ROUTE_META = {
     description:
       "Faculties, departments and degree programmes at Ajayi Crowther University, Oyo — undergraduate and postgraduate study.",
   },
+  "/webinars": {
+    title: "Webinars | Ajayi Crowther University, Oyo",
+    description:
+      "Live and on-demand webinars from Ajayi Crowther University, Oyo: research, teaching, careers and sustainability sessions, free and open to everyone.",
+  },
   "/listofcourses": {
     title: "List of Courses | Ajayi Crowther University, Oyo",
     description:

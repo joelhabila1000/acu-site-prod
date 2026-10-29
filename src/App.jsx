@@ -25,6 +25,7 @@ import NewsEventsPage from "./pages/NewsEventsPage.jsx";
 import NewsArticle from "./pages/NewsArticle.jsx";
 import Gallery from "./pages/Gallery.jsx";
 import Sustainability from "./pages/Sustainability.jsx";
+import Webinars from "./pages/Webinars.jsx";
 import Directory from "./pages/Directory.jsx";
 import StaffDirectory from "./pages/StaffDirectory.jsx";
 import PrincipalOfficerDetail from "./pages/PrincipalOfficerDetail.jsx";
@@ -162,6 +163,7 @@ export default function App() {
           <Route path="/news/:slug" element={<NewsArticle />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/sustainability" element={<Sustainability />} />
+          <Route path="/webinars" element={<Webinars />} />
           <Route path="/directory" element={<Directory />} />
           <Route path="/directory/staff" element={<StaffDirectory />} />
           <Route

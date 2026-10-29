@@ -80,6 +80,7 @@ const NAV_LINKS = [
       { label: "Academics Overview", path: "/academics" },
       { label: "List of Courses", path: "/listofcourses" },
       { label: "Inaugural Lectures", path: "/academics/inaugural-lectures" },
+      { label: "Webinars", path: "/webinars" },
     ],
   },
   { label: "Admissions", path: "/admissions" },

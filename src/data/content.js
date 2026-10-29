@@ -33,6 +33,7 @@ export const SITE = {
     linkedin: "https://ng.linkedin.com/school/acu-ng/",
     x: "https://x.com/ACUOyo",
     youtube: "https://www.youtube.com/channel/UC7pciK9IUlqgP3VziMDmvPA",
+    tiktok: "https://www.tiktok.com/@acuoyo",
   },
 };
 
@@ -83,6 +84,7 @@ export const NAV_LINKS = [
       { label: "Academics Overview", path: "/academics" },
       { label: "List of Courses", path: "/listofcourses" },
       { label: "Inaugural Lectures", path: "/academics/inaugural-lectures" },
+      { label: "Webinars", path: "/webinars" },
     ],
   },
   { label: "Admissions", path: "/admissions" },
