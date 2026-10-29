@@ -340,7 +340,12 @@ body .admin-shell {
   min-width: 180px;
 }
 
-.btn {
+/* Scoped to the admin shell and the login screen on purpose. These rules load
+   after index.css, so an unscoped `.btn` would otherwise win over every public
+   `.btn-gold` / `.btn-navy` / `.btn-oxblood` variant and turn the whole site's
+   buttons admin-blue. index.css owns the public button system. */
+body .admin-shell .btn,
+body .login-page .btn {
   background: linear-gradient(135deg, var(--acu-blue), #2d67d4);
   color: #fff;
   padding: 10px 16px;
@@ -354,19 +359,22 @@ body .admin-shell {
   box-shadow: 0 12px 20px rgba(11, 77, 162, 0.18);
 }
 
-.btn:hover {
+body .admin-shell .btn:hover,
+body .login-page .btn:hover {
   transform: translateY(-1px);
 }
 
-.btn.secondary,
-.btn.btn-secondary {
+body .admin-shell .btn.secondary,
+body .admin-shell .btn.btn-secondary,
+body .login-page .btn.secondary,
+body .login-page .btn.btn-secondary {
   background: #edf4ff;
   color: var(--acu-dark);
   box-shadow: none;
   border: 1px solid rgba(11, 77, 162, 0.08);
 }
 
-.btn-primary {
+body .admin-shell .btn-primary {
   background: linear-gradient(135deg, var(--acu-blue), #2d67d4);
 }
 

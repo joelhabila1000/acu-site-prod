@@ -25,12 +25,16 @@
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    115deg,
-    rgba(8, 19, 38, 0.94) 8%,
-    rgba(8, 19, 38, 0.78) 45%,
-    rgba(8, 19, 38, 0.55) 100%
-  );
+  /* Vertical fall-off grounds the copy, the diagonal keeps the left edge dark
+     enough to read the headline over a bright photograph. */
+  background:
+    linear-gradient(to top, rgba(8, 19, 38, 0.6), transparent 42%),
+    linear-gradient(
+      115deg,
+      rgba(8, 19, 38, 0.94) 8%,
+      rgba(8, 19, 38, 0.78) 45%,
+      rgba(8, 19, 38, 0.55) 100%
+    );
 }
 
 .hero-content {
@@ -91,6 +95,9 @@
   transition:
     transform 180ms ease,
     background 180ms ease;
+}
+.hero-dots button:hover {
+  background: rgba(255, 255, 255, 0.92);
 }
 .hero-dots button.is-active {
   background: var(--gold-400);

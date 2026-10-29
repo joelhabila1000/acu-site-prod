@@ -3,13 +3,18 @@
   top: 0;
   z-index: 1000;
   background: var(--white);
-  box-shadow: 0 1px 0 var(--line);
+  /* A hairline plus a soft, wide drop shadow: the header reads as a lid over
+     the page instead of dissolving into it as you scroll. */
+  box-shadow:
+    0 1px 0 var(--line),
+    0 14px 34px -28px rgba(8, 19, 38, 0.6);
 }
 
 .topbar {
   background: var(--navy-950);
   color: var(--gold-100);
   font-size: 0.8rem;
+  border-bottom: 1px solid rgba(224, 191, 79, 0.22);
 }
 .topbar-inner {
   display: flex;
