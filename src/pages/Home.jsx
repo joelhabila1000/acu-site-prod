@@ -9,6 +9,7 @@ import NewsSection from "../components/NewsSection.jsx";
 import AdmissionCTA from "../components/AdmissionCTA.jsx";
 import SustainabilitySection from "../components/SustainabilitySection.jsx";
 import UpcomingEventsSection from "../components/UpcomingEventsSection.jsx";
+import Reveal from "../components/Reveal.jsx";
 import { SITE } from "../data/content.js";
 
 export default function Home() {
@@ -19,7 +20,12 @@ export default function Home() {
       <ProgrammesSection />
       <AboutPreview />
 
-      <section className="section section-cream" aria-labelledby="faculties-heading">
+      <Reveal
+        as="section"
+        variant="clip"
+        className="section section-cream"
+        aria-labelledby="faculties-heading"
+      >
         <div className="container">
           <div className="section-head center">
             <p className="eyebrow" style={{ justifyContent: "center" }}>
@@ -34,7 +40,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      </section>
+      </Reveal>
 
       <SustainabilitySection />
       <GallerySection />
@@ -42,7 +48,12 @@ export default function Home() {
       <UpcomingEventsSection />
       <AdmissionCTA />
 
-      <section className="section" aria-labelledby="map-heading">
+      <Reveal
+        as="section"
+        variant="zoom"
+        className="section"
+        aria-labelledby="map-heading"
+      >
         <div className="container">
           <div className="section-head center">
             <p className="eyebrow" style={{ justifyContent: "center" }}>
@@ -60,7 +71,7 @@ export default function Home() {
             />
           </div>
         </div>
-      </section>
+      </Reveal>
     </>
   );
 }

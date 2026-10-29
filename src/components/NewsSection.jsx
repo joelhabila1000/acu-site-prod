@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useNewsEvents } from "../data/cms.js";
+import Reveal from "./Reveal.jsx";
 import "./NewsSection.css";
 
 function formatDate(iso) {
@@ -69,7 +70,12 @@ export default function NewsSection() {
   }, [newsCount]);
 
   return (
-    <section className="section" aria-labelledby="news-heading">
+    <Reveal
+      as="section"
+      variant="scale"
+      className="section"
+      aria-labelledby="news-heading"
+    >
       <div className="container">
         <div className="news-head">
           <div>
@@ -128,6 +134,6 @@ export default function NewsSection() {
           ))}
         </div>
       </div>
-    </section>
+    </Reveal>
   );
 }

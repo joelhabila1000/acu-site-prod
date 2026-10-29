@@ -1,10 +1,16 @@
 import { Link } from "react-router-dom";
 import { IMAGES, PILLARS } from "../data/content.js";
+import Reveal from "./Reveal.jsx";
 import "./AboutPreview.css";
 
 export default function AboutPreview() {
   return (
-    <section className="section section-cream" aria-labelledby="about-heading">
+    <Reveal
+      as="section"
+      variant="left"
+      className="section section-cream"
+      aria-labelledby="about-heading"
+    >
       <div className="container about-grid">
         <div className="about-media">
           <img
@@ -43,6 +49,6 @@ export default function AboutPreview() {
           </ul>
         </div>
       </div>
-    </section>
+    </Reveal>
   );
 }

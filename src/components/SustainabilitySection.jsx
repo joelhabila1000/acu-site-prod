@@ -12,12 +12,14 @@ export default function SustainabilitySection() {
   const lede = Array.isArray(s.body) && s.body.length ? s.body[0] : "";
 
   return (
-    <section
+    <Reveal
+      as="section"
+      variant="blur"
       className="section section-navy sustain"
       aria-labelledby="sustain-heading"
     >
       <div className="container sustain-grid">
-        <Reveal className="sustain-copy">
+        <Reveal className="sustain-copy" variant="fade" delay={650}>
           <p className="eyebrow">Sustainability</p>
           <h2 id="sustain-heading">
             Sustainability at Ajayi Crowther University
@@ -40,7 +42,7 @@ export default function SustainabilitySection() {
           </Link>
         </Reveal>
 
-        <Reveal className="sustain-media" variant="scale" delay={120}>
+        <Reveal className="sustain-media" variant="roll" delay={120}>
           <div className="sustain-wheel">
             <img
               src={s.introImage || IMAGES.sdgWheel}
@@ -50,6 +52,6 @@ export default function SustainabilitySection() {
           </div>
         </Reveal>
       </div>
-    </section>
+    </Reveal>
   );
 }

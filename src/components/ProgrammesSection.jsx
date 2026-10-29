@@ -1,10 +1,16 @@
 import { useSite } from "../data/cms.js";
+import Reveal from "./Reveal.jsx";
 import "./ProgrammesSection.css";
 
 export default function ProgrammesSection() {
   const { programmes } = useSite();
   return (
-    <section className="section" aria-labelledby="programmes-heading">
+    <Reveal
+      as="section"
+      variant="up"
+      className="section"
+      aria-labelledby="programmes-heading"
+    >
       <div className="container">
         <div className="section-head center">
           <p className="eyebrow" style={{ justifyContent: "center" }}>
@@ -30,6 +36,6 @@ export default function ProgrammesSection() {
           ))}
         </div>
       </div>
-    </section>
+    </Reveal>
   );
 }

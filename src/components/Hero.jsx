@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSite } from "../data/cms.js";
+import Reveal from "./Reveal.jsx";
 import "./Hero.css";
 
 export default function Hero() {
@@ -24,7 +25,12 @@ export default function Hero() {
   }, [list.length]);
 
   return (
-    <section className="hero" aria-label="Welcome to Ajayi Crowther University">
+    <Reveal
+      as="section"
+      variant="fade"
+      className="hero"
+      aria-label="Welcome to Ajayi Crowther University"
+    >
       <div className="hero-media" aria-live="polite">
         {list.map((slide, index) => (
           <img
@@ -80,6 +86,6 @@ export default function Hero() {
           <Link to="/listofcourses">View Courses →</Link>
         </div>
       </div>
-    </section>
+    </Reveal>
   );
 }

@@ -61,7 +61,12 @@ export default function UpcomingEventsSection() {
   });
 
   return (
-    <section className="section section-cream" aria-labelledby="events-heading">
+    <Reveal
+      as="section"
+      variant="rise"
+      className="section section-cream"
+      aria-labelledby="events-heading"
+    >
       <div className="container">
         <div className="events-head">
           <div>
@@ -146,6 +151,6 @@ export default function UpcomingEventsSection() {
           </div>
         )}
       </div>
-    </section>
+    </Reveal>
   );
 }

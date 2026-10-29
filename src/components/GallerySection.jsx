@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useGallery } from "../data/cms.js";
+import Reveal from "./Reveal.jsx";
 import "./GallerySection.css";
 
 const OFFSETS = ["left", "right", "left", "right", "left", "right"];
@@ -21,7 +22,12 @@ export default function GallerySection() {
   if (!photos.length) return null;
 
   return (
-    <section className="section" aria-labelledby="gallery-heading">
+    <Reveal
+      as="section"
+      variant="right"
+      className="section"
+      aria-labelledby="gallery-heading"
+    >
       <div className="container">
         <div className="section-head center">
           <p className="eyebrow" style={{ justifyContent: "center" }}>
@@ -48,6 +54,6 @@ export default function GallerySection() {
           </Link>
         </div>
       </div>
-    </section>
+    </Reveal>
   );
 }

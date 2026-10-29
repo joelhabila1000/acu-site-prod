@@ -43,6 +43,7 @@ const SECTIONS = [
       { name: "social.linkedin", label: "LinkedIn", type: "text" },
       { name: "social.x", label: "X (Twitter)", type: "text" },
       { name: "social.youtube", label: "YouTube", type: "text" },
+      { name: "social.tiktok", label: "TikTok", type: "text" },
     ],
   },
   {
@@ -59,6 +60,7 @@ const SECTIONS = [
       { name: "social.linkedin", label: "LinkedIn", type: "text" },
       { name: "social.x", label: "X (Twitter)", type: "text" },
       { name: "social.youtube", label: "YouTube", type: "text" },
+      { name: "social.tiktok", label: "TikTok", type: "text" },
     ],
   },
   {

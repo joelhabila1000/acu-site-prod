@@ -1,9 +1,15 @@
 import { SITE } from "../data/content.js";
+import Reveal from "./Reveal.jsx";
 import "./AdmissionCTA.css";
 
 export default function AdmissionCTA() {
   return (
-    <section className="cta-band" aria-labelledby="cta-heading">
+    <Reveal
+      as="section"
+      variant="lift"
+      className="cta-band"
+      aria-labelledby="cta-heading"
+    >
       <div className="container cta-inner">
         <div>
           <p className="eyebrow" style={{ color: "var(--gold-400)" }}>
@@ -21,6 +27,6 @@ export default function AdmissionCTA() {
           </a>
         </div>
       </div>
-    </section>
+    </Reveal>
   );
 }

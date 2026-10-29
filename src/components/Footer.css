@@ -199,10 +199,18 @@
   text-decoration: none;
   font-weight: 700;
   background: rgba(255, 255, 255, 0.03);
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
 }
 
 .footer-social-row a:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(224, 191, 79, 0.12);
+  border-color: var(--gold-400);
+  color: var(--gold-400);
+  transform: translateY(-2px);
 }
 
 .footer-bottom-bar {
@@ -281,25 +289,6 @@
     align-items: flex-start;
   }
 }
-.social-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  color: #0b1f4a;
-  background: transparent;
-  border-radius: 50%;
-  text-decoration: none;
-  transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-}
-
-.social-icon:hover {
-  color: #ffffff;
-  background: #ff0000; /* YouTube red on hover */
-  transform: translateY(-2px);
-}
-
-.social-icon svg {
+.footer-social-row svg {
   display: block;
 }

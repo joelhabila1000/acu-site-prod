@@ -1,11 +1,17 @@
 import Counter from "./Counter.jsx";
 import { useSite } from "../data/cms.js";
+import Reveal from "./Reveal.jsx";
 import "./StatsBar.css";
 
 export default function StatsBar() {
   const { stats } = useSite();
   return (
-    <section className="stats-bar" aria-label="Ajayi Crowther University at a glance">
+    <Reveal
+      as="section"
+      variant="flip"
+      className="stats-bar"
+      aria-label="Ajayi Crowther University at a glance"
+    >
       <div className="container stats-grid">
         {stats.map((s) => (
           <div className="stat-item" key={s.label}>
@@ -14,6 +20,6 @@ export default function StatsBar() {
           </div>
         ))}
       </div>
-    </section>
+    </Reveal>
   );
 }
