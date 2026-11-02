@@ -9,18 +9,18 @@ function dateParts(value) {
   if (!value) return null;
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return null;
-  return {
-    iso: date.toISOString(),
-    time: date.getTime(),
-    day: date.toLocaleDateString("en-GB", { day: "numeric" }),
-    month: date.toLocaleDateString("en-GB", { month: "short" }),
-    year: date.toLocaleDateString("en-GB", { year: "numeric" }),
-    monthKey: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`,
-    monthLabel: date.toLocaleDateString("en-GB", {
-      month: "long",
-      year: "numeric",
-    }),
-  };
+  return { iso: date.toISOString(), time: date.getTime() };
+}
+
+function formatEventDate(value) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value);
+  return date.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 }
 
 // "09:00 – 14:00", "09:00", or "" when the event has no time set.
@@ -29,6 +29,54 @@ function timeRange(item) {
   const end = (item.endTime || "").trim();
   if (start && end) return `${start} – ${end}`;
   return start || end;
+}
+
+function CalendarIcon() {
+  return (
+    <svg
+      className="event-icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      aria-hidden="true"
+    >
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M3 9h18M8 3v4M16 3v4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function ClockIcon() {
+  return (
+    <svg
+      className="event-icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3 2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function PinIcon() {
+  return (
+    <svg
+      className="event-icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      aria-hidden="true"
+    >
+      <path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z" />
+      <circle cx="12" cy="10" r="2.5" />
+    </svg>
+  );
 }
 
 // How many rows the list shows at most.
@@ -48,18 +96,6 @@ export default function UpcomingEventsSection() {
     .sort((a, b) => a.when.time - b.when.time)
     .slice(0, LIMIT);
 
-  // Group the list by calendar month, the way an events calendar does, so the
-  // section reads as "what comes next on the school calendar".
-  const months = [];
-  forthcoming.forEach((row, index) => {
-    let group = months.find((entry) => entry.key === row.when.monthKey);
-    if (!group) {
-      group = { key: row.when.monthKey, label: row.when.monthLabel, rows: [] };
-      months.push(group);
-    }
-    group.rows.push({ ...row, index });
-  });
-
   return (
     <Reveal
       as="section"
@@ -78,7 +114,7 @@ export default function UpcomingEventsSection() {
           </Link>
         </div>
 
-        {months.length === 0 ? (
+        {forthcoming.length === 0 ? (
           <div className="events-empty">
             <svg
               className="events-empty-icon"
@@ -98,57 +134,57 @@ export default function UpcomingEventsSection() {
             </p>
           </div>
         ) : (
-          <div className="events-calendar">
-            {months.map((month) => (
-              <div className="events-month" key={month.key}>
-                <h3 className="events-month-label">{month.label}</h3>
-                <ul className="events-list">
-                  {month.rows.map(({ item, when, index }) => (
-                    <Reveal
-                      as="li"
-                      key={item.slug || item.id}
-                      className="event-row"
-                      delay={index * 60}
-                    >
-                      <Link
-                        to={`/news/${item.slug || item.id}`}
-                        className="event-row-link"
-                      >
-                        <time className="event-date" dateTime={when.iso}>
-                          <strong>{when.day}</strong>
-                          <span>{when.month}</span>
-                          <em>{when.year}</em>
+          <ol className="events-list">
+            {forthcoming.map(({ item, when }, index) => {
+              const time = timeRange(item);
+              return (
+                <Reveal
+                  as="li"
+                  key={item.slug || item.id}
+                  className="event-row"
+                  delay={index * 60}
+                >
+                  <Link
+                    to={`/news/${item.slug || item.id}`}
+                    className="event-row-link"
+                  >
+                    <span className="event-index" aria-hidden="true">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+
+                    <span className="event-body">
+                      <span className="event-title">{item.title}</span>
+                      <span className="event-meta">
+                        <time
+                          className="event-meta-item"
+                          dateTime={when.iso}
+                        >
+                          <CalendarIcon />
+                          {formatEventDate(item.date)}
                         </time>
+                        {time && (
+                          <span className="event-meta-item">
+                            <ClockIcon />
+                            {time}
+                          </span>
+                        )}
+                        {item.venue && (
+                          <span className="event-meta-item">
+                            <PinIcon />
+                            {item.venue}
+                          </span>
+                        )}
+                      </span>
+                    </span>
 
-                        <div className="event-body">
-                          <h3>{item.title}</h3>
-                          {(timeRange(item) || item.venue) && (
-                            <p className="event-meta">
-                              {timeRange(item) && (
-                                <span className="event-time">
-                                  {timeRange(item)}
-                                </span>
-                              )}
-                              {item.venue && (
-                                <span className="event-venue">{item.venue}</span>
-                              )}
-                            </p>
-                          )}
-                          {item.excerpt && (
-                            <p className="event-excerpt">{item.excerpt}</p>
-                          )}
-                        </div>
-
-                        <span className="event-more" aria-hidden="true">
-                          Details →
-                        </span>
-                      </Link>
-                    </Reveal>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+                    <span className="event-more" aria-hidden="true">
+                      Details →
+                    </span>
+                  </Link>
+                </Reveal>
+              );
+            })}
+          </ol>
         )}
       </div>
     </Reveal>
