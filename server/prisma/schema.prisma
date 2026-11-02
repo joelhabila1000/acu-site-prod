@@ -12,6 +12,9 @@ datasource db {
 model User {
   id          Int      @id @default(autoincrement())
   name        String
+  // Optional sign-in name. The admin can sign in with this instead of an email;
+  // email remains the unique account identifier and a working fallback.
+  username    String?  @unique
   email       String   @unique
   passwordHash String
   roleId      Int

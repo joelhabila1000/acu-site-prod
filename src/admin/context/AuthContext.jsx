@@ -27,8 +27,8 @@ export function AuthProvider({ children }) {
     setSessionExpired(true);
   }, []);
 
-  const login = useCallback(async (email, password) => {
-    const res = await apiSend("/api/auth/login", "POST", { email, password });
+  const login = useCallback(async (username, password) => {
+    const res = await apiSend("/api/auth/login", "POST", { username, password });
     setSession(res.token, res.user);
     setToken(res.token);
     setUser(res.user);

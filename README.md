@@ -62,11 +62,15 @@ Use `npm run dev:site` or `npm run dev:api` to run just one.
 
 ## Admin
 
-Go to http://localhost:5173/admin and sign in with:
+Go to http://localhost:5173/admin and sign in with a username and password:
 
 ```
-admin@acu.edu.ng / adminchangeme
+admin / adminchangeme
 ```
+
+The seeded admin gets the username `admin`. Every account can have a username
+set in **Users & Roles**; leave it blank to sign in with the email address
+instead. Both work, so an account without a username still signs in normally.
 
 Change that password in **Users & Roles** as soon as you can.
 

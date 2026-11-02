@@ -31,11 +31,21 @@ async function seedRolesAndAdmin() {
     update: {},
     create: {
       name: "ACU Admin",
+      username: "admin",
       email: "admin@acu.edu.ng",
       passwordHash,
       roleId: superRole.id,
     },
   });
+
+  // Databases created before usernames existed have none on the admin row. Give
+  // it one, but never overwrite a username that has already been set.
+  if (!admin.username) {
+    return prisma.user.update({
+      where: { id: admin.id },
+      data: { username: "admin" },
+    });
+  }
   return admin;
 }
 

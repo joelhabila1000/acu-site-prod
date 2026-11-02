@@ -68,6 +68,7 @@ export default function Users() {
     (u) =>
       !q ||
       u.name.toLowerCase().includes(q.toLowerCase()) ||
+      (u.username || "").toLowerCase().includes(q.toLowerCase()) ||
       u.email.toLowerCase().includes(q.toLowerCase()),
   );
 
@@ -100,6 +101,7 @@ export default function Users() {
             <thead>
               <tr>
                 <th>Name</th>
+                <th>Username</th>
                 <th>Email</th>
                 <th>Role</th>
                 <th>Status</th>
@@ -110,6 +112,7 @@ export default function Users() {
               {filtered.map((u) => (
                 <tr key={u.id}>
                   <td>{u.name}</td>
+                  <td>{u.username || "—"}</td>
                   <td>{u.email}</td>
                   <td>{u.role?.name || "—"}</td>
                   <td className="small muted">{u.status}</td>
@@ -135,6 +138,17 @@ export default function Users() {
             <div className="form-row">
               <label>Name</label>
               <input name="name" defaultValue={editing.name || ""} required />
+            </div>
+            <div className="form-row">
+              <label>Username</label>
+              <input
+                name="username"
+                defaultValue={editing.username || ""}
+                autoComplete="off"
+              />
+              <span className="field-help">
+                Sign-in name. Leave blank to sign in with the email address.
+              </span>
             </div>
             <div className="form-row">
               <label>Email</label>

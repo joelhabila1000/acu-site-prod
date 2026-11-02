@@ -4,7 +4,7 @@ import "../admin.css";
 
 export default function Login() {
   const { login, sessionExpired } = useAuth();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -14,7 +14,7 @@ export default function Login() {
     setError("");
     setBusy(true);
     try {
-      await login(email.trim(), password);
+      await login(username.trim(), password);
     } catch (err) {
       setError(err.message || "Could not sign in.");
     } finally {
@@ -40,15 +40,18 @@ export default function Login() {
         {error && <div className="login-error">{error}</div>}
 
         <div className="form-row">
-          <label htmlFor="login-email">Email</label>
+          <label htmlFor="login-username">Username</label>
           <input
-            id="login-email"
-            type="email"
+            id="login-username"
+            type="text"
             autoComplete="username"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
+          <span className="field-help">
+            Your username, or the email address on your account.
+          </span>
         </div>
 
         <div className="form-row">

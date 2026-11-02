@@ -4,14 +4,14 @@ const bcrypt = require('bcryptjs')
 async function list(req,res){
   const { q, page = 1, per = 20 } = req.query
   const where = {}
-  if(q) where.OR = [{ name: { contains: q } }, { email: { contains: q } }]
+  if(q) where.OR = [{ name: { contains: q } }, { email: { contains: q } }, { username: { contains: q } }]
   const take = Number(per)
   const skip = (Number(page)-1) * take
   const [items, total] = await Promise.all([
     prisma.user.findMany({ where, include:{ role:true }, take, skip, orderBy:{ createdAt: 'desc' } }),
     prisma.user.count({ where })
   ])
-  res.json({ data: items.map(u=>({ id:u.id, name:u.name, email:u.email, role:u.role, status:u.status, createdAt:u.createdAt })), total })
+  res.json({ data: items.map(u=>({ id:u.id, name:u.name, username:u.username, email:u.email, role:u.role, status:u.status, createdAt:u.createdAt })), total })
 }
 
 async function get(req,res){
@@ -22,13 +22,17 @@ async function get(req,res){
 }
 
 async function create(req,res){
-  const { name, email, password, roleId } = req.body
+  const { name, username, email, password, roleId } = req.body
   if(!name || !email || !password) return res.status(400).json({ error: 'Missing required fields' })
   const existing = await prisma.user.findUnique({ where:{ email } })
   if(existing) return res.status(400).json({ error: 'Email already in use' })
+  if(username){
+    const taken = await prisma.user.findUnique({ where:{ username } })
+    if(taken) return res.status(400).json({ error: 'Username already in use' })
+  }
   const passwordHash = await bcrypt.hash(password, 10)
-  const user = await prisma.user.create({ data:{ name, email, passwordHash, roleId: Number(roleId) } })
-  res.json({ id: user.id, name: user.name, email: user.email })
+  const user = await prisma.user.create({ data:{ name, username: username || null, email, passwordHash, roleId: Number(roleId) } })
+  res.json({ id: user.id, name: user.name, username: user.username, email: user.email })
 }
 
 async function update(req,res){
@@ -38,9 +42,11 @@ async function update(req,res){
     body.passwordHash = await bcrypt.hash(body.password, 10)
     delete body.password
   }
+  // An emptied username field clears it; the caller falls back to email.
+  if(body.username !== undefined) body.username = String(body.username).trim() || null
   if(body.roleId) body.roleId = Number(body.roleId)
   const updated = await prisma.user.update({ where:{ id }, data: body })
-  res.json({ id: updated.id, name: updated.name, email: updated.email })
+  res.json({ id: updated.id, name: updated.name, username: updated.username, email: updated.email })
 }
 
 async function remove(req,res){

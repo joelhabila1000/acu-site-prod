@@ -7,12 +7,20 @@ const SECRET = require("../lib/authSecret");
 const { EDITOR_ROLES, ADMIN_ROLES } = require("../lib/roles");
 
 async function login(req, res) {
-  const { email, password } = req.body;
-  if (!email || !password)
-    return res.status(400).json({ error: "Email and password required" });
+  // The admin signs in with a username; `email` is still accepted so existing
+  // sessions and scripts keep working.
+  const { username, email, password } = req.body;
+  const identifier = String(username || email || "").trim();
+  if (!identifier || !password)
+    return res.status(400).json({ error: "Username and password required" });
 
-  const user = await prisma.user.findUnique({
-    where: { email },
+  const user = await prisma.user.findFirst({
+    where: {
+      OR: [
+        { username: { equals: identifier, mode: "insensitive" } },
+        { email: { equals: identifier, mode: "insensitive" } },
+      ],
+    },
     include: { role: true },
   });
   if (!user) return res.status(401).json({ error: "Invalid credentials" });
@@ -37,6 +45,7 @@ async function login(req, res) {
     user: {
       id: user.id,
       name: user.name,
+      username: user.username,
       email: user.email,
       role: user.role ? { id: user.role.id, name: user.role.name } : null,
     },
