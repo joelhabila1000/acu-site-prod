@@ -121,14 +121,13 @@ export const ROUTE_META = {
 };
 
 // Returns the meta for an exact path, or null when the page owns its own tags.
-export function metaFor(pathname) {
+export function metaFor(pathname, pages) {
   const explicit = ROUTE_META[pathname];
   if (explicit) return explicit;
 
   // Section pages carry their own heading and lede, so they do not need a
-  // hand-written title/description — derive them instead of shipping a blank
-  // title for every one of them.
-  const page = SECTION_PAGES[pathname];
+  // hand-written title/description — derive them from whichever copy is live.
+  const page = (pages && pages[pathname]) || SECTION_PAGES[pathname];
   if (!page) return null;
   return {
     title: `${page.title} | Ajayi Crowther University, Oyo`,

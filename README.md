@@ -127,6 +127,15 @@ The content files above still hold the starting values, but `npm run seed` and
 `npm run sync:nav` overwrite the database copy — treat them as fresh-database
 setup, not as a way to edit the live menu.
 
+Every informational page (Admissions, Student Life, Student Services, Resources,
+Research, News) is editable from **Pages** in the admin: title, breadcrumb, intro
+text, sections (heading, paragraphs, bullet points), key facts, buttons, a call
+to action and an optional downloadable file. The pages live in the database;
+`src/data/sectionPages.json` is both the bundled fallback and the seed source.
+On a new database run `npm run seed:pages` (from `server/`) to create them — it
+only adds pages that are missing, so edits made in the admin are never
+overwritten.
+
 The **Sustainability** page is fully editable from the admin:
 
 - **Settings → Sustainability** — hero slides, intro copy, statistics, the 17-goal

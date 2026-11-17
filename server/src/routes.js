@@ -7,6 +7,7 @@ const principalOfficers = require("./controllers/principalOfficers");
 const faculties = require("./controllers/faculties");
 const gallery = require("./controllers/gallery");
 const settings = require("./controllers/settings");
+const pages = require("./controllers/pages");
 const uploads = require("./controllers/uploads");
 const documents = require("./controllers/documents");
 const staff = require("./controllers/staff");
@@ -70,6 +71,13 @@ router.delete("/gallery/:id", auth.requireEditor, gallery.remove);
 // Site settings
 router.get("/settings", settings.getAll);
 router.put("/settings/:key", auth.requireEditor, settings.put);
+
+// Section pages (the informational pages rendered by SectionPage on the site)
+router.get("/pages", pages.list);
+router.get("/pages/:id", pages.get);
+router.post("/pages", auth.requireEditor, pages.create);
+router.put("/pages/:id", auth.requireEditor, pages.update);
+router.delete("/pages/:id", auth.requireEditor, pages.remove);
 
 // Staff directory
 router.get("/staff", staff.list);

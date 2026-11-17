@@ -45,6 +45,117 @@ export const RESOURCES = {
     ],
   },
 
+  // The informational pages rendered by SectionPage (Admissions, Student Life,
+  // Student Services, Resources, Research, News…). Editing here changes the
+  // live page: the site reads these rows, with the bundled JSON as fallback.
+  pages: {
+    title: "Pages",
+    singular: "Page",
+    endpoint: "/api/pages",
+    columns: [
+      { key: "path", label: "Path" },
+      { key: "title", label: "Title" },
+      { key: "status", label: "Status" },
+    ],
+    defaults: { status: "published", sections: [], facts: [], links: [] },
+    fields: [
+      {
+        name: "path",
+        label: "Path",
+        type: "text",
+        required: true,
+        help: "The address on the site, e.g. /student-services/undergraduate-freshers-registration",
+      },
+      { name: "title", label: "Title", type: "text", required: true },
+      {
+        name: "crumb",
+        label: "Breadcrumb label",
+        type: "text",
+        help: "Shown after Home, e.g. Student Services.",
+      },
+      { name: "lede", label: "Intro text", type: "textarea" },
+      {
+        name: "sections",
+        label: "Sections",
+        type: "list",
+        itemLabel: "section",
+        help: "Each section is a heading, optional paragraphs and optional bullet points.",
+        itemFields: [
+          { name: "heading", label: "Heading", type: "text" },
+          {
+            name: "paragraphs",
+            label: "Paragraphs",
+            type: "tags",
+            rows: 4,
+            help: "One paragraph per line.",
+          },
+          {
+            name: "list",
+            label: "Bullet points",
+            type: "tags",
+            rows: 3,
+            help: "One point per line.",
+          },
+        ],
+      },
+      {
+        name: "facts",
+        label: "Key facts",
+        type: "list",
+        itemLabel: "fact",
+        itemFields: [
+          { name: "label", label: "Label", type: "text" },
+          { name: "value", label: "Value", type: "text" },
+        ],
+      },
+      {
+        name: "links",
+        label: "Buttons",
+        type: "list",
+        itemLabel: "button",
+        itemFields: [
+          { name: "label", label: "Label", type: "text" },
+          {
+            name: "path",
+            label: "Link",
+            type: "text",
+            help: "A site path (/contact) or a full URL.",
+          },
+        ],
+      },
+      { name: "ctaLabel", label: "Call to action — label", type: "text" },
+      {
+        name: "ctaHref",
+        label: "Call to action — link",
+        type: "text",
+        help: "A site path or a full URL.",
+      },
+      {
+        name: "ctaExternal",
+        label: "Call to action opens another site",
+        type: "boolean",
+      },
+      {
+        name: "attachment",
+        label: "Downloadable file",
+        type: "file",
+        help: "Optional. Shown as a download button on the page.",
+        targets: {
+          url: "attachmentUrl",
+          name: "attachmentName",
+          size: "attachmentSize",
+          type: "attachmentType",
+        },
+      },
+      {
+        name: "status",
+        label: "Status",
+        type: "select",
+        options: STATUS_EDITORIAL,
+      },
+    ],
+  },
+
   events: {
     title: "Events",
     singular: "Event",
@@ -829,6 +940,7 @@ export const RESOURCES = {
 export const ADMIN_NAV = [
   { path: "/admin", page: "dashboard", label: "Dashboard" },
   { path: "/admin/navigation", page: "navigation", label: "Navigation" },
+  { path: "/admin/pages", page: "pages", label: "Pages" },
   { path: "/admin/news", page: "news", label: "News" },
   { path: "/admin/events", page: "events", label: "Events" },
   { path: "/admin/announcements", page: "announcements", label: "Announcements" },

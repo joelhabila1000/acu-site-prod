@@ -118,7 +118,7 @@ const NAV_LINKS = [
           },
           {
             label: "Transcript Request Procedure",
-            path: "/student-services/undergraduate-transcript",
+            path: "/student-services/transcript-request",
           },
           {
             label: "Collection of Statement of Result",
@@ -159,7 +159,7 @@ const NAV_LINKS = [
           },
           {
             label: "Transcript Request Procedure",
-            path: "/student-services/postgraduate-transcript",
+            path: "/student-services/transcript-request",
           },
         ],
       },

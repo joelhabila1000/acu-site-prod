@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { usePages } from "../data/cms.js";
 import { SITE_URL, metaFor } from "../data/seo.js";
 
 function upsertMeta(attr, key, content) {
@@ -16,9 +17,10 @@ function upsertMeta(attr, key, content) {
 // with the current route. Renders nothing.
 export default function RouteMeta() {
   const { pathname } = useLocation();
+  const pages = usePages();
 
   useEffect(() => {
-    const meta = metaFor(pathname);
+    const meta = metaFor(pathname, pages);
     if (!meta) return;
 
     const url = `${SITE_URL}${pathname === "/" ? "/" : pathname}`;
@@ -37,7 +39,7 @@ export default function RouteMeta() {
       document.head.appendChild(canonical);
     }
     canonical.setAttribute("href", url);
-  }, [pathname]);
+  }, [pathname, pages]);
 
   return null;
 }

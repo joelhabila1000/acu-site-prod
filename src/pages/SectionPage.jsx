@@ -1,19 +1,20 @@
 import { Link, useLocation } from "react-router-dom";
 import PageHeader from "../components/PageHeader.jsx";
 import NotFound from "./NotFound.jsx";
-import { SECTION_PAGES } from "../data/sectionPages.js";
+import { usePages } from "../data/cms.js";
 import "./SectionPage.css";
 
 // Renders the informational pages reached from the primary navigation. Each
-// route looks its content up in SECTION_PAGES by path, so a new page needs only
-// a data entry and a route rather than a new component.
+// route looks its content up by path, so a page is an admin record (with the
+// bundled copy as fallback) rather than a component of its own.
 export default function SectionPage() {
   const { pathname } = useLocation();
-  const content = SECTION_PAGES[pathname];
+  const pages = usePages();
+  const content = pages[pathname];
 
   if (!content) return <NotFound />;
 
-  const { crumb, title, lede, calendar, sections = [], links, facts, cta } =
+  const { crumb, title, lede, calendar, sections = [], links, facts, cta, attachment } =
     content;
 
   return (
@@ -107,12 +108,27 @@ export default function SectionPage() {
 
           {facts && (
             <div className="value-card">
-              {facts.map(([label, value]) => (
-                <p key={label}>
-                  <strong>{label}:</strong> {value}
+              {facts.map((fact) => (
+                <p key={fact.label}>
+                  <strong>{fact.label}:</strong> {fact.value}
                 </p>
               ))}
             </div>
+          )}
+
+          {attachment && (
+            <p style={{ marginTop: 28 }}>
+              <a
+                href={attachment.url}
+                className="btn btn-navy"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {attachment.name
+                  ? `Download ${attachment.name}`
+                  : "Download the form"}
+              </a>
+            </p>
           )}
 
           {cta && (

@@ -24,7 +24,6 @@ model User {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   ActivityLog ActivityLog[]
-  pages       Page[]
   news        News[]
 }
 
@@ -56,17 +55,26 @@ model RolePermission {
 }
 
 model Page {
-  id           Int @id @default(autoincrement())
-  title        String
-  slug         String @unique
-  content      String @db.Text
-  featuredImage String?
-  status       String @default("draft")
-  authorId     Int
-  author       User @relation(fields: [authorId], references: [id])
-  publishedAt  DateTime?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id             Int      @id @default(autoincrement())
+  // Exact route the page answers on, e.g. "/student-services/...".
+  path           String   @unique
+  title          String
+  crumb          String?
+  lede           String?  @db.Text
+  sections       Json?
+  facts          Json?
+  links          Json?
+  calendar       Json?
+  ctaLabel       String?
+  ctaHref        String?
+  ctaExternal    Boolean  @default(false)
+  attachmentUrl  String?
+  attachmentName String?
+  attachmentSize Int?
+  attachmentType String?
+  status         String   @default("published")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model News {

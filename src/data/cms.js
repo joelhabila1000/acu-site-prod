@@ -14,6 +14,7 @@ import {
 } from "react";
 import { apiGet } from "../lib/api.js";
 import { slugify } from "../lib/format.js";
+import { SECTION_PAGES } from "./sectionPages.js";
 import {
   SITE,
   NAV_LINKS,
@@ -209,6 +210,34 @@ const STATIC_NEWS_EVENTS = NEWS_ITEMS.map((item) => ({
   endTime: item.endTime || "",
 }));
 
+// A section page row from the API, shaped for SectionPage. The page is edited
+// in the admin; anything it does not set simply falls through to undefined.
+function mapPage(row) {
+  const page = {
+    crumb: row.crumb || "",
+    title: row.title,
+    lede: row.lede || "",
+    sections: asArray(row.sections),
+    facts: asArray(row.facts),
+    links: asArray(row.links),
+  };
+  if (row.calendar) page.calendar = row.calendar;
+  if (row.ctaLabel && row.ctaHref)
+    page.cta = {
+      label: row.ctaLabel,
+      href: row.ctaHref,
+      external: Boolean(row.ctaExternal),
+    };
+  if (row.attachmentUrl)
+    page.attachment = {
+      url: row.attachmentUrl,
+      name: row.attachmentName || "",
+      size: Number(row.attachmentSize) || 0,
+      type: row.attachmentType || "",
+    };
+  return page;
+}
+
 // A news row from the API, shaped for the shared news/events list.
 function mapNews(row) {
   const photos = mapImages(row.images);
@@ -329,6 +358,9 @@ const DEFAULT_CONTENT = {
   libraryEResources: LIBRARY_FALLBACKS.eResources,
   libraryBranches: LIBRARY_FALLBACKS.branches,
   libraryServices: LIBRARY_FALLBACKS.services,
+  // Keyed by route. The API copy replaces this once it loads; this is what the
+  // site falls back to when the API cannot be reached.
+  pages: SECTION_PAGES,
   ready: false,
 };
 
@@ -390,6 +422,7 @@ export function ContentProvider({ children }) {
         libraryEResourcesR,
         libraryBranchesR,
         libraryServicesR,
+        pagesR,
       ] = await Promise.allSettled([
         apiGet("/api/settings"),
         apiGet("/api/faculties"),
@@ -408,6 +441,7 @@ export function ContentProvider({ children }) {
         apiGet("/api/library/e-resources?status=published"),
         apiGet("/api/library/branches?status=active"),
         apiGet("/api/library/services?status=published"),
+        apiGet("/api/pages?status=published"),
       ]);
 
       if (cancelled) return;
@@ -755,6 +789,18 @@ export function ContentProvider({ children }) {
         next.newsEvents = eventRows.map(mapEvent);
       }
 
+      // Pages are the live copy once the API answers; the bundled file stays as
+      // the fallback when it does not (or when nothing has been seeded yet).
+      const pageRows =
+        pagesR.status === "fulfilled"
+          ? asArray(pagesR.value && pagesR.value.data)
+          : [];
+      if (pageRows.length) {
+        next.pages = Object.fromEntries(
+          pageRows.filter((row) => row.path).map((row) => [row.path, mapPage(row)]),
+        );
+      }
+
       next.ready = true;
       setContent(next);
     }
@@ -875,6 +921,10 @@ export function useLibraryServices() {
 
 export function useLibrarySettings() {
   return useContent().library;
+}
+
+export function usePages() {
+  return useContent().pages;
 }
 
 // True once the first API load has finished, so detail pages can tell an empty

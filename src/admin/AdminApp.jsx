@@ -72,6 +72,8 @@ function AdminShell() {
         resource={RESOURCES.postgraduateProgrammes}
       />
     );
+  else if (page === "pages")
+    content = <ResourcePage key="pages" resource={RESOURCES.pages} />;
   else if (page === "navigation")
     content = <Settings initialSection="nav" />;
   else if (page === "settings") content = <Settings />;
