@@ -169,6 +169,15 @@
   z-index: 1;
 }
 
+/* A mega panel centres on the header rather than on its own nav item, so a
+   wide four-column menu stays inside the viewport wherever the item sits.
+   Leaving the item unpositioned makes the sticky header the containing block. */
+.nav-dropdown--mega,
+.primary-nav li.nav-dropdown--mega {
+  position: static;
+  z-index: auto;
+}
+
 .nav-dropdown-toggle {
   display: inline-flex;
   align-items: center;
@@ -269,13 +278,19 @@
 }
 
 .nav-mega-menu {
+  /* Column count comes from the menu data, so a two- or four-column panel
+     sizes itself instead of being hard-coded. */
+  --mega-columns: 2;
   position: absolute;
   top: calc(100% - 8px);
   left: 50%;
-  width: min(760px, calc(100svw - 32px));
+  width: min(calc(var(--mega-columns) * 280px + 40px), calc(100svw - 32px));
+  max-height: calc(100svh - 116px);
+  overflow-y: auto;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 64px;
+  grid-template-columns: repeat(var(--mega-columns), minmax(0, 1fr));
+  column-gap: 40px;
+  row-gap: 28px;
   padding: 32px 36px 34px;
   background: var(--white);
   border: 1px solid var(--line);
@@ -304,18 +319,20 @@
   gap: 0;
 }
 .nav-mega-column h3 {
-  margin: 0 0 18px;
+  margin: 0 0 16px;
   color: var(--navy-900);
-  font-size: 1.05rem;
+  font-size: 1.02rem;
   font-weight: 700;
   letter-spacing: 0.01em;
-  text-transform: uppercase;
+  line-height: 1.35;
 }
-.nav-mega-column a {
+.nav-mega-column a,
+.nav-mega-placeholder {
   padding: 9px 0;
   color: var(--ink-700);
   font-size: 1rem;
   font-weight: 500;
+  line-height: 1.4;
 }
 .nav-mega-column a:hover,
 .nav-mega-column a.active {
@@ -323,6 +340,10 @@
 }
 .nav-mega-column a::after {
   display: none;
+}
+/* Links without a destination yet (`#`) read as plain text, not dead links. */
+.nav-mega-placeholder {
+  color: var(--ink-500);
 }
 
 .nav-submenu-item {
@@ -497,6 +518,15 @@
     padding: 10px 4px;
     color: var(--gold-100);
     font-size: 0.9rem;
+  }
+  .mobile-submenu .mobile-placeholder {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 10px 4px;
+    color: var(--gold-100);
+    font-size: 0.9rem;
+    opacity: 0.55;
   }
   .mobile-submenu.nested {
     padding-left: 18px;

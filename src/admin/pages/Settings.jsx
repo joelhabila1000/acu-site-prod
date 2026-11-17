@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Card from "../components/Card";
+import NavEditor from "../components/NavEditor.jsx";
 import { Field } from "../components/fields.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 
@@ -321,7 +322,7 @@ const SECTIONS = [
       },
     ],
   },
-  { key: "nav", label: "Navigation (read-only)", kind: "raw" },
+  { key: "nav", label: "Navigation", kind: "nav" },
 ];
 
 export default function Settings() {
@@ -377,13 +378,11 @@ export default function Settings() {
     if (!section) return null;
     const value = docs[section.key];
 
-    if (section.kind === "raw") {
+    if (section.kind === "nav") {
       return (
-        <textarea
-          className="raw-json"
-          readOnly
-          rows={18}
-          value={JSON.stringify(value ?? [], null, 2)}
+        <NavEditor
+          value={Array.isArray(value) ? value : []}
+          onChange={(next) => updateDoc(section.key, next)}
         />
       );
     }
@@ -458,15 +457,13 @@ export default function Settings() {
         <Card>
           <div className="settings-panel-head">
             <h3>{section.label}</h3>
-            {section.kind !== "raw" && (
-              <div className="settings-save">
-                {message && <span className="settings-saved">{message}</span>}
-                {error && <span className="field-error">{error}</span>}
-                <button className="btn" onClick={saveSection} disabled={saving}>
-                  {saving ? "Saving…" : "Save"}
-                </button>
-              </div>
-            )}
+            <div className="settings-save">
+              {message && <span className="settings-saved">{message}</span>}
+              {error && <span className="field-error">{error}</span>}
+              <button className="btn" onClick={saveSection} disabled={saving}>
+                {saving ? "Saving…" : "Save"}
+              </button>
+            </div>
           </div>
           <div className="modal-scroll">{renderEditor()}</div>
         </Card>

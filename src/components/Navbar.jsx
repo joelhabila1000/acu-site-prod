@@ -7,26 +7,57 @@ function hasChildren(item) {
   return Array.isArray(item.children) && item.children.length > 0;
 }
 
+function hasMegaMenu(item) {
+  return Array.isArray(item.megaMenu) && item.megaMenu.length > 0;
+}
+
+// Entries whose destination has not been supplied yet (`#`, or missing) are
+// rendered as plain text so nothing navigates to a dead hash.
+function isPlaceholder(path) {
+  return !path || path === "#";
+}
+
 // Menu entries may point off-site (student portals). Those need a plain anchor
 // rather than a router link, which would treat them as an internal path.
 function isExternal(path) {
   return /^https?:\/\//i.test(path || "");
 }
 
+function MegaMenuLink({ item }) {
+  if (isPlaceholder(item.path)) {
+    return <span className="nav-mega-placeholder">{item.label}</span>;
+  }
+  if (isExternal(item.path)) {
+    return (
+      <a href={item.path} target="_blank" rel="noopener noreferrer">
+        {item.label}
+        <span className="nav-external" aria-hidden="true">
+          ↗
+        </span>
+      </a>
+    );
+  }
+  return (
+    <NavLink
+      to={item.path}
+      className={({ isActive }) => (isActive ? "active" : "")}
+    >
+      {item.label}
+    </NavLink>
+  );
+}
+
 function DesktopMegaMenu({ columns }) {
   return (
-    <div className="nav-mega-menu">
+    <div
+      className="nav-mega-menu"
+      style={{ "--mega-columns": columns.length }}
+    >
       {columns.map((column) => (
         <div key={column.heading} className="nav-mega-column">
           <h3>{column.heading}</h3>
           {column.items.map((item) => (
-            <NavLink
-              key={item.label}
-              to={item.path}
-              className={({ isActive }) => (isActive ? "active" : "")}
-            >
-              {item.label}
-            </NavLink>
+            <MegaMenuLink key={item.label} item={item} />
           ))}
         </div>
       ))}
@@ -66,6 +97,9 @@ function DesktopChildren({ items, onNavigate }) {
 // A single mobile drawer entry: off-site links open in a new tab, everything
 // else routes and closes the drawer on tap.
 function MobileNavLink({ item, onNavigate }) {
+  if (isPlaceholder(item.path)) {
+    return <span className="mobile-placeholder">{item.label}</span>;
+  }
   if (isExternal(item.path)) {
     return (
       <a
@@ -193,11 +227,12 @@ export default function Navbar() {
           <ul>
             {nav.map((link, index) => {
               const children = hasChildren(link);
-              const isGroupLabel = children && !link.path;
+              const megaMenu = hasMegaMenu(link);
+              const isGroupLabel = (children || megaMenu) && !link.path;
               // Menus near the right edge open leftwards so they stay on screen.
               const alignRight = index >= nav.length - 2;
 
-              if (!children) {
+              if (!children && !megaMenu) {
                 return (
                   <li key={link.path || link.label}>
                     {isExternal(link.path) ? (
@@ -226,9 +261,9 @@ export default function Navbar() {
               return (
                 <li
                   key={link.path || link.label}
-                  className={`nav-dropdown ${alignRight ? "nav-dropdown--right" : ""} ${
-                    menuOpen ? "is-open" : ""
-                  }`}
+                  className={`nav-dropdown ${megaMenu ? "nav-dropdown--mega" : ""} ${
+                    alignRight ? "nav-dropdown--right" : ""
+                  } ${menuOpen ? "is-open" : ""}`}
                 >
                   {isGroupLabel ? (
                     <button
@@ -300,8 +335,7 @@ export default function Navbar() {
         <ul>
           {nav.map((link) => {
             const children = hasChildren(link);
-            const megaMenu =
-              Array.isArray(link.megaMenu) && link.megaMenu.length > 0;
+            const megaMenu = hasMegaMenu(link);
 
             if (!children && !megaMenu) {
               return (

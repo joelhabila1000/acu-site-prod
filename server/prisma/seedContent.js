@@ -87,13 +87,52 @@ const NAV_LINKS = [
   {
     // A grouping label rather than a destination — no `path`, so the navbar
     // renders it as a non-clickable heading that reveals the menu on hover.
-    // The items are placeholder stubs (`#`) to be filled in later.
+    // Every entry is a placeholder stub (`#`) until the real URLs are supplied.
     label: "Student Services",
-    children: [
-      { label: "Undergraduate Programme", path: "https://apply.acu.edu.ng/" },
-      { label: "Postgraduate Programme", path: "https://pgs.acu.edu.ng/" },
-      { label: "Centre for Continuing Education (CCED)", path: "#" },
-      { label: "CDEL", path: "https://cdel.acu.edu.ng" },
+    megaMenu: [
+      {
+        heading: "Undergraduate",
+        items: [
+          { label: "Freshers Doc. For Registration", path: "#" },
+          { label: "Freshers Information", path: "#" },
+          { label: "Returning Students Change Of course", path: "#" },
+          { label: "Academic Calendar", path: "#" },
+          { label: "2026/2027 Schedule of Fees", path: "#" },
+          { label: "Course Registration / Result Portal", path: "#" },
+          { label: "Transcript Request Procedure", path: "#" },
+          { label: "Collection of Statement of Result", path: "#" },
+          { label: "Students' Handbook", path: "#" },
+        ],
+      },
+      {
+        heading: "Postgraduate",
+        items: [
+          { label: "Academic Calendar", path: "#" },
+          { label: "School Fees Schedule", path: "#" },
+          { label: "Programmes & Requirement", path: "#" },
+          { label: "Student Portal (PGD)", path: "#" },
+          { label: "Student Portal (M.A / M.Sc.)", path: "#" },
+          { label: "Student Portal (Ph.D)", path: "#" },
+          { label: "Transcript Request Procedure", path: "#" },
+        ],
+      },
+      {
+        heading: "JUPEP / Foundation",
+        items: [
+          { label: "Admission Requirement", path: "#" },
+          { label: "School Fee Schedule", path: "#" },
+          { label: "Course Form Payment", path: "#" },
+          { label: "Course Registration & Result Portal", path: "#" },
+        ],
+      },
+      {
+        heading: "Part-time / HND Conversion & Sandwich",
+        items: [
+          { label: "Centres & Contacts", path: "#" },
+          { label: "ID Card Payment Link", path: "#" },
+          { label: "Student Portal (Part-Time)", path: "#" },
+        ],
+      },
     ],
   },
   { label: "Sustainability", path: "/sustainability" },

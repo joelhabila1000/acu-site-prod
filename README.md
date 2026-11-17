@@ -116,9 +116,16 @@ There are two content files and it matters which one you edit:
   database gets seeded with. **The API wins over the fallback**, so run
   `npm run seed` after editing this, or the change won't appear.
 
-Navigation in particular is stored in the database as a setting, so adding a
-nav item means editing both files and re-running the seed (or editing it in the
-CMS).
+Navigation is stored in the database as a setting and is edited in the admin
+under **Settings → Navigation**: add, reorder and remove menus and their links,
+or give a menu dropdown links or mega-menu columns. Use a site path
+(`/admissions`), a full URL for another site, or `#` while a page is not ready
+(`#` items render as plain text). Leaving a menu's URL blank makes it a heading
+that opens on hover or tap.
+
+The content files above still hold the starting values, but `npm run seed` and
+`npm run sync:nav` overwrite the database copy — treat them as fresh-database
+setup, not as a way to edit the live menu.
 
 The **Sustainability** page is fully editable from the admin:
 
