@@ -100,3 +100,29 @@
     white-space: normal;
   }
 }
+
+/* Downloadable document attached to a page (admin → Pages). PDFs are shown
+   inline as well as offered as a download. */
+.download {
+  margin-top: 32px;
+}
+
+.download p {
+  margin: 0;
+}
+
+.pdf-embed {
+  margin-top: 18px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--white);
+  box-shadow: var(--shadow-md);
+}
+
+.pdf-embed iframe {
+  display: block;
+  width: 100%;
+  height: min(80vh, 880px);
+  border: 0;
+}

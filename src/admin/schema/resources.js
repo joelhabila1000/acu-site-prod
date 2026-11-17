@@ -139,7 +139,7 @@ export const RESOURCES = {
         name: "attachment",
         label: "Downloadable file",
         type: "file",
-        help: "Optional. Shown as a download button on the page.",
+        help: "Optional. Shown on the page with a download button; a PDF is also displayed inline.",
         targets: {
           url: "attachmentUrl",
           name: "attachmentName",

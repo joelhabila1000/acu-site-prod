@@ -17,6 +17,14 @@ export default function SectionPage() {
   const { crumb, title, lede, calendar, sections = [], links, facts, cta, attachment } =
     content;
 
+  // A PDF is shown on the page as well as offered as a download, so a fee
+  // schedule or form can be read without leaving the site.
+  const isPdf = Boolean(
+    attachment &&
+      (attachment.type === "application/pdf" ||
+        /\.pdf($|\?)/i.test(attachment.url || "")),
+  );
+
   return (
     <>
       <PageHeader crumb={crumb} title={title} lede={lede} />
@@ -117,18 +125,29 @@ export default function SectionPage() {
           )}
 
           {attachment && (
-            <p style={{ marginTop: 28 }}>
-              <a
-                href={attachment.url}
-                className="btn btn-navy"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {attachment.name
-                  ? `Download ${attachment.name}`
-                  : "Download the form"}
-              </a>
-            </p>
+            <div className="download">
+              <p>
+                <a
+                  href={attachment.url}
+                  className="btn btn-navy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {attachment.name
+                    ? `Download ${attachment.name}`
+                    : "Download the document"}
+                </a>
+              </p>
+              {isPdf && (
+                <div className="pdf-embed">
+                  <iframe
+                    src={attachment.url}
+                    title={attachment.name || "Document"}
+                    loading="lazy"
+                  />
+                </div>
+              )}
+            </div>
           )}
 
           {cta && (
