@@ -151,15 +151,15 @@ export const NAV_LINKS = [
           },
           {
             label: "Student Portal (PGD)",
-            path: "/student-services/postgraduate-portal-pgd",
+            path: "https://pgs.acu.edu.ng/",
           },
           {
             label: "Student Portal (M.A / M.Sc.)",
-            path: "/student-services/postgraduate-portal-masters",
+            path: "https://pgs.acu.edu.ng/",
           },
           {
             label: "Student Portal (Ph.D)",
-            path: "/student-services/postgraduate-portal-phd",
+            path: "https://pgs.acu.edu.ng/",
           },
           {
             label: "Transcript Request Procedure",
