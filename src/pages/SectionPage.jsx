@@ -25,12 +25,22 @@ export default function SectionPage() {
         /\.pdf($|\?)/i.test(attachment.url || "")),
   );
 
+  // A section the editor emptied out should not leave a divider and blank space
+  // behind, and an empty calendar/facts/links block should not draw a box.
+  const visibleSections = sections.filter(
+    (section) =>
+      section &&
+      (section.heading ||
+        (section.paragraphs || []).length > 0 ||
+        (section.list || []).length > 0),
+  );
+
   return (
     <>
       <PageHeader crumb={crumb} title={title} lede={lede} />
       <section className="section">
         <div className="container" style={{ maxWidth: 940 }}>
-          {calendar && (
+          {calendar && calendar.semesters && calendar.semesters.length > 0 && (
             <div className="calendar">
               {calendar.session && (
                 <p className="calendar-session">
@@ -74,7 +84,7 @@ export default function SectionPage() {
             </div>
           )}
 
-          {sections.map((section) => (
+          {visibleSections.map((section) => (
             <article key={section.heading} style={{ marginBottom: 42 }}>
               <div className="crest-divider">
                 <span className="diamond" aria-hidden="true" />
@@ -83,7 +93,7 @@ export default function SectionPage() {
               {(section.paragraphs || []).map((paragraph, index) => (
                 <p key={index}>{paragraph}</p>
               ))}
-              {section.list && (
+              {section.list && section.list.length > 0 && (
                 <ul className="value-list" style={{ marginTop: 20 }}>
                   {section.list.map((item) => (
                     <li key={item}>{item}</li>
@@ -93,7 +103,7 @@ export default function SectionPage() {
             </article>
           ))}
 
-          {links && (
+          {links && links.length > 0 && (
             <div
               style={{
                 display: "flex",
@@ -114,7 +124,7 @@ export default function SectionPage() {
             </div>
           )}
 
-          {facts && (
+          {facts && facts.length > 0 && (
             <div className="value-card">
               {facts.map((fact) => (
                 <p key={fact.label}>
