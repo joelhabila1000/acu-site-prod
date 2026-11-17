@@ -312,6 +312,17 @@
   visibility: visible;
   transform: translateX(-50%) translateY(0);
 }
+
+/* Just after a menu link is clicked the pointer and keyboard focus are still
+   inside the panel, so :hover/:focus-within would hold it open. The Navbar
+   sets this until the pointer leaves the menu or moves to another item. */
+.primary-nav.is-click-closed .nav-dropdown:hover .nav-dropdown-menu,
+.primary-nav.is-click-closed .nav-dropdown:focus-within .nav-dropdown-menu,
+.primary-nav.is-click-closed .nav-dropdown:hover .nav-mega-menu,
+.primary-nav.is-click-closed .nav-dropdown:focus-within .nav-mega-menu {
+  opacity: 0;
+  visibility: hidden;
+}
 .nav-mega-column {
   display: flex;
   flex-direction: column;

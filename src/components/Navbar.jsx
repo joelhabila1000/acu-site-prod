@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useSite } from "../data/cms.js";
 import "./Navbar.css";
 
@@ -23,13 +23,18 @@ function isExternal(path) {
   return /^https?:\/\//i.test(path || "");
 }
 
-function MegaMenuLink({ item }) {
+function MegaMenuLink({ item, onNavigate }) {
   if (isPlaceholder(item.path)) {
     return <span className="nav-mega-placeholder">{item.label}</span>;
   }
   if (isExternal(item.path)) {
     return (
-      <a href={item.path} target="_blank" rel="noopener noreferrer">
+      <a
+        href={item.path}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={onNavigate}
+      >
         {item.label}
         <span className="nav-external" aria-hidden="true">
           ↗
@@ -41,13 +46,14 @@ function MegaMenuLink({ item }) {
     <NavLink
       to={item.path}
       className={({ isActive }) => (isActive ? "active" : "")}
+      onClick={onNavigate}
     >
       {item.label}
     </NavLink>
   );
 }
 
-function DesktopMegaMenu({ columns }) {
+function DesktopMegaMenu({ columns, onNavigate }) {
   return (
     <div
       className="nav-mega-menu"
@@ -57,7 +63,7 @@ function DesktopMegaMenu({ columns }) {
         <div key={column.heading} className="nav-mega-column">
           <h3>{column.heading}</h3>
           {column.items.map((item) => (
-            <MegaMenuLink key={item.label} item={item} />
+            <MegaMenuLink key={item.label} item={item} onNavigate={onNavigate} />
           ))}
         </div>
       ))}
@@ -152,11 +158,27 @@ function MobileChildren({ items, onNavigate }) {
 
 export default function Navbar() {
   const { site, nav, portals } = useSite();
+  const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   // Only used by the non-clickable grouping headings (e.g. Student Services),
   // so touch and keyboard users can open the menu without hovering.
   const [openGroup, setOpenGroup] = useState(null);
+  // After a menu link is clicked the pointer (and keyboard focus) is still on
+  // the item, so :hover/:focus-within would immediately reopen the panel. This
+  // holds both shut until the pointer leaves the menu or enters another item.
+  const [hoverLocked, setHoverLocked] = useState(false);
+
+  // Closes every menu and releases focus, so nothing reopens the panel it was
+  // clicked from.
+  function closeMenus() {
+    setOpenGroup(null);
+    setOpen(false);
+    setHoverLocked(true);
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -164,6 +186,13 @@ export default function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // A menu link followed to another route may bypass the click handler (e.g. a
+  // link opened with the keyboard), so close on navigation as well.
+  useEffect(() => {
+    setOpenGroup(null);
+    setOpen(false);
+  }, [pathname]);
 
   // Lock body scroll while the mobile menu is open
   useEffect(() => {
@@ -223,7 +252,11 @@ export default function Navbar() {
           </span>
         </NavLink>
 
-        <nav className="primary-nav" aria-label="Primary">
+        <nav
+          className={`primary-nav ${hoverLocked ? "is-click-closed" : ""}`}
+          aria-label="Primary"
+          onMouseLeave={() => setHoverLocked(false)}
+        >
           <ul>
             {nav.map((link, index) => {
               const children = hasChildren(link);
@@ -231,6 +264,8 @@ export default function Navbar() {
               const isGroupLabel = (children || megaMenu) && !link.path;
               // Menus near the right edge open leftwards so they stay on screen.
               const alignRight = index >= nav.length - 2;
+              // Moving to another item should let its menu open normally again.
+              const releaseLock = () => setHoverLocked(false);
 
               if (!children && !megaMenu) {
                 return (
@@ -261,6 +296,7 @@ export default function Navbar() {
               return (
                 <li
                   key={link.path || link.label}
+                  onMouseEnter={releaseLock}
                   className={`nav-dropdown ${megaMenu ? "nav-dropdown--mega" : ""} ${
                     alignRight ? "nav-dropdown--right" : ""
                   } ${menuOpen ? "is-open" : ""}`}
@@ -293,12 +329,15 @@ export default function Navbar() {
                   )}
 
                   {link.megaMenu ? (
-                    <DesktopMegaMenu columns={link.megaMenu} />
+                    <DesktopMegaMenu
+                      columns={link.megaMenu}
+                      onNavigate={closeMenus}
+                    />
                   ) : (
                     <div className="nav-dropdown-menu">
                       <DesktopChildren
                         items={link.children}
-                        onNavigate={() => setOpenGroup(null)}
+                        onNavigate={closeMenus}
                       />
                     </div>
                   )}
@@ -342,7 +381,7 @@ export default function Navbar() {
                 <li key={link.path || link.label}>
                   <MobileNavLink
                     item={link}
-                    onNavigate={() => setOpen(false)}
+                    onNavigate={closeMenus}
                   />
                 </li>
               );
@@ -356,7 +395,7 @@ export default function Navbar() {
                 {link.path ? (
                   <MobileNavLink
                     item={link}
-                    onNavigate={() => setOpen(false)}
+                    onNavigate={closeMenus}
                   />
                 ) : (
                   <span className="mobile-group-label">{link.label}</span>
@@ -369,14 +408,14 @@ export default function Navbar() {
                       </span>
                       <MobileChildren
                         items={column.items}
-                        onNavigate={() => setOpen(false)}
+                        onNavigate={closeMenus}
                       />
                     </div>
                   ))
                 ) : (
                   <MobileChildren
                     items={link.children}
-                    onNavigate={() => setOpen(false)}
+                    onNavigate={closeMenus}
                   />
                 )}
               </li>
