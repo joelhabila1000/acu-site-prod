@@ -325,10 +325,10 @@ const SECTIONS = [
   { key: "nav", label: "Navigation", kind: "nav" },
 ];
 
-export default function Settings() {
+export default function Settings({ initialSection }) {
   const { authGet, authSend } = useAuth();
   const [docs, setDocs] = useState({});
-  const [active, setActive] = useState("site");
+  const [active, setActive] = useState(initialSection || "site");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
@@ -432,27 +432,33 @@ export default function Settings() {
 
   return (
     <div>
-      <div className="page-head">
-        <h2>Site Settings</h2>
-      </div>
-
-      <div className="settings-layout">
-        <div className="settings-tabs">
-          {SECTIONS.map((item) => (
-            <button
-              key={item.key}
-              type="button"
-              className={item.key === active ? "is-active" : ""}
-              onClick={() => {
-                setActive(item.key);
-                setMessage("");
-                setError("");
-              }}
-            >
-              {item.label}
-            </button>
-          ))}
+      {!initialSection && (
+        <div className="page-head">
+          <h2>Site Settings</h2>
         </div>
+      )}
+
+      <div
+        className={`settings-layout ${initialSection ? "settings-layout--single" : ""}`}
+      >
+        {!initialSection && (
+          <div className="settings-tabs">
+            {SECTIONS.map((item) => (
+              <button
+                key={item.key}
+                type="button"
+                className={item.key === active ? "is-active" : ""}
+                onClick={() => {
+                  setActive(item.key);
+                  setMessage("");
+                  setError("");
+                }}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        )}
 
         <Card>
           <div className="settings-panel-head">

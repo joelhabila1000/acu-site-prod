@@ -828,6 +828,7 @@ export const RESOURCES = {
 
 export const ADMIN_NAV = [
   { path: "/admin", page: "dashboard", label: "Dashboard" },
+  { path: "/admin/navigation", page: "navigation", label: "Navigation" },
   { path: "/admin/news", page: "news", label: "News" },
   { path: "/admin/events", page: "events", label: "Events" },
   { path: "/admin/announcements", page: "announcements", label: "Announcements" },

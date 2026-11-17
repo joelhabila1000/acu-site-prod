@@ -818,6 +818,11 @@ body .admin-shell .btn-primary {
   align-items: start;
 }
 
+/* A single section shown on its own page (e.g. Navigation) has no tab strip. */
+.settings-layout--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .settings-tabs {
   display: grid;
   gap: 6px;
