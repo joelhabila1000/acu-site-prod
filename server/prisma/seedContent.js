@@ -87,50 +87,118 @@ const NAV_LINKS = [
   {
     // A grouping label rather than a destination — no `path`, so the navbar
     // renders it as a non-clickable heading that reveals the menu on hover.
-    // Every entry is a placeholder stub (`#`) until the real URLs are supplied.
     label: "Student Services",
     megaMenu: [
       {
         heading: "Undergraduate",
         items: [
-          { label: "Freshers Doc. For Registration", path: "#" },
-          { label: "Freshers Information", path: "#" },
-          { label: "Returning Students Change Of course", path: "#" },
-          { label: "Academic Calendar", path: "#" },
-          { label: "2026/2027 Schedule of Fees", path: "#" },
-          { label: "Course Registration / Result Portal", path: "#" },
-          { label: "Transcript Request Procedure", path: "#" },
-          { label: "Collection of Statement of Result", path: "#" },
-          { label: "Students' Handbook", path: "#" },
+          {
+            label: "Freshers Doc. For Registration",
+            path: "/student-services/undergraduate-freshers-registration",
+          },
+          {
+            label: "Freshers Information",
+            path: "/student-services/undergraduate-freshers-information",
+          },
+          {
+            label: "Returning Students Change Of course",
+            path: "/student-services/undergraduate-change-of-course",
+          },
+          {
+            label: "Academic Calendar",
+            path: "/student-services/undergraduate-academic-calendar",
+          },
+          {
+            label: "2026/2027 Schedule of Fees",
+            path: "/student-services/undergraduate-schedule-of-fees",
+          },
+          {
+            label: "Course Registration / Result Portal",
+            path: "/student-services/undergraduate-course-registration",
+          },
+          {
+            label: "Transcript Request Procedure",
+            path: "/student-services/undergraduate-transcript",
+          },
+          {
+            label: "Collection of Statement of Result",
+            path: "/student-services/undergraduate-statement-of-result",
+          },
+          {
+            label: "Students' Handbook",
+            path: "/student-services/undergraduate-students-handbook",
+          },
         ],
       },
       {
         heading: "Postgraduate",
         items: [
-          { label: "Academic Calendar", path: "#" },
-          { label: "School Fees Schedule", path: "#" },
-          { label: "Programmes & Requirement", path: "#" },
-          { label: "Student Portal (PGD)", path: "#" },
-          { label: "Student Portal (M.A / M.Sc.)", path: "#" },
-          { label: "Student Portal (Ph.D)", path: "#" },
-          { label: "Transcript Request Procedure", path: "#" },
+          {
+            label: "Academic Calendar",
+            path: "/student-services/postgraduate-academic-calendar",
+          },
+          {
+            label: "School Fees Schedule",
+            path: "/student-services/postgraduate-school-fees",
+          },
+          {
+            label: "Programmes & Requirement",
+            path: "/student-services/postgraduate-programmes",
+          },
+          {
+            label: "Student Portal (PGD)",
+            path: "/student-services/postgraduate-portal-pgd",
+          },
+          {
+            label: "Student Portal (M.A / M.Sc.)",
+            path: "/student-services/postgraduate-portal-masters",
+          },
+          {
+            label: "Student Portal (Ph.D)",
+            path: "/student-services/postgraduate-portal-phd",
+          },
+          {
+            label: "Transcript Request Procedure",
+            path: "/student-services/postgraduate-transcript",
+          },
         ],
       },
       {
         heading: "JUPEP / Foundation",
         items: [
-          { label: "Admission Requirement", path: "#" },
-          { label: "School Fee Schedule", path: "#" },
-          { label: "Course Form Payment", path: "#" },
-          { label: "Course Registration & Result Portal", path: "#" },
+          {
+            label: "Admission Requirement",
+            path: "/student-services/jupeb-admission-requirements",
+          },
+          {
+            label: "School Fee Schedule",
+            path: "/student-services/jupeb-school-fees",
+          },
+          {
+            label: "Course Form Payment",
+            path: "/student-services/jupeb-course-form-payment",
+          },
+          {
+            label: "Course Registration & Result Portal",
+            path: "/student-services/jupeb-course-registration",
+          },
         ],
       },
       {
         heading: "Part-time / HND Conversion & Sandwich",
         items: [
-          { label: "Centres & Contacts", path: "#" },
-          { label: "ID Card Payment Link", path: "#" },
-          { label: "Student Portal (Part-Time)", path: "#" },
+          {
+            label: "Centres & Contacts",
+            path: "/student-services/part-time-centres",
+          },
+          {
+            label: "ID Card Payment Link",
+            path: "/student-services/part-time-id-card",
+          },
+          {
+            label: "Student Portal (Part-Time)",
+            path: "/student-services/part-time-portal",
+          },
         ],
       },
     ],

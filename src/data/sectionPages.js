@@ -790,4 +790,749 @@ export const SECTION_PAGES = {
       },
     ],
   },
+
+  // ------------------------------------------------------- Student Services
+  // The links under the Student Services menu. Each menu item has a page here;
+  // figures (fees, dates) are published by the Bursary and Registry, so these
+  // pages explain the process and point to the office rather than restating
+  // amounts that change every session.
+
+  "/student-services/undergraduate-freshers-registration": {
+    crumb: "Student Services",
+    title: "Freshers' Registration Documents",
+    lede: "The documents a newly admitted undergraduate must present to complete registration and clearance.",
+    sections: [
+      {
+        heading: "What to bring",
+        paragraphs: [
+          "Report to your Faculty Officer with the originals and photocopies of the documents below. Clearance is completed before matriculation, and no student is assigned courses until registration is closed.",
+        ],
+        list: [
+          "Admission letter and acceptance fee receipt",
+          "O'Level result(s) and UTME/JAMB result slip",
+          "Birth certificate or sworn declaration of age",
+          "Local government area certificate of origin",
+          "Recent passport photographs",
+          "School fees payment receipt",
+        ],
+      },
+      {
+        heading: "After clearance",
+        paragraphs: [
+          "Your Faculty Officer guides you through course registration on the student portal and issues your matriculation number. Keep every receipt — they are required for library access, examinations and later transcript requests.",
+        ],
+      },
+    ],
+    facts: [
+      ["Office", "Faculty Office / Registry"],
+      ["When", "On resumption, before matriculation"],
+      ["Bring", "Originals and photocopies"],
+    ],
+    cta: { label: "Contact the Registry", href: "/contact" },
+  },
+
+  "/student-services/undergraduate-freshers-information": {
+    crumb: "Student Services",
+    title: "Freshers' Information",
+    lede: "Everything a new undergraduate needs for a smooth first semester at ACU.",
+    sections: [
+      {
+        heading: "Before you arrive",
+        paragraphs: [
+          "Accept your admission offer and pay the acceptance fee, then settle your school fees. Accommodation is allocated on a first-come basis, so apply early if you intend to live on campus.",
+        ],
+        list: [
+          "Accept admission and pay the acceptance fee",
+          "Pay school fees for the session",
+          "Apply for hostel accommodation if needed",
+          "Print your admission letter and payment receipts",
+        ],
+      },
+      {
+        heading: "Orientation and matriculation",
+        paragraphs: [
+          "The orientation programme introduces you to your faculty, the library, the health centre and student support services. Matriculation formally admits you to the University and is followed by course registration.",
+        ],
+      },
+      {
+        heading: "Getting help",
+        paragraphs: [
+          "Your Faculty Officer is the first point of contact for academic matters. The Student Affairs office handles accommodation, conduct and welfare, and the health centre is open to all registered students.",
+        ],
+      },
+    ],
+    facts: [
+      ["First contact", "Your Faculty Officer"],
+      ["Welfare", "Student Affairs"],
+      ["Health", "University Health Centre"],
+    ],
+    cta: { label: "See student life", href: "/student-life" },
+  },
+
+  "/student-services/undergraduate-change-of-course": {
+    crumb: "Student Services",
+    title: "Returning Students: Change of Course",
+    lede: "How a returning undergraduate applies to change programme, and the conditions that apply.",
+    sections: [
+      {
+        heading: "Who can apply",
+        paragraphs: [
+          "A returning student may apply to change course where they meet the entry requirements of the new programme and there is space in the class. Approval is not automatic and depends on your academic record.",
+        ],
+        list: [
+          "You must have completed at least one semester",
+          "You must meet the O'Level and UTME requirements of the new course",
+          "Your results in the current programme are considered",
+          "Change is normally allowed once during undergraduate study",
+        ],
+      },
+      {
+        heading: "How to apply",
+        paragraphs: [
+          "Obtain the change-of-course form from the Registry, obtain the endorsement of both Heads of Department, and submit it before the end of the registration period. Late applications are carried to the next session.",
+        ],
+      },
+    ],
+    facts: [
+      ["Form", "Registry"],
+      ["Endorsement", "Both Heads of Department"],
+      ["Deadline", "End of the registration period"],
+    ],
+    cta: { label: "Contact the Registry", href: "/contact" },
+  },
+
+  "/student-services/undergraduate-academic-calendar": {
+    crumb: "Student Services",
+    title: "Undergraduate Academic Calendar",
+    lede: "Semester dates and academic deadlines for undergraduate students.",
+    sections: [
+      {
+        heading: "Where to find the dates",
+        paragraphs: [
+          "The University publishes a calendar for each session covering resumption, registration, lectures, continuous assessment, examinations, results and convocation. Dates are confirmed by the Registry and announced through the portal and faculty noticeboards.",
+        ],
+        list: [
+          "Resumption and course registration",
+          "Lectures, continuous assessment and revision",
+          "First and second semester examinations",
+          "Senate approval of results",
+          "Convocation",
+        ],
+      },
+      {
+        heading: "Why deadlines matter",
+        paragraphs: [
+          "Registration closes on the published date, and a student who has not registered cannot sit examinations. Keep an eye on your faculty noticeboard and the student portal for any adjustment to the calendar.",
+        ],
+      },
+    ],
+    cta: { label: "View the academic calendar", href: "/resources/academic-calendar" },
+  },
+
+  "/student-services/undergraduate-schedule-of-fees": {
+    crumb: "Student Services",
+    title: "2026/2027 Schedule of Fees",
+    lede: "Tuition and other charges for undergraduate students in the 2026/2027 session.",
+    sections: [
+      {
+        heading: "What the fees cover",
+        paragraphs: [
+          "School fees are set for each session and vary by programme and level. The approved schedule, showing tuition, registration and other charges, is published by the Bursary and issued with your fee receipt.",
+        ],
+        list: [
+          "Tuition for the programme and level",
+          "Registration and examination charges",
+          "Acceptance fee (fresh students only)",
+          "Accommodation, where applicable",
+        ],
+      },
+      {
+        heading: "How to pay",
+        paragraphs: [
+          "Payments are made through the University's approved channels and confirmed with a receipt. Bring the receipt to your Faculty Officer for registration — an unverified payment is not treated as settled. Contact the Bursary if a payment does not reflect on the portal.",
+        ],
+      },
+    ],
+    facts: [
+      ["Office", "Bursary"],
+      ["Payable", "Per session"],
+      ["Receipt", "Required for registration"],
+    ],
+    cta: { label: "Contact the Bursary", href: "/contact" },
+  },
+
+  "/student-services/undergraduate-course-registration": {
+    crumb: "Student Services",
+    title: "Course Registration & Results",
+    lede: "Register your courses for the semester and check your results on the student portal.",
+    sections: [
+      {
+        heading: "Registering your courses",
+        paragraphs: [
+          "Course registration is completed on the student portal at the start of each semester, after fees have been confirmed. Register only the courses approved for your level and programme, then print and submit the form to your Faculty Officer.",
+        ],
+        list: [
+          "Confirm your fees are settled",
+          "Log in to the student portal with your matriculation number",
+          "Select the approved courses for the semester",
+          "Print the registration form and submit it to your Faculty Officer",
+        ],
+      },
+      {
+        heading: "Checking results",
+        paragraphs: [
+          "Semester results are published on the portal after Faculty and Senate approval. Query any missing or incorrect result with your Faculty Officer within the published window; corrections cannot be made once results are ratified.",
+        ],
+      },
+    ],
+    facts: [
+      ["Portal", "Student portal"],
+      ["Login", "Matriculation number"],
+      ["Approval", "Faculty Officer"],
+    ],
+    cta: { label: "See admissions", href: "/admissions" },
+  },
+
+  "/student-services/undergraduate-transcript": {
+    crumb: "Student Services",
+    title: "Transcript Request Procedure",
+    lede: "How to apply for an official transcript of your undergraduate academic record.",
+    sections: [
+      {
+        heading: "Applying",
+        paragraphs: [
+          "Transcripts are issued by the Registry and sent directly to the institution or employer that requests them. Apply in person or in writing, and allow time for the record to be compiled and signed.",
+        ],
+        list: [
+          "Apply in writing to the Registrar",
+          "State the institution and address the transcript should be sent to",
+          "Provide your matriculation number, programme and year of graduation",
+          "Pay the prescribed transcript fee and attach the receipt",
+        ],
+      },
+      {
+        heading: "Please note",
+        paragraphs: [
+          "Transcripts are not released while you have outstanding fees or unreturned library materials. Academic transcripts are issued in sealed envelopes and are not valid if opened by anyone other than the receiving institution.",
+        ],
+      },
+    ],
+    facts: [
+      ["Office", "Registry"],
+      ["Addressed to", "Receiving institution"],
+      ["Condition", "No outstanding fees or library items"],
+    ],
+    cta: { label: "Contact the Registry", href: "/contact" },
+  },
+
+  "/student-services/undergraduate-statement-of-result": {
+    crumb: "Student Services",
+    title: "Collection of Statement of Result",
+    lede: "Obtaining the formal statement of your semester or final results.",
+    sections: [
+      {
+        heading: "What it is",
+        paragraphs: [
+          "A statement of result is the University's confirmation of your approved results for a semester or for the award of a degree. It is issued by the Registry after Senate approval and is separate from the transcript sent to other institutions.",
+        ],
+      },
+      {
+        heading: "Collecting it",
+        paragraphs: [
+          "Bring your student identity card and the fee receipt to the Registry. If someone is collecting on your behalf, provide a signed authorisation letter along with a copy of your identity document.",
+        ],
+        list: [
+          "Student identity card",
+          "Fee receipt",
+          "Written authorisation, if collecting by proxy",
+        ],
+      },
+    ],
+    facts: [
+      ["Office", "Registry"],
+      ["Requires", "Identity card and fee receipt"],
+      ["Proxy", "Signed authorisation letter"],
+    ],
+    cta: { label: "Contact the Registry", href: "/contact" },
+  },
+
+  "/student-services/undergraduate-students-handbook": {
+    crumb: "Student Services",
+    title: "Students' Handbook",
+    lede: "The rules, regulations and academic guidance that apply to every undergraduate.",
+    sections: [
+      {
+        heading: "What the handbook covers",
+        paragraphs: [
+          "The Students' Handbook is the reference for academic regulations and student conduct. Read it at the start of your programme — the rules on registration, assessment, examinations and discipline apply from the day you matriculate.",
+        ],
+        list: [
+          "Registration and course requirements",
+          "Assessment, grading and examination rules",
+          "Attendance and probation",
+          "Dress code and code of conduct",
+          "Disciplinary procedures and appeals",
+        ],
+      },
+      {
+        heading: "Getting a copy",
+        paragraphs: [
+          "Copies are issued through your Faculty Officer at the start of the session, and the current edition is available from the Registry. Where the handbook and a faculty notice disagree, the Registry's ruling applies.",
+        ],
+      },
+    ],
+    cta: { label: "Contact the Registry", href: "/contact" },
+  },
+
+  "/student-services/postgraduate-academic-calendar": {
+    crumb: "Student Services",
+    title: "Postgraduate Academic Calendar",
+    lede: "Semester dates and deadlines for PGD, master's and doctoral students.",
+    sections: [
+      {
+        heading: "Dates for the session",
+        paragraphs: [
+          "The postgraduate calendar runs alongside the undergraduate session, with its own registration, coursework, seminar and dissertation milestones. Dates are confirmed by the School of Postgraduate Studies and published on the portal.",
+        ],
+        list: [
+          "Registration and course approval",
+          "Coursework and seminars",
+          "Semester examinations",
+          "Dissertation and thesis submission windows",
+          "Senate approval and convocation",
+        ],
+      },
+      {
+        heading: "Staying on track",
+        paragraphs: [
+          "Supervision meetings, progress reports and submission deadlines are set by your department. Confirm each milestone with your supervisor and the Postgraduate School early, as missed deadlines can extend your programme.",
+        ],
+      },
+    ],
+    cta: {
+      label: "View the academic calendar",
+      href: "/resources/academic-calendar",
+    },
+  },
+
+  "/student-services/postgraduate-school-fees": {
+    crumb: "Student Services",
+    title: "Postgraduate School Fees Schedule",
+    lede: "Tuition and other charges for PGD, master's and doctoral programmes.",
+    sections: [
+      {
+        heading: "What you pay",
+        paragraphs: [
+          "Postgraduate fees are set per programme and per session, and differ between PGD, master's and doctoral study. The approved schedule is published by the Bursary and stated on your admission letter.",
+        ],
+        list: [
+          "Tuition for the programme and level",
+          "Registration and examination charges",
+          "Acceptance fee",
+          "Thesis or dissertation processing, where applicable",
+        ],
+      },
+      {
+        heading: "Payment and confirmation",
+        paragraphs: [
+          "Pay through the University's approved channels and keep the receipt. Registration is only complete once payment is confirmed by the Bursary, so settle fees before the registration deadline.",
+        ],
+      },
+    ],
+    facts: [
+      ["Office", "Bursary"],
+      ["Varies by", "Programme and level"],
+      ["Required", "Before registration"],
+    ],
+    cta: { label: "Contact the Bursary", href: "/contact" },
+  },
+
+  "/student-services/postgraduate-programmes": {
+    crumb: "Student Services",
+    title: "Postgraduate Programmes & Requirements",
+    lede: "The postgraduate programmes on offer and what each one requires for admission.",
+    sections: [
+      {
+        heading: "Programmes available",
+        paragraphs: [
+          "The University offers Postgraduate Diplomas, master's degrees and doctorates across its faculties. Each programme sets its own entry requirements, duration and mode of study.",
+        ],
+        list: [
+          "Postgraduate Diploma (PGD)",
+          "Master's degrees (M.A., M.Sc., MBA and others)",
+          "Doctor of Philosophy (Ph.D)",
+        ],
+      },
+      {
+        heading: "Entry requirements",
+        paragraphs: [
+          "A PGD requires a first degree or an HND at the level stated by the department. Master's programmes normally require a good first degree or a PGD in a relevant field, and a doctorate requires a master's degree with a research proposal. Transcripts, NYSC documentation and references are part of every application.",
+        ],
+      },
+      {
+        heading: "How to apply",
+        paragraphs: [
+          "Applications are made through the postgraduate portal. Check the specific requirements for your chosen programme with the School of Postgraduate Studies before applying.",
+        ],
+      },
+    ],
+    cta: {
+      label: "Apply for postgraduate admission",
+      href: "https://pgsportal.acu.edu.ng/",
+      external: true,
+    },
+  },
+
+  "/student-services/postgraduate-portal-pgd": {
+    crumb: "Student Services",
+    title: "Postgraduate Student Portal (PGD)",
+    lede: "The portal PGD students use for registration, fees and results.",
+    sections: [
+      {
+        heading: "What the portal does",
+        paragraphs: [
+          "The student portal is the official record of your registration and results. PGD students use it to register courses each semester, confirm fee payments and check published results.",
+        ],
+        list: [
+          "Course registration and printing of forms",
+          "Fee status and payment receipts",
+          "Semester results and transcripts of progress",
+          "Notices from the Postgraduate School",
+        ],
+      },
+      {
+        heading: "Getting access",
+        paragraphs: [
+          "Collect your login details from the ICT Directorate after completing admission. Use the matriculation number issued by the Postgraduate School, and report a forgotten password or a missing course to ICT rather than creating a second account.",
+        ],
+      },
+    ],
+    facts: [
+      ["Users", "PGD students"],
+      ["Login", "Matriculation number"],
+      ["Support", "ICT Directorate"],
+    ],
+    cta: { label: "Contact ICT support", href: "/contact" },
+  },
+
+  "/student-services/postgraduate-portal-masters": {
+    crumb: "Student Services",
+    title: "Postgraduate Student Portal (M.A / M.Sc.)",
+    lede: "Registration, results and progress for master's students.",
+    sections: [
+      {
+        heading: "What the portal does",
+        paragraphs: [
+          "Master's students register coursework and seminars on the portal each semester, confirm fee payments, and check results once they are approved by the Postgraduate School and Senate.",
+        ],
+        list: [
+          "Semester course registration",
+          "Fee status and receipts",
+          "Coursework and examination results",
+          "Supervision and progress notices",
+        ],
+      },
+      {
+        heading: "Before you register",
+        paragraphs: [
+          "Confirm that your fees are settled and that your supervisor has approved your course selection. Registration for a semester you do not attend still attracts fees, so notify the Postgraduate School in writing if you are deferring.",
+        ],
+      },
+    ],
+    facts: [
+      ["Users", "M.A / M.Sc. students"],
+      ["Login", "Matriculation number"],
+      ["Support", "ICT Directorate"],
+    ],
+    cta: { label: "Contact ICT support", href: "/contact" },
+  },
+
+  "/student-services/postgraduate-portal-phd": {
+    crumb: "Student Services",
+    title: "Postgraduate Student Portal (Ph.D)",
+    lede: "Registration, supervision records and thesis milestones for doctoral students.",
+    sections: [
+      {
+        heading: "What the portal does",
+        paragraphs: [
+          "Doctoral students use the portal to register each session, confirm fees, and keep track of the milestones that lead to thesis submission and examination.",
+        ],
+        list: [
+          "Annual registration and fee confirmation",
+          "Progress reports from your supervisor",
+          "Seminar and proposal defence records",
+          "Thesis submission and examination notices",
+        ],
+      },
+      {
+        heading: "Progress and submission",
+        paragraphs: [
+          "Your department sets the schedule for proposal defence, progress seminars and thesis submission. Keep copies of every approval — the Postgraduate School requires them before a thesis can be sent for examination.",
+        ],
+      },
+    ],
+    facts: [
+      ["Users", "Ph.D students"],
+      ["Login", "Matriculation number"],
+      ["Support", "Postgraduate School"],
+    ],
+    cta: { label: "Contact the Postgraduate School", href: "/contact" },
+  },
+
+  "/student-services/postgraduate-transcript": {
+    crumb: "Student Services",
+    title: "Postgraduate Transcript Request",
+    lede: "How to request an official transcript of your postgraduate record.",
+    sections: [
+      {
+        heading: "Applying",
+        paragraphs: [
+          "Postgraduate transcripts are issued by the Registry after the Postgraduate School confirms your record. Apply in writing, stating where the transcript should be sent.",
+        ],
+        list: [
+          "Written application to the Registrar",
+          "Matriculation number, programme and year of award",
+          "Name and address of the receiving institution",
+          "Payment of the prescribed transcript fee",
+        ],
+      },
+      {
+        heading: "Please note",
+        paragraphs: [
+          "Transcripts are held while fees are outstanding or library materials are unreturned. They are issued in sealed envelopes and are only valid unopened.",
+        ],
+      },
+    ],
+    facts: [
+      ["Office", "Registry"],
+      ["Confirmation", "Postgraduate School"],
+      ["Addressed to", "Receiving institution"],
+    ],
+    cta: { label: "Contact the Registry", href: "/contact" },
+  },
+
+  "/student-services/jupeb-admission-requirements": {
+    crumb: "Student Services",
+    title: "JUPEP / Foundation Admission Requirements",
+    lede: "Entry requirements for the one-year foundation programme that leads to direct entry.",
+    sections: [
+      {
+        heading: "Who the programme is for",
+        paragraphs: [
+          "The Joint Universities Preliminary Examinations Board (JUPEP) programme prepares candidates for direct entry into 200-level degree study. It suits school leavers who want a structured bridging year before university.",
+        ],
+        list: [
+          "O'Level credit passes in the subjects required for your intended degree",
+          "A minimum of five credits, including English Language and Mathematics, in not more than two sittings",
+          "Subjects that match the faculty you intend to enter",
+        ],
+      },
+      {
+        heading: "How to apply",
+        paragraphs: [
+          "Applications are made online through the foundation programme portal. Upload your O'Level result and a recent passport photograph, and keep the payment receipt for screening.",
+        ],
+      },
+    ],
+    facts: [
+      ["Duration", "One academic session"],
+      ["Leads to", "Direct entry (200 level)"],
+      ["Result", "JUPEP examination"],
+    ],
+    cta: {
+      label: "Apply for the foundation programme",
+      href: "https://cpfpapply.acu.edu.ng",
+      external: true,
+    },
+  },
+
+  "/student-services/jupeb-school-fees": {
+    crumb: "Student Services",
+    title: "JUPEP / Foundation School Fees",
+    lede: "Fees payable for the one-year foundation programme.",
+    sections: [
+      {
+        heading: "What the fees cover",
+        paragraphs: [
+          "Foundation programme fees cover tuition, registration and examination charges for the session. The approved schedule is published by the Bursary and stated on your admission letter.",
+        ],
+        list: [
+          "Tuition for the session",
+          "Registration and examination charges",
+          "Acceptance fee on admission",
+          "Accommodation, where applicable",
+        ],
+      },
+      {
+        heading: "Payment",
+        paragraphs: [
+          "Pay through the University's approved channels and keep the receipt — it is required at registration. Contact the Bursary if a payment does not reflect on your record.",
+        ],
+      },
+    ],
+    facts: [
+      ["Office", "Bursary"],
+      ["Payable", "Per session"],
+      ["Required", "Before registration"],
+    ],
+    cta: { label: "Contact the Bursary", href: "/contact" },
+  },
+
+  "/student-services/jupeb-course-form-payment": {
+    crumb: "Student Services",
+    title: "JUPEP Course Form Payment",
+    lede: "Paying for and collecting the course form for the foundation programme.",
+    sections: [
+      {
+        heading: "Paying for the form",
+        paragraphs: [
+          "The course form fee is paid through the University's approved payment channels after admission. Keep the receipt — the course form is only released against a verified payment.",
+        ],
+        list: [
+          "Pay the course form fee",
+          "Keep the payment receipt",
+          "Present the receipt to the programme office",
+          "Complete the form and submit it before the deadline",
+        ],
+      },
+      {
+        heading: "After payment",
+        paragraphs: [
+          "Completed forms are submitted to the foundation programme office, which registers your subjects and issues your examination number. Late submission may mean missing continuous assessment.",
+        ],
+      },
+    ],
+    facts: [
+      ["Payment", "University approved channels"],
+      ["Release", "Against a verified receipt"],
+      ["Submit to", "Programme office"],
+    ],
+    cta: { label: "Contact the programme office", href: "/contact" },
+  },
+
+  "/student-services/jupeb-course-registration": {
+    crumb: "Student Services",
+    title: "JUPEP Course Registration & Results",
+    lede: "Registering your JUPEP subjects and checking your examination results.",
+    sections: [
+      {
+        heading: "Registering subjects",
+        paragraphs: [
+          "Foundation students register the four subjects that match their intended degree. Registration is done at the programme office after the course form is submitted, and the subject combination cannot be changed after the deadline.",
+        ],
+        list: [
+          "Four subjects matched to your intended degree",
+          "English Language is compulsory",
+          "Changes only before the registration deadline",
+        ],
+      },
+      {
+        heading: "Results",
+        paragraphs: [
+          "JUPEP examination results are released by the board and published by the programme office. A pass in the required subjects qualifies you for direct entry into the corresponding degree programme.",
+        ],
+      },
+    ],
+    facts: [
+      ["Subjects", "Four, matched to the degree"],
+      ["Result", "JUPEP board examination"],
+      ["Progression", "Direct entry to 200 level"],
+    ],
+    cta: { label: "Contact the programme office", href: "/contact" },
+  },
+
+  "/student-services/part-time-centres": {
+    crumb: "Student Services",
+    title: "Part-Time Centres & Contacts",
+    lede: "Where part-time and conversion programmes are taught, and who to contact.",
+    sections: [
+      {
+        heading: "Study centres",
+        paragraphs: [
+          "Part-time degree and conversion programmes are taught at the University's campuses and approved study centres. Lectures are scheduled for weekends and evenings so students can keep working.",
+        ],
+        list: [
+          "Weekend and evening lectures",
+          "The same curriculum and standards as full-time study",
+          "Coordination through the Centre for Continuing Education",
+        ],
+      },
+      {
+        heading: "Who to contact",
+        paragraphs: [
+          "Enquiries about a centre, lecture timetable or your registration should go to the Centre for Continuing Education (CCED). Include your name, programme and matriculation number in any correspondence so your record can be found quickly.",
+        ],
+      },
+    ],
+    facts: [
+      ["Office", "Centre for Continuing Education (CCED)"],
+      ["Mode", "Weekend and evening"],
+      ["Enquiries", "Contact the University"],
+    ],
+    cta: { label: "Contact the University", href: "/contact" },
+  },
+
+  "/student-services/part-time-id-card": {
+    crumb: "Student Services",
+    title: "Part-Time ID Card Payment",
+    lede: "Paying for and collecting the student identity card for part-time students.",
+    sections: [
+      {
+        heading: "Paying for the card",
+        paragraphs: [
+          "The identity card fee is paid through the University's approved channels after registration. Keep the receipt and bring it, with a recent passport photograph, when you collect the card.",
+        ],
+        list: [
+          "Pay the identity card fee",
+          "Keep the payment receipt",
+          "Bring a recent passport photograph",
+          "Collect the card from the issuing office",
+        ],
+      },
+      {
+        heading: "Why you need it",
+        paragraphs: [
+          "The card identifies you on campus and is required for library access, examinations and any Registry transaction. Report a lost card immediately so it can be replaced and the old one invalidated.",
+        ],
+      },
+    ],
+    facts: [
+      ["Payment", "University approved channels"],
+      ["Bring", "Receipt and passport photograph"],
+      ["Use", "Library, examinations, Registry"],
+    ],
+    cta: { label: "Contact the Registry", href: "/contact" },
+  },
+
+  "/student-services/part-time-portal": {
+    crumb: "Student Services",
+    title: "Student Portal (Part-Time)",
+    lede: "Registration, fees and results for part-time students.",
+    sections: [
+      {
+        heading: "What the portal does",
+        paragraphs: [
+          "Part-time students use the same student portal as full-time students. It is where you register courses each semester, confirm fee payments and check results once they are approved.",
+        ],
+        list: [
+          "Course registration and printing of forms",
+          "Fee status and payment receipts",
+          "Semester results",
+          "Notices from the Centre for Continuing Education",
+        ],
+      },
+      {
+        heading: "Getting help",
+        paragraphs: [
+          "Collect your login details from the ICT Directorate after registration. If a course is missing or your fee payment does not show, contact the centre that coordinates your programme before the registration deadline.",
+        ],
+      },
+    ],
+    facts: [
+      ["Users", "Part-time students"],
+      ["Login", "Matriculation number"],
+      ["Support", "ICT Directorate / CCED"],
+    ],
+    cta: { label: "Contact ICT support", href: "/contact" },
+  },
 };

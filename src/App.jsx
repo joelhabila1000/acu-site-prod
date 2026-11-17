@@ -154,6 +154,7 @@ export default function App() {
           <Route path="/resources/:page" element={<SectionPage />} />
           <Route path="/student-life" element={<SectionPage />} />
           <Route path="/student-life/:page" element={<SectionPage />} />
+          <Route path="/student-services/:page" element={<SectionPage />} />
           <Route path="/research" element={<SectionPage />} />
           <Route path="/research/publications" element={<Publications />} />
           <Route path="/research/:page" element={<SectionPage />} />

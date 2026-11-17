@@ -5,6 +5,8 @@
 // Routes left out of ROUTE_META (news articles, admin, the hostel portal) are
 // owned by the page itself or are private, so they are left untouched.
 
+import { SECTION_PAGES } from "./sectionPages.js";
+
 export const SITE_URL = "https://ajayi-crowther-university.vercel.app";
 
 export const DEFAULT_TITLE =
@@ -120,5 +122,16 @@ export const ROUTE_META = {
 
 // Returns the meta for an exact path, or null when the page owns its own tags.
 export function metaFor(pathname) {
-  return ROUTE_META[pathname] || null;
+  const explicit = ROUTE_META[pathname];
+  if (explicit) return explicit;
+
+  // Section pages carry their own heading and lede, so they do not need a
+  // hand-written title/description — derive them instead of shipping a blank
+  // title for every one of them.
+  const page = SECTION_PAGES[pathname];
+  if (!page) return null;
+  return {
+    title: `${page.title} | Ajayi Crowther University, Oyo`,
+    description: page.lede || ROUTE_META["/"].description,
+  };
 }
